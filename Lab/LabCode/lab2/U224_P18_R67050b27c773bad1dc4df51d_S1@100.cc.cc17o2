@@ -1,0 +1,29 @@
+#include "Solution.h"
+#include <cmath>
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+	int m = ceil(log(n)/log(2));
+    int position = pow(2,m);
+    int n_ = position;
+    vector<int> a(position);
+    a[0] = 1;
+    int count = m;
+    for(count ; count >= 2 ; count--){
+    	if(count >= 1){
+    		int count1 = pow(2, m - count);
+    		for(int j = 0; j < count1; j++){
+    			a[j+count1] = a[j] + position/2;
+			}
+		}
+		position /= 2;
+	}
+	for(int i = 0 ; i <= n_/2 - 1 ; i++){
+		a[i+n_/2] = a[i] + 1;
+	}
+	for(int i = 0; i < n_; i++){
+		if(a[i] <= n) ans.push_back(a[i]); 
+	}
+
+ 	return ans;
+}

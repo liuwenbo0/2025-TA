@@ -1,0 +1,45 @@
+#include "QuickSort.h"
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+
+    int temp=0;
+    temp=nums[p];
+    while(p<q)
+    {
+        while(p<q&&nums[q]>temp)
+        {
+            q--;
+        }
+        if(p<q&&nums[q]<=temp)
+        {
+        nums[p]=nums[q];
+        p++;
+        }
+        while(p<q&&nums[p]<temp)
+        {
+            p++;
+        }
+        if(p<q&&nums[p]>=temp)
+        {
+        nums[q]=nums[p];
+        q--;          
+        }
+    }
+    nums[p]=temp;
+    return p;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if(l>r)
+    {
+        return ;
+    }
+    int mid=QuickSort::partition(nums,l,r);
+    QuickSort::quick_sort(nums,l,mid-1);
+    QuickSort::quick_sort(nums,mid+1,r);
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

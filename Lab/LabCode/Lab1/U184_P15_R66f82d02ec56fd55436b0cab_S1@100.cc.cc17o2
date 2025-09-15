@@ -1,0 +1,65 @@
+#include<iostream>  
+#include<vector>  
+  
+int MergeSort(std::vector<int>& nums, int left, int right) {  
+    int count = 0;  
+    if (left < right) {  
+        int mid = (left + right) / 2;  
+        count += MergeSort(nums, left, mid);  
+        count += MergeSort(nums, mid + 1, right);  
+  
+        std::vector<int> temp(right - left + 1);  
+        int i = left, j = mid + 1, k = 0;  
+        while (i <= mid && j <= right) {  
+            if (nums[i] <= nums[j]) {  
+                temp[k++] = nums[i++];  
+            } else {  
+                temp[k++] = nums[j++];  
+            } 
+            count++;
+        }  
+        while (i <= mid) {  
+            temp[k++] = nums[i++];  
+        }  
+        while (j <= right) {  
+            temp[k++] = nums[j++];  
+        }  
+        // 使用 k 而不是 i 来复制元素  
+        for (k = 0; k < static_cast<int>(temp.size()); k++) {  
+            nums[left + k] = temp[k];  
+        }  
+    }  
+    return count; // 注意：这里的 count 实际上并没有正确计算排序中的比较次数  
+}
+  
+int InsertionSort(std::vector<int>& nums) {  
+    int count = 0; 
+    int len=nums.size() ;
+    for (int i = 1; i < len; i++) {  
+        int key = nums[i];  
+        int j = i - 1; 
+        count++; 
+        while (j >= 0 && nums[j] > key) {  
+            if(j==0) count--;
+            nums[j + 1] = nums[j];  
+            j = j - 1;  
+            count++;  
+        }  
+        nums[j + 1] = key;  
+    }  
+    return count;  
+}  
+  
+int main() {  
+    int N;  
+    std::cin >> N;  
+    std::vector<int> nums(N);  
+    for (int i = 0; i < N; i++) {  
+        std::cin >> nums[i];  
+    }  
+    std::vector<int> numsCopy = nums;
+    int count1 = MergeSort(nums, 0, N - 1);  
+    int count2 = InsertionSort(numsCopy);  
+    std::cout<< count1 <<" "<< count2 <<  std::endl;  
+    return 0;   
+}

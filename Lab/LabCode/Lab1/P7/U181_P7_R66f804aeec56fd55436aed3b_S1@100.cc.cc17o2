@@ -1,0 +1,43 @@
+#include "MergeSort.h"
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    //完成代码
+    if(left>=right) return;
+    int mid = left+(right - left) / 2 ;  //要么左右相等，要么右边多一位；
+    merge_sort_aux(nums,left,mid);
+    merge_sort_aux(nums,mid+1,right);
+    int n1 = mid-left+1, n2 = right-mid ;
+    std::vector<int> Left(n1);
+    std::vector<int> Right(n2);
+    for(int i=0 ; i<n1 ; i++){
+        Left[i] = nums[left+i];
+    }
+    for(int j=0;j<n2;j++){
+        Right[j] = nums[mid+j+1];
+        
+    }
+    int i=0,j=0,k=left;
+    while(i<n1 && j<n2){
+        if(Left[i]<=Right[j]){
+            nums[k]=Left[i];
+            i++;
+        }
+        else{
+            nums[k]=Right[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i<n1){
+        nums[k]=Left[i];
+        k++;
+        i++;
+    }
+    while(j<n2){
+        nums[k]=Right[j];
+        k++;
+        j++;
+    }
+}

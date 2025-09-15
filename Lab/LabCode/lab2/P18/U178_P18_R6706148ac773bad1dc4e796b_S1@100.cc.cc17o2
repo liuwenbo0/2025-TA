@@ -1,0 +1,16 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+            vector<int> ans, left, right;
+        if(n > 1){
+            left = perfect_permutation((n+1)/2);
+            right = perfect_permutation(n/2);
+            for(int l : left){
+                ans.push_back(l * 2 - 1);
+            }
+            for(int r : right){
+                ans.push_back(r * 2);
+            }
+        }
+        else ans.push_back(1);
+    return ans;
+}

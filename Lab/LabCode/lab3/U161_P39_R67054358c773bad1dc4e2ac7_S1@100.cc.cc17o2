@@ -1,0 +1,29 @@
+#include "ThreeWayQuickSort.h"
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    if (p <q) {
+        int l = p;
+        int r = q;
+        int i = p + 1; 
+        swap(nums[p], nums[rand() % (q- p+ 1) + p]);
+        int t = nums[p];
+        while (i <= r) {
+            if (nums[i] < t) {
+                swap(nums[i++], nums[l++]);
+            }
+            else if (nums[i] == t) {
+                i++;
+            }
+            else if (nums[i] > t) {
+                swap(nums[i], nums[r--]);
+            }
+        }
+        three_way_quick_sort(nums, p, l - 1);
+        three_way_quick_sort(nums, r + 1, q);
+    }
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

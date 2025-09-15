@@ -1,0 +1,68 @@
+#include"Linklist.h"
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list) {
+        return; // 空链表或只有一个节点的链表不需要改变
+    }
+
+    node* current = list;
+    node* last = list->prior;
+    node* temp = nullptr;
+
+    // 遍历链表，直到到达中点
+    while (current->next != last) {
+        current = current->next;
+
+        // 交换每个节点的 next 和 prior 指针
+        temp = current->next;
+        current->next = current->prior;
+        current->prior = temp;
+
+        // 跳过已经交换过的节点
+        if (temp == last) {
+            last = current;
+        }
+    }
+
+    // 如果链表有偶数个节点，将 last 设置为最后一个节点
+    if (last->next != list) {
+        last = last->next;
+    }
+
+    // 连接链表的两半
+    current->next = list;
+    list->prior = current;
+
+    // 更新头节点
+    list = last;
+
+    // 修复头节点和尾节点的连接
+    list->next->prior = list;
+    list->prior->next = list;
+}
+main.cpp
+cpp
+#include "Linklist.h"
+
+int main(){
+    int n;
+    Linklist head, tail, point;
+    head = tail = new node();
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        point = new node();
+        cin >> point->num;
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    head->prior = tail;
+    tail->next = head;
+    changeList(head);
+    point = head->next;
+    while(point != head->prior){
+    	cout << point->num << " ";
+    	point = point->next;
+	}
+	cout << point->num;
+	return 0;
+}

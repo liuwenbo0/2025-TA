@@ -1,0 +1,29 @@
+#include "Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    Linklist st=list,now=list->next;
+    int n,number[100010];
+    number[n=0] = st->num;
+    while(now!=st) {number[++n]=now->num;now=now->next;}
+	Linklist head, tail, point;
+    head = tail = new node();
+    for(int i=1;i<=(n+1)/2;i++)
+    {
+        point = new node();
+        point->num = number[i*2-1];
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+	}
+    for(int i=n/2;i>=1;i--)
+    {
+        point = new node();
+        point->num = number[i*2];
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    head->prior = tail;
+    tail->next = head;
+    list = head;
+}

@@ -1,0 +1,18 @@
+#include "SqList.h"
+#include <vector>
+
+typedef std::vector<int> SqList;
+
+void insert(SqList& list, int num) {
+    int left = 0;
+    int right = list.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (list[mid] < num) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    list.insert(list.begin() + left, num);
+}

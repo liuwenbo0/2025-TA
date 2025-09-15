@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+using namespace std;
+
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+    deque<int> index; // 双向队列
+    vector<int> result;
+    for (int i = 0; i < nums.size(); i++) {
+        if (!index.empty() && index.front() == i - k) {
+            index.pop_front(); //弹出超过窗口的元素
+        }
+        while (!index.empty() && nums[index.back()] < nums[i]) {
+            index.pop_back();
+        }
+        index.push_back(i);
+        if (i >= k - 1) {  // 窗口满
+            result.push_back(nums[index.front()]);
+        }
+
+    }
+    // 输出结果
+    for (int i = 0; i < result.size(); i++) {
+        cout << result[i]<<" ";
+    }
+    cout << endl; 
+    return 0;
+}

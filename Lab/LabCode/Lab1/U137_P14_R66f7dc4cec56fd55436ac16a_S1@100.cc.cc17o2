@@ -1,0 +1,60 @@
+#include <iostream>  
+#include <vector>  
+  
+using namespace std;  
+  
+long long mergeElements(vector<int>& inputArray, vector<int>& tempArray, int start, int mid, int end) {  
+    int i = start;  
+    int j = mid + 1;  
+    int k = start;  
+    long long inversionCount = 0;  
+  
+    while (i <= mid && j <= end) {  
+        if (inputArray[i] <= inputArray[j]) {  
+            tempArray[k++] = inputArray[i++];  
+        } else {  
+            tempArray[k++] = inputArray[j++];  
+            inversionCount += (mid - i + 1);  
+        }  
+    }  
+  
+    while (i <= mid) {  
+        tempArray[k++] = inputArray[i++];  
+    }  
+  
+    while (j <= end) {  
+        tempArray[k++] = inputArray[j++];  
+    }  
+  
+    for (i = start; i <= end; i++) {  
+        inputArray[i] = tempArray[i];  
+    }  
+  
+    return inversionCount;  
+}  
+  
+long long mergeSortElements(vector<int>& inputArray, vector<int>& tempArray, int start, int end) {  
+    long long inversionCount = 0;  
+    if (start < end) {  
+        int mid = (start + end) / 2;  
+        inversionCount += mergeSortElements(inputArray, tempArray, start, mid);  
+        inversionCount += mergeSortElements(inputArray, tempArray, mid + 1, end);  
+        inversionCount += mergeElements(inputArray, tempArray, start, mid, end);  
+    }  
+    return inversionCount;  
+}  
+  
+int main() {  
+    int size;  
+    cin >> size;  
+    vector<int> mainArray(size);  
+    for (int i = 0; i < size; i++) {  
+        cin >> mainArray[i];  
+    }  
+  
+    vector<int> temporaryArray(size);  
+    long long inversions = mergeSortElements(mainArray, temporaryArray, 0, size - 1);  
+    cout << inversions << endl;  
+  
+    return 0;  
+}

@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <algorithm>
+#include <climits> 
+
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    
+    vector<int> heights(n);
+    unordered_map<int, vector<int>> cut_map;
+
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+
+    for (int h : heights) {
+        int current_height = h;
+        int cuts = 0;
+        
+        while (current_height > 0) {
+            cut_map[current_height].push_back(cuts);
+            current_height /= 2;
+            cuts++;
+        }
+    }
+
+    int result = INT_MAX;  
+    
+  
+    for (auto& [height, cut_list] : cut_map) {
+        if (cut_list.size() < static_cast<size_t>(q)) {  
+            continue; 
+        }
+
+       
+        sort(cut_list.begin(), cut_list.end());
+        int current_cost = 0;
+        for (int i = 0; i < q; ++i) {
+            current_cost += cut_list[i];
+        }
+
+        result = min(result, current_cost); 
+    }
+
+    cout << result << endl;
+
+    return 0;
+}

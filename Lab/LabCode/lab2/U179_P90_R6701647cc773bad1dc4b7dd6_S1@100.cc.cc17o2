@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+struct TreeNode {
+     int val;
+     TreeNode *left;
+     TreeNode *right;
+     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* TreeBuild(const vector<int>& nodes, int index) {
+     if (index >= nodes.size() || nodes[index] == -1) return NULL;
+     TreeNode* root = new TreeNode(nodes[index]);
+     root->left = TreeBuild(nodes, 2 * index + 1);
+     root->right = TreeBuild(nodes, 2 * index + 2);
+     return root;
+}
+
+int TreeHeight(TreeNode* root) {
+     if (!root) return 0;
+     return max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
+}
+
+
+int maxPathSum(TreeNode* root, int& maxSum) {
+    if (!root) return 0;
+    if (!root->left && !root->right) return root->val;
+    int leftSum = maxPathSum(root->left, maxSum);
+    int rightSum = maxPathSum(root->right, maxSum);
+    
+    maxSum = max(maxSum, max(leftSum, rightSum) + root->val);
+    
+    return max(leftSum, rightSum) + root->val;
+}
+
+
+
+void specialArea(TreeNode* root, int& specialsum) {
+    if (!root) return;
+    if (!root->left && !root->right) return;
+
+    
+    if (root->left) specialArea(root->left, specialsum);
+    if (root->right) specialArea(root->right, specialsum);
+
+    
+    if ((root->left == NULL || root->val > root->left->val) &&
+        (root->right == NULL || root->val > root->right->val)) {
+        specialsum += root->val;
+    }
+}
+
+int main() {
+     vector<int> nodes;
+     int temp;
+     while(cin>>temp){
+         nodes.push_back(temp);
+     }
+     TreeNode* root = TreeBuild(nodes, 0);
+
+     int hight = TreeHeight(root);
+     int maxSum = INT_MIN;
+     maxPathSum(root, maxSum);
+     int specialsum=0;
+     specialArea(root,specialsum);
+
+     cout << hight << endl;
+     cout << maxSum << endl;
+     cout << specialsum << endl;
+
+     return 0;
+}

@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int findMaxSubarraySum(int A[], int low, int high) {
+    if (low == high) {
+        return A[low];
+    } else {
+        int mid = (low + high) / 2;
+        int leftSum = findMaxSubarraySum(A, low, mid);
+        int rightSum = findMaxSubarraySum(A, mid + 1, high);
+        int crossSum = findMaximumCrossingSubarray(A, low, mid, high);
+        return max(max(leftSum, rightSum), crossSum);
+    }
+}
+int findMaximumCrossingSubarray(int A[], int low, int mid, int high) {
+    int leftSum = -__INT_MAX__;
+    int sum = 0;
+    for (int i = mid; i >= low; i--) {
+        sum = sum + A[i];
+        if (sum > leftSum) {
+            leftSum = sum;
+        }
+    }
+
+    int rightSum = -__INT_MAX__;
+    sum = 0;
+    for (int j = mid + 1; j <= high; j++) {
+        sum = sum + A[j];
+        if (sum > rightSum) {
+            rightSum = sum;
+        }
+    }
+
+    return leftSum + rightSum;
+}
+int main() {
+    int A[] = {-2, 11, -4, 13, -5, -2};
+    int N = sizeof(A) / sizeof(A[0]);
+    int maxSum = findMaxSubarraySum(A, 0, N - 1);
+   
+    return 0;
+}

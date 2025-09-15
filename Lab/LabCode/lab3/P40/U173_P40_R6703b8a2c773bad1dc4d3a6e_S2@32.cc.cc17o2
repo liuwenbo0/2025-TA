@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int minPrunes(int n, int q, vector<int>& heights) {
+    unordered_map<int, int> heightCount;
+
+    for (int height : heights) {
+        ++heightCount[height];
+    }
+
+    unordered_map<int, vector<pair<int, int>>> pruneCount;
+
+    for (const auto& [height, count] : heightCount) {
+        int currentHeight = height;
+        int prunesNeeded = 0;
+
+        while (currentHeight > 0) {
+
+            pruneCount[currentHeight].emplace_back(prunesNeeded, count);
+            currentHeight /= 2;
+            prunesNeeded++;
+        }
+    }
+
+    int minPrunesNeeded = INT_MAX;
+
+    for (const auto& [achievableHeight, prunesList] : pruneCount) {
+        vector<pair<int, int>> sortedPrunes = prunesList;
+        sort(sortedPrunes.begin(), sortedPrunes.end());
+
+        int totalSegments = 0;
+        int currentPrunes = 0;
+
+        for (const auto& [prunesNeeded, count] : sortedPrunes) {
+            if (totalSegments >= q) {
+                break;
+            }
+
+            totalSegments += count;
+            currentPrunes += prunesNeeded;
+        }
+
+        if (totalSegments >= q) {
+            minPrunesNeeded = min(minPrunesNeeded, currentPrunes);
+        }
+    }
+
+    return minPrunesNeeded == INT_MAX ? 0 : minPrunesNeeded;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    int result = minPrunes(n, q, heights);
+    cout << result << endl;
+
+    return 0;
+}

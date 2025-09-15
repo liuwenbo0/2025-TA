@@ -1,0 +1,22 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    int length = list.size();  
+    // 确保有足够的容量
+    list.push_back(0);
+  
+    // 找到插入位置  
+    int i;  
+    for (i = 0; i < length; i++) {  
+        if (num <= list[i]) {  
+            break;  
+        }  
+    }  
+  
+    // 将元素向后移动为新元素腾出空间  
+    for (int j = length; j > i; j--) {  
+        list[j] = list[j - 1];  
+    }  
+  
+    // 插入新元素  
+    list[i] = num;  
+}

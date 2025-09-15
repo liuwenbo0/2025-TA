@@ -1,0 +1,8 @@
+# Ignore 发布包 directory
+Lab/labs/发布包/
+
+# Ignore other common files that shouldn't be in version control
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

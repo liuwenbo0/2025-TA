@@ -1,0 +1,40 @@
+#include "ThreeWayQuickSort.h"  
+  
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {  
+    if (p >= q) {  
+        return;  
+    }  
+  
+    int pivot = nums[q]; // 选择最后一个元素作为基准值  
+    int lt = p - 1; // 较小元素的索引  
+    int gt = q; // 较大元素的索引  
+    int i = p; // 当前元素的索引  
+  
+    while (i < gt) {  
+        if (nums[i] < pivot) {  
+            ++lt;  
+            std::swap(nums[lt], nums[i]);  
+            ++i;  
+        } else if (nums[i] > pivot) {  
+            --gt;  
+            std::swap(nums[i], nums[gt]);  
+        } else {  
+            // nums[i] == pivot，不做任何操作，继续检查下一个元素  
+            ++i;  
+        }  
+    }  
+  
+    // 此时，lt+1 到 i-1 是小于 pivot 的元素，i 到 gt-1 是等于 pivot 的元素（但已经不重要了，因为已经排好序）  
+    // gt 及之后是大于 pivot 的元素  
+    // 我们只需要对小于和大于 pivot 的部分进行递归排序  
+    three_way_quick_sort(nums, p, lt); // 递归排序左子数组（小于 pivot 的部分）  
+    three_way_quick_sort(nums, gt + 1, q); // 递归排序右子数组（大于 pivot 的部分）  
+    // 等于 pivot 的部分已经处于正确的位置，无需进一步排序  
+}  
+  
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {  
+    if (nums.size() == 0) {  
+        return;  
+    }  
+    three_way_quick_sort(nums, 0, nums.size() - 1);  
+}

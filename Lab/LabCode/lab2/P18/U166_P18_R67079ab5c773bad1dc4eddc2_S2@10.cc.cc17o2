@@ -1,0 +1,22 @@
+#include "Solution.h"
+#include <vector>
+using namespace std;
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+
+    for (int i = 1; i <= n; i++) {
+      
+        if (i % 2 == 1) {
+            ans.push_back((i + 1) / 2); 
+        } else {
+            ans.push_back(n - (i / 2) + 1); 
+        }
+    }
+
+    if (ans.size() != static_cast<size_t>(n)) {
+        throw std::runtime_error("Size of the permutation is incorrect.");
+    }
+
+    return ans;
+}

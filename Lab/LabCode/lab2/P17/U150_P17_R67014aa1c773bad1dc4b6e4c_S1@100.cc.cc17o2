@@ -1,0 +1,44 @@
+#include "Solution.h"
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int>> schedule;
+    for (int i = 0; i < n; i++) {
+        schedule.push_back(vector<int>(n, 0));
+    }
+    vector<int> usedInRows(n, 0);
+    vector<int> usedInCols(n, 0);
+    for(int col = 0; col < n; col++){
+        for(int row = 0; row < n; row++){
+            for(int rowIndex = 0; rowIndex < n; rowIndex++){
+                usedInRows[rowIndex] = 0;
+                usedInCols[rowIndex] = 0;
+            }
+
+            if(col == 0){
+                schedule[row][col] = row + 1;
+            }
+            if(row == 0)
+                schedule[row][col] = col + 1;
+            if(schedule[row][col] == 0){
+               for(int prevCol = 0; prevCol < col; prevCol++){
+                    if(schedule[row][prevCol] != 0){
+                        usedInRows[schedule[row][prevCol] - 1] = 1;
+                    }
+               }
+               for(int prevRow = 0; prevRow < n; prevRow++){
+                    if(schedule[prevRow][col] != 0)
+                        usedInCols[schedule[prevRow][col] - 1] = 1;
+               }
+               for(int num = 1; num <= n; num++){
+                    if(usedInRows[num - 1] == 0 && usedInCols[num - 1] == 0){
+                        schedule[row][col] = num;
+                        break;
+                    }
+               }
+            }
+            
+            schedule[schedule[row][col] - 1][col] = row + 1;
+        }
+    }
+
+    return schedule;
+}

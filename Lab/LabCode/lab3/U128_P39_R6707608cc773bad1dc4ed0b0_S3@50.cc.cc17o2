@@ -1,0 +1,45 @@
+#include "ThreeWayQuickSort.h"
+using namespace std;
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    if(p>=q) return;
+    int pivot = nums[p];
+    int lt = p, rt = q;
+    int i = p + 1;
+    int temp = 0;
+    while(i <= rt)
+    {
+        if(nums[i] < pivot)
+        {
+
+            temp = nums[lt];
+            nums[lt] = nums[i];
+            nums[i] = temp;
+            lt++;
+            i++;
+        }
+        else if(nums[i] > pivot)
+        {
+
+            temp = nums[rt];
+            nums[rt] = nums[i];
+            nums[i] = temp;
+            rt--;
+        }
+        else if(nums[i] == pivot)
+        {
+            i++;
+        }
+        
+    }
+    three_way_quick_sort(nums,p,lt-1);
+    three_way_quick_sort(nums,rt+1,q);
+
+}
+
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

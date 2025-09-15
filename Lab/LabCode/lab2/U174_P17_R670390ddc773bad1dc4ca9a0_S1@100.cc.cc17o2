@@ -1,0 +1,30 @@
+#include "Solution.h"
+using namespace std;
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    // 请在这里完成你的代码
+   if(n==2)
+   {
+    ans[0][0]=1;
+    ans[0][1]=2;
+    ans[1][0]=2;
+    ans[1][1]=1;
+    return ans;
+   }
+    vector<vector<int>> bord=Solution::round_robin_schedule(n/2);
+    for(int k=0;k<n/2;k++)
+    {
+        for(int i=0;i<n/2;i++)
+        {
+        ans[i+n/2][k+n/2]=bord[i][k];
+        ans[i][k+n/2]=bord[i][k]+n/2;
+        ans[i+n/2][k]=bord[i][k]+n/2;
+        ans[i][k]=bord[i][k];
+        }
+    }
+    return ans;
+  }

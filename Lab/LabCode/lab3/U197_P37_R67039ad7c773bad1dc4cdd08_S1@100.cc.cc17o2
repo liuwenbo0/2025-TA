@@ -1,0 +1,54 @@
+#include "HeapSort.h"
+
+inline int left(int n) { return n * 2 + 1; }
+inline int right(int n) { return n * 2 + 2; }
+inline void swap(int& a, int& b)
+{
+    auto tmp = a;
+    a = b;
+    b = tmp;
+}
+
+void HeapSort::max_heapify(std::vector<int>& nums, int i)
+{
+    while (true)
+    {
+        if (left(i) >= nums.size())
+            break;
+        if (right(i) >= nums.size() && left(i) < nums.size())
+        {
+            if (nums[i] < nums[left(i)])
+                swap(nums[i], nums[left(i)]);
+            break;
+        }
+        auto maxIndex = i;
+        if (nums[left(i)] > nums[maxIndex])
+            maxIndex = left(i);
+        if (nums[right(i)] > nums[maxIndex])
+            maxIndex = right(i);
+        swap(nums[i], nums[maxIndex]);
+        if (i == maxIndex)
+            break;
+        i = maxIndex;
+    }
+}
+
+void HeapSort::build_max_heap(std::vector<int>& nums)
+{
+    for (int i = nums.size() - 1; i >= 0; i--)
+        max_heapify(nums, i);
+}
+
+void HeapSort::mysort(std::vector<int>& nums)
+{
+    auto sorted = nums;
+    build_max_heap(nums);
+    for (int i = nums.size() - 1; i >= 0; i--)
+    {
+        sorted[i] = nums[0];
+        swap(nums[0], nums[i]);
+        nums.pop_back();
+        max_heapify(nums, 0);
+    }
+    nums.swap(sorted);
+}

@@ -1,0 +1,21 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+       int insertPos = 0;
+    while (insertPos < list.size() && list[insertPos] < num) {
+        insertPos++;
+    }
+
+    // 如果找到了位置，则将插入位置及其后的元素后移
+    if (insertPos < list.size()) {
+        for (int i = list.size() - 1; i >= insertPos; i--) {
+            list[i + 1] = list[i];
+        }
+    }
+
+    // 插入元素
+    list[insertPos] = num;
+
+    // 顺序表长度加一
+    list.push_back(0);
+    list.pop_back();
+}

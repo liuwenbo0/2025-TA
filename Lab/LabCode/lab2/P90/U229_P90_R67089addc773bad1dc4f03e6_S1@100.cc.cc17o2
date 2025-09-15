@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+int Height(const vector<int> &shu){
+    int height = 0;
+    while(pow(2, height) <= shu.size()){
+        height++;
+    }
+    return height;
+}
+
+int maxsum(const vector<int> &shu, int index){
+    if(index >= shu.size() || shu[index] == -1) return 0;
+    else if(shu.size() == 1) return shu[0];
+    else{
+        int left_max = maxsum(shu, 2 * index + 1);;
+        int right_max = maxsum(shu, 2 * index + 2);;
+        return shu[index] + max(left_max, right_max);
+    }
+}
+
+int specialsum(const vector<int> &shu, int index){
+    if(index >= shu.size() || shu[index] == -1) return 0;
+    else{
+        int sum = 0;
+        int left_index = 2 * index + 1;  
+        //左子节点索引
+        int right_index = 2 * index + 2; 
+        //右子节点索引
+        int left_shu = (left_index < shu.size()) ? shu[left_index] : -1; 
+        //左子节点值
+        int right_shu = (right_index < shu.size()) ? shu[right_index] : -1; 
+        //右子节点值
+        if ((shu[index] > left_shu) && (shu[index] > right_shu) && !(left_shu ==-1 && right_shu ==-1)){
+            sum += shu[index];
+        }
+        //递归计算左右子树的特殊区域值之和
+        sum += specialsum(shu, left_index);
+        sum += specialsum(shu, right_index);
+        return sum;
+    }
+}
+
+int main(){
+    vector<int> shu(0);
+    int input = 0;
+    while(cin >> input){
+        shu.push_back(input);
+    }
+
+    int gaodu = Height(shu);
+    int maxziyuan = maxsum(shu, 0);
+    int special = specialsum(shu, 0);
+
+    cout << gaodu << endl;
+    cout << maxziyuan << endl;
+    cout << special << endl;
+
+    return 0 ;
+}

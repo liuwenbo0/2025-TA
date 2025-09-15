@@ -1,0 +1,38 @@
+#include "Solution.h"
+#include <vector>
+#include <numeric>
+#include <stack>
+
+std::vector<int> Solution::perfect_permutation(int n) {
+    std::vector<int> result(n);
+    std::vector<int> temp(n);
+
+    std::iota(result.begin(), result.end(), 1);
+    std::stack<std::pair<int, int>> intervals;
+    intervals.push({0, n - 1});
+    
+    while (!intervals.empty()) {
+        auto [left, right] = intervals.top();
+        intervals.pop();
+
+        if (left + 1 >= right)
+            continue;
+
+        for (int i = left; i <= right; i++) {
+            temp[i] = result[i];
+        }
+
+        int index = left;
+        for (int i = left; i <= right; i += 2) {
+            result[index++] = temp[i];
+        }
+        for (int i = left + 1; i <= right; i += 2) {
+            result[index++] = temp[i];
+        }
+
+        intervals.push({left, (left + right) / 2});
+        intervals.push({(left + right) / 2 + 1, right});
+    }
+
+    return result;
+}

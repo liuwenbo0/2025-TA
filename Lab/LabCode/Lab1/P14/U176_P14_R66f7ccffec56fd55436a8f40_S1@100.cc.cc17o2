@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+
+long long s_sum = 0;
+#include <vector>
+
+void mergesort(std::vector<int>& nums, int left, int right) {
+    if (left >= right) {
+        return;
+    }
+    int mid = left + (right - left) / 2;
+
+    mergesort(nums, left, mid);
+    mergesort(nums, mid + 1, right);
+    std::vector<int> temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+            s_sum += (mid - i + 1);
+        }
+    }
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+    }
+    while (j <= right) {
+        temp[k++] = nums[j++];
+    }
+    for (int i = 0; i < temp.size(); ++i) {
+        nums[left + i] = temp[i];
+    }
+}
+
+int main() {
+    std::vector<int> nums;
+    int N;
+    std::cin >> N;
+    for (int i = 0; i < N; i++) {
+        int temp;
+        std::cin >> temp;
+        nums.push_back(temp);
+    }
+    mergesort(nums, 0, N - 1);
+    std::cout << s_sum << std::endl;
+
+    return 0;
+}

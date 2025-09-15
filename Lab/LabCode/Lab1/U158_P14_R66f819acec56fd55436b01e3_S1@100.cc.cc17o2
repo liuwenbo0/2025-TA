@@ -1,0 +1,42 @@
+#include<cstdio>
+#include<iostream>
+using namespace std;
+int n,a[500001],c[500001];
+long long ans;
+
+void mysort(int left,int right)//归并排序
+{
+    if(left==right)  return;
+    int mid=(left+right)/2,i=left,j=mid+1,k=left;
+    mysort(left,mid);
+	mysort(mid+1,right);
+    while(i<=mid&&j<=right){
+    	if(a[i]<=a[j]) c[k++]=a[i++];
+    	else {
+    		c[k++]=a[j++];
+			ans+=mid-i+1;
+		}
+	}
+    	
+    while(i<=mid){
+    	c[k++]=a[i++];
+	}
+    while(j<=right){
+    	c[k++]=a[j++];
+	}
+    for(int l=left;l<=right;l++){
+    	a[l]=c[l];
+	}
+    	
+} 
+
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;i++){
+    	cin>>a[i];
+	}
+    mysort(1,n);
+    cout<<ans;
+    return 0;
+}

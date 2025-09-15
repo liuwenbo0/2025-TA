@@ -1,0 +1,8 @@
+#include "SqList.h"
+void insert(SqList& list, int num){
+    int pos = 0;
+    while (pos < list.size() && list[pos] < num) {
+        pos++;
+    }
+    list.insert(list.begin() + pos, num);
+}

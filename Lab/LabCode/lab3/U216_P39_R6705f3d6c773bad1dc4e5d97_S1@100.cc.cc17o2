@@ -1,0 +1,34 @@
+#include "ThreeWayQuickSort.h"
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    if (p >= q) return; // 如果数组只有一个元素或者没有元素，则不用排序，直接返回
+
+    // 随机选择一个元素作为基准值，将该元素与最后一个元素进行交换
+    int pivotIndex = p + rand() % (q - p + 1);
+    std::swap(nums[pivotIndex], nums[q]);
+    int pivot = nums[q];
+
+    int lt = p; 
+    int gt = q; 
+    int i = p;  
+
+    while (i <= gt) {
+        if (nums[i] < pivot) {
+            std::swap(nums[i++], nums[lt++]);
+        } else if (nums[i] > pivot) {
+            std::swap(nums[i], nums[gt--]);
+        } else {
+            i++;
+        }
+    }
+
+    //通过递归分别排序小于基准值的部分以及大于基准值的部分
+    three_way_quick_sort(nums, p, lt - 1);
+    three_way_quick_sort(nums, gt + 1, q);
+// 请在这里完成你的代码
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

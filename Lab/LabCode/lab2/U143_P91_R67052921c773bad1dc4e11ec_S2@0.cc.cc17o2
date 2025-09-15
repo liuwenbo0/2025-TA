@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+int c = 0, num, r, l, s;
+void digui(int e) {
+    if (s == 0) 
+	return; 
+    if (e == 0) {
+        if (l > 1) {
+            --l;
+        } else if (s) {
+            c += 0; 
+            --s;
+        }
+        return;
+    }
+    if (e == 1) {
+        if (l > 1) {
+            --l;
+        } else if (s) {
+            c += 1; 
+            --s;
+        }
+        return;
+    }
+    digui(e / 2);
+    if (s > 0) {
+        digui(e % 2);
+    }
+    digui(e / 2);
+}
+
+int main() {
+    cin >> num >> l >> r;
+    s = r - l + 1; 
+    digui(num);  
+    return 0;
+}

@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <unordered_map>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+TreeNode* buildTree(const vector<int>& data) {
+    if (data.empty() || data[0] == -1) return nullptr;
+    TreeNode* root = new TreeNode(data[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+    int i = 1;
+    while (!q.empty() && i < data.size()) {
+        TreeNode* node = q.front();
+        q.pop();
+        if (data[i] != -1) {
+            node->left = new TreeNode(data[i]);
+            q.push(node->left);
+        }
+        i++;
+        if (i < data.size() && data[i] != -1) {
+            node->right = new TreeNode(data[i]);
+            q.push(node->right);
+        }
+        i++;
+    }
+    return root;
+}
+int treeHeight(TreeNode* root) {
+    if (!root) return 0;
+    return 1 + max(treeHeight(root->left), treeHeight(root->right));
+}
+
+int maxPathSum(TreeNode* root, int& maxSum) {
+    if (!root) return 0;
+    
+    int leftSum = maxPathSum(root->left, maxSum);
+    int rightSum = maxPathSum(root->right, maxSum);
+    
+    int currentSum = max(root->val, max(root->val + leftSum, root->val + rightSum));
+    maxSum = max(maxSum, currentSum);
+    return root->val + max(leftSum, rightSum);
+}
+
+int findSpecialNodesSum(TreeNode* root, unordered_map<TreeNode*, int>& parentValues) {
+    if (!root) return 0;
+    int specialSum = 0;
+    if (parentValues.find(root) != parentValues.end() && root->val > parentValues[root] &&
+        (root->left == nullptr || root->val > root->left->val) &&
+        (root->right == nullptr || root->val > root->right->val)) {
+        specialSum += root->val;
+    }
+    parentValues[root->left] = root->val;
+    parentValues[root->right] = root->val;
+    return specialSum + findSpecialNodesSum(root->left, parentValues) + findSpecialNodesSum(root->right, parentValues);
+}
+
+int main() {
+    string inputLine;
+    getline(cin, inputLine);
+    vector<int> data;
+    size_t pos = 0;
+    while ((pos = inputLine.find(' ')) != string::npos) {
+        data.push_back(stoi(inputLine.substr(0, pos)));
+        inputLine.erase(0, pos + 1);
+    }
+    data.push_back(stoi(inputLine));
+    TreeNode* root = buildTree(data);
+    int height = treeHeight(root);
+    cout << height << endl;
+    int maxSum = INT_MIN;
+    maxPathSum(root, maxSum);
+    cout << maxSum << endl;
+    unordered_map<TreeNode*, int> parentValues;
+    int specialSum = findSpecialNodesSum(root, parentValues);
+    cout << specialSum << endl;
+    return 0;
+}

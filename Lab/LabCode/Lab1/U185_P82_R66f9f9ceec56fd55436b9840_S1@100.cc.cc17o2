@@ -1,0 +1,44 @@
+#include "Linklist.h"
+#include <vector>
+
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list || list->next->next == list) {
+        return;
+    }
+
+    list = list->next; // 跳过头节点
+
+    int number = 0;
+    node* present = list;
+
+    // 计算链表长度
+    do {
+        present = present->next;
+        number++;
+    } while (present != list);
+
+    number--; // 减去头节点
+
+    std::vector<int> new_array(number);
+
+    // 填充数组
+    present = list;
+    int clue = 0;
+    while (clue < number) {
+        if (clue % 2 == 0) {
+            new_array[clue / 2] = present->num;
+        } else {
+            new_array[number - 1 - clue / 2] = present->num;
+        }
+        present = present->next;
+        clue++;
+    }
+
+    // 修改链表
+    clue = 0;
+    while (clue < number) {
+        list->num = new_array[clue];
+        list = list->next;
+        clue++;
+    }
+}

@@ -1,0 +1,7 @@
+#include"SqList.h"
+#include<iostream>
+#include<algorithm>
+void insert(SqList&list,int num){
+    int pos = distance(list.begin(),lower_bound(list.begin(),list.end(),num));
+    list.insert(list.begin()+pos,num);
+}

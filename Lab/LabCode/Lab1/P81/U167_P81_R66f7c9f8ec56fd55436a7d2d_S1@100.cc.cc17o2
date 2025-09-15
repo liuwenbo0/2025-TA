@@ -1,0 +1,14 @@
+#include"SqList.h"
+void insert(SqList& list, int number){
+    
+    for (auto it = list.begin(); it != list.end()+1; ++it) {
+    if(number<=*it){
+        list.insert(it,number);
+        return;
+    }
+    else if(it==list.end()){
+        list.push_back(number);
+        return;
+    }
+}
+}

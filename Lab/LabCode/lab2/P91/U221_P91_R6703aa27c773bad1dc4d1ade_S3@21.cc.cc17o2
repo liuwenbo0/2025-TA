@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+// 递归计算能量值为 1 的晶体数量
+long long countOnes(long long m, long long k, long long s, long long currentIndex, long long& count) {
+    if (m == 0) return currentIndex;
+    if (m == 1) {
+        if (currentIndex >= k && currentIndex <= s) {
+            count++;
+        }
+        return currentIndex + 1;
+    }
+    
+    long long half = m / 2;
+    currentIndex = countOnes(half, k, s, currentIndex, count);
+    currentIndex = countOnes(m % 2, k, s, currentIndex, count);
+    currentIndex = countOnes(half, k, s, currentIndex, count);
+    
+    return currentIndex;
+}
+
+int main() {
+    long long m;
+    long long k, s;
+    cin >> m >> k >> s;
+
+    long long count = 0;
+    countOnes(m, k, s, 1, count);
+
+    cout << count << endl;
+
+    return 0;
+}

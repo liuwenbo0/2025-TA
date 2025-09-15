@@ -1,0 +1,47 @@
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+
+
+std::unordered_map<long long, std::vector<long long>> memo;
+
+
+void splitCrystals(long long x, std::vector<long long>& result) {
+    if (x == 0 || x == 1) {
+        result.push_back(x);
+        return;
+    }
+    
+    if (memo.find(x) != memo.end()) {
+        result.insert(result.end(), memo[x].begin(), memo[x].end());
+        return;
+    }
+    splitCrystals(x / 2, result);
+    splitCrystals(x % 2, result);
+    splitCrystals(x / 2, result);
+    memo[x] = result;
+}
+
+
+int countOnesInRange(const std::vector<long long>& crystals, int k, int s) {
+    int count = 0;
+    for (size_t i = k - 1; i < static_cast<size_t>(s) && i < crystals.size(); ++i) {
+        if (crystals[i] == 1) {
+            ++count;
+        }
+    }
+    return count;
+}
+
+int main() {
+    long long m;
+    int k, s;
+    std::cin >> m >> k >> s;
+
+    std::vector<long long> crystals;
+    splitCrystals(m, crystals);
+
+    std::cout << countOnesInRange(crystals, k, s) << std::endl;
+    
+    return 0;
+}

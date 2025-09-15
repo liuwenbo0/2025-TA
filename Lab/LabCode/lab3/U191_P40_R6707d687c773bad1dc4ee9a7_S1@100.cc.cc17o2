@@ -1,0 +1,37 @@
+#include<iostream>
+#include<vector>
+#include<unordered_map>
+#include<algorithm>
+using namespace std;
+int main(void){ 
+    int n, q;
+    cin >> n >> q;
+    vector<int> bush(n);
+    for (int i = 0; i < n; ++i) cin >> bush[i];
+    if(!n){ cout << 0; return 0; }
+    unordered_map<int, vector<int>> ways;
+    for (auto h : bush) {
+        auto curh = h;
+        int times = 0;
+        while(curh) {
+            if(ways.find(curh) == ways.end()) {
+                ways[curh] = vector<int>();
+            }
+            ways[curh].push_back(times++);
+            curh /= 2;
+        }
+    }
+    int mintimes = 2147483647;
+    for (const auto& check : ways) {
+        vector<int> menu = check.second;
+        int len = menu.size();
+        if(len >= q) {
+            sort(menu.begin(), menu.end());
+            int now = 0;
+            for (int i = 0; i < q; ++i) now += menu[i];
+            if(now < mintimes) mintimes = now;
+        }
+    }
+    cout << mintimes;
+    return 0;
+}

@@ -1,0 +1,8 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    //在此处添加代码
+
+auto it =lower_bound(list.begin(), list.end(), num);
+    
+    list.insert(it, num);
+}

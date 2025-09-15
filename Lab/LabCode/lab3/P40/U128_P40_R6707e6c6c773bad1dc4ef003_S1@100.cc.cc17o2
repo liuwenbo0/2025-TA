@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+
+int minCutsForEqualHeight(int n, int q, vector<int>& bushHeights) 
+{
+    unordered_map<int, vector<int>> heightFrequency;
+    for (int i = 0; i < bushHeights.size(); ++i) 
+    {
+        int height = bushHeights[i];
+        int currentHeight = height;
+        int a = 0;
+        while (currentHeight > 0) 
+        {
+            heightFrequency[currentHeight].push_back(a);
+            currentHeight /= 2;
+            a++;
+        }
+    }
+
+    int minCutTotal = INT_MAX;
+
+    for (auto it = heightFrequency.begin(); it != heightFrequency.end(); ++it) 
+    {
+        const vector<int>& cutList = it->second;
+        if (cutList.size() >= static_cast<size_t>(q)) {
+            vector<int> sortedCutCounts = cutList;
+            sort(sortedCutCounts.begin(), sortedCutCounts.end());           
+            int totalCuts = 0;
+            for (int j = 0; j < q; ++j) {
+                totalCuts += sortedCutCounts[j];
+            }
+            minCutTotal = min(minCutTotal, totalCuts);
+        }
+    }
+
+    return (minCutTotal == INT_MAX) ? 0 : minCutTotal;
+}
+
+int main() 
+{
+    int n, q;
+    cin >> n >> q;
+    vector<int> bushHeights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> bushHeights[i];
+    }
+    cout << minCutsForEqualHeight(n, q, bushHeights) << endl;
+
+    return 0;
+}

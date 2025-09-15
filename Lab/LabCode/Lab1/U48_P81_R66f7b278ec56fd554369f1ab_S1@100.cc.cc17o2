@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+typedef std::vector<int> SqList;
+
+void insert(SqList& list, int num) {
+    int n = list.size();
+    list.push_back(0); // 先扩展一个空间
+    int i = n - 1;
+
+    // 寻找插入位置
+    while (i >= 0 && list[i] > num) {
+        list[i + 1] = list[i]; // 将元素后移
+        i--;
+    }
+    list[i + 1] = num; // 插入元素
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+
+    SqList list(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> list[i];
+    }
+
+    int m;
+    std::cin >> m;
+    for (int i = 0; i < m; ++i) {
+        int num;
+        std::cin >> num;
+        insert(list, num);
+    }
+
+    for (int i = 0; i < list.size(); ++i) {
+        std::cout << list[i] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}

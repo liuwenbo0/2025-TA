@@ -1,0 +1,21 @@
+#include "Solution.h"
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) {
+    // 请在这里完成你的代码
+
+
+    return 0;
+}
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) {
+    // 请在这里完成你的代码
+    int n=high;
+    long long b[100001]={0},ans=LLONG_MIN,a;
+    b[0]=A[0];
+    for(int i=1;i<=n;++i){
+      a=A[i];
+      b[i]=max(a,b[i-1]+a);
+      ans=max(ans,b[i]);
+    }
+
+    return ans;
+    
+}

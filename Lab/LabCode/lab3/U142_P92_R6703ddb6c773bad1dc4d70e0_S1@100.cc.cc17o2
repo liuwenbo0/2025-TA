@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <algorithm>
+
+std::vector<int> maxInWindows(int size, int windowSize, const std::vector<int>& data) {
+    std::vector<int> maxInEachWindow(size - windowSize + 1, 0);
+    std::deque<int> indices;
+
+    for (int i = 0; i < windowSize; ++i) {
+        while (!indices.empty() && data[indices.back()] < data[i]) {
+            indices.pop_back();
+        }
+        indices.push_back(i);
+        maxInEachWindow[0] = data[indices.front()];
+    }
+
+    for (int i = 1; i < size - windowSize + 1; ++i) {
+        if (indices.front() == i - 1) {
+            indices.pop_front();
+        }
+        while (!indices.empty() && data[indices.back()] < data[i + windowSize - 1]) {
+            indices.pop_back();
+        }
+        indices.push_back(i + windowSize - 1);
+        maxInEachWindow[i] = data[indices.front()];
+    }
+
+    return maxInEachWindow;
+}
+
+int main() {
+    int length, window;
+    std::cin >> length >> window;
+    std::vector<int> array(length);
+    for (int i = 0; i < length; ++i) {
+        std::cin >> array[i];
+    }
+
+    std::vector<int> output = maxInWindows(length, window, array);
+    for (int i = 0; i < output.size(); ++i) {
+        std::cout << output[i] << (i < output.size() - 1 ? ' ' : '\n');
+    }
+
+    return 0;
+}

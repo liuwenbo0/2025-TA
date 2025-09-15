@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+long long  merge_sort_aux(vector<int> &nums, long long left, long long right) {
+    long long comparisons = 0;
+
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        comparisons =comparisons + merge_sort_aux(nums, left, mid);
+        comparisons =comparisons + merge_sort_aux(nums, mid + 1, right);
+
+        long long n1 = mid - left + 1;
+        long long n2 = right - mid;
+
+        vector<int> leftArr(n1);
+        vector<int> rightArr(n2);
+
+        for (long long i = 0; i < n1; ++i)
+            leftArr[i] = nums[left + i];
+        for (long long j = 0; j < n2; ++j)
+            rightArr[j] = nums[mid + 1 + j];
+
+        long long i = 0, j = 0, k = 0;
+        while (i < n1 && j < n2) {
+            if (leftArr[i] > rightArr[j]) {
+                nums[k+left] = leftArr[i];
+                comparisons = comparisons + right - left - k - n1 + i + 1;
+                i++;
+            } else {
+                nums[k+left] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            nums[k+left] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            nums[k+left] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+    return comparisons;
+}
+
+int main() {
+    long long n;
+    
+    long long flag =0;//记录逆序列的数目
+    cin>>n;
+    vector<int> nums(n);
+    for (int i=0;i<=n-1;i++){
+
+        cin>>nums[i];
+        }
+    flag = merge_sort_aux(nums,0,n-1);
+    cout<<flag;
+    return 0;
+}

@@ -1,0 +1,30 @@
+#include "Solution.h"
+void range(vector<int> &arr, int n)
+{
+    if (n == 1)
+        return;
+    int i;
+    int odd_len = (n + 1) / 2;
+    int even_len = n / 2;
+    vector<int> odd(odd_len);
+    vector<int> even(even_len);
+    for (i = 0; i < odd_len; i++)
+        odd[i] = arr[2 * i];
+    for (i = 0; i < even_len; i++)
+        even[i] = arr[2 * i + 1];
+    range(odd, odd_len);
+    range(even, even_len);
+    //分治
+    for (i = 0; i < odd_len; i++)
+        arr[i] = odd[i];
+    for (i = odd_len; i < n; i++)
+        arr[i] = even[i - odd_len];
+}
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    for(int i=1;i<=n;i++){
+        ans.push_back(i);
+     }
+    range(ans,n);
+    return ans;
+}

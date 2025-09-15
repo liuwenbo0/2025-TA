@@ -1,0 +1,31 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+int main()
+{
+    int n, k;
+    cin >> n >> k;
+    vector<int> eyesight(n);
+    for (int i = 0; i < n; i++) {
+        cin >> eyesight[i];
+    }
+    int firstmxindex = max_element(eyesight.begin(), eyesight.begin() + k) - eyesight.begin();
+	int firstmx = eyesight[firstmxindex];
+	cout << firstmx << " ";
+    for (int i = 1; i <= n - k; i++) {
+		if (eyesight[i + k - 1] > firstmx) {
+			cout << eyesight[i + k - 1] << " ";
+			firstmx = eyesight[i + k - 1];
+			firstmxindex = i + k - 1;
+		}
+		else {
+			if (firstmxindex == i - 1) {
+				firstmxindex = max_element(eyesight.begin() + i, eyesight.begin() + i + k) - eyesight.begin();
+				firstmx = eyesight[firstmxindex];
+			}
+			cout << firstmx << " ";
+		}
+    }
+}

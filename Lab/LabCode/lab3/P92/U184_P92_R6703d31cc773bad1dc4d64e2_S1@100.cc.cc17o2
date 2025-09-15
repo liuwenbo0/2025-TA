@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void MAX(vector<long long>& nums,long long n,long long k){
+    vector<long long> maxnums(n - k + 1);
+    long long maxnum = nums[0];
+    for (long long i = 1; i < k; i++) {
+        if (nums[i] > maxnum) {
+            maxnum = nums[i];
+        }
+    }
+    maxnums[0] = maxnum;
+    for (long long i = 1; i < n - k + 1; i++) {
+        if (nums[i + k - 1] > maxnum) {
+            maxnum = nums[i + k - 1];
+        }
+        if (nums[i - 1] == maxnum) {
+            maxnum = nums[i]; 
+            for (long long j = i + 1; j < i + k; j++) {
+                if (nums[j] > maxnum) {
+                    maxnum = nums[j];
+                }
+            }
+        }
+        // 将当前窗口的最大值存储到 maxnums 数组中
+        maxnums[i] = maxnum;
+    }
+
+    // 输出 maxnums 数组
+    for (long long i = 0; i < n - k + 1; i++) {
+        cout << maxnums[i] << " ";
+    }
+    cout << endl;
+}
+int main(){
+    long long n,k;
+    cin>>n>>k;
+    vector<long long> nums(n);
+    for(long long i=0;i<n;i++){
+        cin>>nums[i];
+    }
+    MAX(nums,n,k);
+    return 0;
+}

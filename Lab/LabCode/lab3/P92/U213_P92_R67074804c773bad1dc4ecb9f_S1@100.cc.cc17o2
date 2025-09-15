@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+void build(int n, vector<int> &data) {
+    for (int i = 0; i < n; i++) {
+        cin >> data[i];
+    }
+}
+
+void print(const vector<int> &result) {
+    for (int num : result) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int find_max(int k, const vector<int> &data, int start_index) {
+    int max_val = INT_MIN;
+    int max_index = start_index;
+    for (int i = start_index; i < start_index + k; i++) {
+        if (data[i] > max_val) {
+            max_val = data[i];
+            max_index = i;
+        }
+    }
+    return max_val;
+}
+
+void scan(int k, int n, const vector<int> &data, vector<int> &result) {
+    if (k > n) return;
+    int max_val = find_max(k, data, 0);
+    result.push_back(max_val);
+    for (int i = 1; i <= n - k; i++) {
+        // 检查离开窗口的元素是否是当前最大值
+        if (data[i - 1] == max_val) {
+            max_val = find_max(k, data, i);
+        } else {
+            // 检查进入窗口的元素是否大于当前最大值
+            if (data[i + k - 1] > max_val) {
+                max_val = data[i + k - 1];
+            }
+        }
+        result.push_back(max_val);
+    }
+}
+
+int main() {
+    int n = 0, k = 0;
+    cin >> n >> k;
+    vector<int> data(n);
+    build(n, data);
+    vector<int> result;
+    scan(k, n, data, result);
+    print(result);
+    return 0;
+}

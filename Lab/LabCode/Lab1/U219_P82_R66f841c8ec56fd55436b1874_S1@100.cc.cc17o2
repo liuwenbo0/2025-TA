@@ -1,0 +1,39 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    Linklist p,h,l,t,list1;
+    t = list;
+    list1 = list->next;
+    p = list1;
+    l = p;
+    h = list1->next;
+    int n = 0;
+    while(l->next!=p){
+        n++;
+        l = l->next;
+    }
+    if(n == 1)
+        return;
+    
+    for (int i = 0;i<=(n-1-(n-1)%2)/2-1;i++){
+        p->next = p->next->next;
+        p = p->next;
+
+        }
+
+    if(n%2 == 0){
+        h = p->next;
+        for (int i = 0;i<=(n-2-(n-2)%2)/2-1;i++){
+            h->next = h->prior->prior;
+            h = h->prior->prior;
+        } }
+    else{
+        p->next = p->prior;
+        h = p->prior;
+        for (int i = 0;i<=(n-2-(n-2)%2)/2-1;i++){
+            h->next = h->prior->prior;
+            h = h->prior->prior;
+        } 
+    }
+    t->prior = h;
+    }

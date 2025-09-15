@@ -1,0 +1,151 @@
+#include<iostream>
+#include<vector>
+#include<math.h>
+#include<deque>
+using namespace std;
+int partition(std::vector<int>& nums, int p, int q) {
+	// 请在这里完成你的代码
+	int pivot = nums[p];
+
+	while (p < q)
+	{
+		while (p < q && nums[q] >= pivot)
+		{
+			q--;
+		}
+		nums[p] = nums[q];
+
+		while (p < q && nums[p] <= pivot)
+		{
+			p++;
+		}
+		nums[q] = nums[p];
+	}
+	nums[p] = pivot;
+
+	return p;
+
+}
+
+void quick_sort(std::vector<int>& nums, int l, int r) {
+	// 请在这里完成你的代码
+	if (l < r)
+	{
+		int pivot = partition(nums, l, r);
+		quick_sort(nums, l, pivot - 1);
+		quick_sort(nums, pivot + 1, r);
+	}
+
+}
+void swap(vector<int>& nums, int p, int a)
+{
+	int temp;
+	temp = nums[p];
+	nums[p] = nums[a];
+	nums[a] = temp;
+}
+
+void three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+	// 请在这里完成你的代码
+	if (p >= q) {
+		return;
+	}
+
+	int v = int(rand() % (q - p + 1) + p);
+	swap(nums, p, v);
+	int pivot = nums[p];
+	int lt = p;
+	int i = p;
+	int gt = q;
+
+	while (i <= gt) {
+		if (nums[i] < pivot) {
+			swap(nums, lt, i);
+			lt++;
+			i++;
+		}
+		else if (nums[i] > pivot) {
+			swap(nums, i, gt);
+			gt--;
+		}
+		else {
+			i++;
+		}
+	}
+
+	three_way_quick_sort(nums, p, lt - 1);
+	three_way_quick_sort(nums, gt + 1, q);
+
+}
+int mysort(std::vector<int> nums) {
+	if (nums.size() == 0)
+		return 0;
+	three_way_quick_sort(nums, 0, nums.size() - 1);
+	return nums[int(nums.size()) - 1];
+}
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+	int n = nums.size();
+	vector<int>ans;
+
+	deque<int>qmax;
+	for (int r = 0; r < n; r++)
+	{
+		while (!qmax.empty() && nums[qmax.back()] <= nums[r])
+		{
+			qmax.pop_back();
+			
+		}
+		qmax.push_back(r);
+
+		if (qmax.front() == r - k)
+		{
+			qmax.pop_front();
+			
+		}
+
+		if (r >= k - 1)
+		{
+			ans.push_back(nums[qmax.front()]);
+			
+		}
+	}
+	return ans;
+}
+int main()
+{
+	int n;
+	int k;
+	vector<int>nums;
+	cin >> n;
+	cin >> k;
+	vector<int>keep(k);
+	vector<int>ans(n - k);
+	for (int i = 0; i < n; i++)
+	{
+		int p;
+		cin >> p;
+		nums.push_back(p);
+	}
+	for (int j = 0; j < k; j++)
+	{
+		keep[j] = nums[j];
+	}
+	/*int max = mysort(keep);
+	cout << max << " ";
+	for (int i = k; i < n; i++)
+	{
+		keep.erase(keep.begin());
+		keep.push_back(nums[i]);
+		max=mysort(keep);
+		cout << max << "";
+		if (i != n-1)
+		{
+			cout << " " << "";
+		}
+	}*/
+	ans = maxSlidingWindow(nums, k);
+	for (int i = 0; i < n - k + 1; i++)
+	{
+		cout << ans[i] << " ";
+	}
+}

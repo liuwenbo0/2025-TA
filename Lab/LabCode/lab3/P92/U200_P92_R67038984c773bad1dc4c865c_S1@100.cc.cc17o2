@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 1000001
+int num[MAXN],p[MAXN],a[MAXN];
+int k,head,tail,n;
+
+void dpmax()
+{
+	int i;
+	head=0;
+	tail=1;
+	for(i=1;i<=n;++i)
+	{
+		while(num[head]<=i-k&& head<=tail) ++head;
+		while(a[i]>=p[tail] && head<=tail) --tail;
+		p[++tail]=a[i];
+		num[tail]=i;
+		if(i>=k) cout<<p[head]<<' ';
+	}
+}
+
+int main()
+{
+	cin>>n>>k;
+	for(int i=1;i<=n;++i) cin>>a[i];
+	dpmax();
+}

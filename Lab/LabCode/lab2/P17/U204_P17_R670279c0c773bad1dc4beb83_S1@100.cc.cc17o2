@@ -1,0 +1,135 @@
+#include "Solution.h" 
+/*
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0;i<n;i++) {
+      ans.push_back(vector<int>(n, 0));
+    
+    // 请在这里完成你的代码
+    for(int i=0;i<n;i++)
+    {
+        ans[i][0]=i+1; 
+    }
+    for(int i=0;i<n;i++)
+    {   if(i%2==0)
+        ans[i][1]=ans[i+1][0];
+        else ans[i][1]=ans[i-1][0];
+    }
+    for(int line=0;line<n/2;line++)
+    {
+        for(int block=0;block<n/2-1;block++)
+        {
+            if(line%2==0)
+            {
+                ans[2*line][2*block+2]=(ans[2*line][2*block]+2);
+                if(ans[2*line][2*block+2]>n)
+                ans[2*line][2*block+2]-=n;
+
+                ans[2*line+1][2*block+2]=(ans[2*line+1][2*block]+2);
+                if(ans[2*line+1][2*block+2]>n)
+                ans[2*line+1][2*block+2]-=n;
+
+                ans[2*line][2*block+2+1]=(ans[2*line][2*block+1]+2);
+                if(ans[2*line][2*block+2+1]>n)
+                ans[2*line][2*block+2+1]-=n;
+
+                ans[2*line+1][2*block+2+1]=(ans[2*line+1][2*block+1]+2);
+                if(ans[2*line+1][2*block+2+1]>n)
+                ans[2*line+1][2*block+2+1]-=n;
+
+            }
+            else if(line%2==1)
+            {
+                ans[2*line][2*block+2]=(ans[2*line][2*block]-2);
+                if(ans[2*line][2*block+2]<=0)
+                ans[2*line][2*block+2]+=n;
+
+                ans[2*line+1][2*block+2]=(ans[2*line+1][2*block]-2);
+                if(ans[2*line+1][2*block+2]<=0)
+                ans[2*line+1][2*block+2]+=n;
+
+                ans[2*line][2*block+2+1]=(ans[2*line][2*block+1]-2);
+                if(ans[2*line][2*block+2+1]<=0)
+                ans[2*line][2*block+2+1]+=n;
+
+                ans[2*line+1][2*block+2+1]=(ans[2*line+1][2*block+1]-2);
+                if(ans[2*line+1][2*block+2+1]<=0)
+                ans[2*line+1][2*block+2+1]+=n;
+            }
+        }
+    }
+
+
+    return ans;  
+}*/
+/*vector<vector<int>> Solution::round_robin_schedule(int n)
+{
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0;i<n;i++)
+    {
+      ans.push_back(vector<int>(n, 0));
+    }
+    ans[1][1]=1;
+    ans[1][2]=2;
+    ans[2][1]=2;
+    ans[2][2]=1;
+    int p=2;
+    for(int t=1;t<n;t++)
+     {  int temp = p;
+        p *= 2;
+        for(int i=temp+1;i<=p;i++)
+        {
+            for(int j=1;j<=temp;j++)
+            {
+                ans[i][j]=ans[i-temp][j]+temp;
+            }
+        }
+        for (int i=1;i<=temp;i++)
+        {
+            for(int j=temp+1;j<=p;j++)
+            {
+                ans[i][j]=ans[i+temp][(j+temp)%n];
+            }
+        }
+        for (int i=temp+1;i<=p;i++)
+        {
+            for (int j=temp+1;j<=p;j++)
+            {
+                ans[i][j]=ans[i-temp][j-temp];
+            }
+        }
+    }
+    
+    return ans;
+
+}*/
+void fill(int n,vector<vector<int>>& ans)
+{
+    if(n==1) return;
+    int half=n/2;
+    fill(half,ans);
+    for(int i=0;i<half;i++)
+    {
+        for(int j=0;j<half;j++)
+        {
+            ans[i+half][j]=ans[i][j]+half;
+            ans[i][j+half]=ans[i+half][j];
+            ans[i+half][j+half]=ans[i][j];
+        }
+    }
+}
+
+vector<vector<int>> Solution::round_robin_schedule(int n) 
+{
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++)
+    {
+      ans.push_back(vector<int>(n, 0));
+    }
+     ans[0][0]=1;
+     fill(n,ans);
+     return ans;
+  }

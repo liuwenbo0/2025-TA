@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+
+const int MAX_SIZE = 2000000;
+
+int countOnesInRange(int number, int left, int right) {
+    int onesCount = 0;
+    int rangeLength = right - left + 1;
+    std::vector<int> stack;
+    stack.push_back(number);
+    while (!stack.empty()) {
+        int currentElement = stack.back();
+        stack.pop_back();
+        if (rangeLength == 0) continue;
+        if (currentElement == 0) {
+            if (left > 1) {
+                left--;
+            } else if (rangeLength > 0) {
+                onesCount += 0;
+                rangeLength--;
+            }
+        } else if (currentElement == 1) {
+            if (left > 1) {
+                left--;
+            } else if (rangeLength > 0) {
+                onesCount += 1;
+                rangeLength--;
+            }
+        } else {
+            stack.push_back(currentElement / 2);
+            if (rangeLength > 0) {
+                stack.push_back(currentElement % 2);
+            }
+            stack.push_back(currentElement / 2);
+        }
+    }
+    return onesCount;
+}
+
+int main() {
+    int number, leftBound, rightBound;
+    std::cin >> number >> leftBound >> rightBound;
+    int result = countOnesInRange(number, leftBound, rightBound);
+    std::cout << result;
+    return 0;
+}

@@ -1,0 +1,21 @@
+#include "InsertionSort.h"
+
+void InsertionSort::mysort(std::vector<int>& nums) 
+{
+    int N=nums.size(),b;
+
+    for(int j=0;j<N-1;j++)
+    {
+        if(nums[j]>nums[j+1])
+        {
+            int a;
+            b=nums[j+1];
+            for(a=j;a>=0&&b<nums[a];a--)
+            {
+                nums[a+1]=nums[a];
+            }
+            nums[a+1]=b;
+        }
+    }
+    return ;
+}

@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+    vector<int> maxnums(n - k + 1);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+    int maxnum = nums[0];
+    for (int i = 1; i < k; i++) {
+        if (nums[i] >= maxnum) {
+            maxnum = nums[i];
+            
+        }
+    }
+    maxnums[0] = maxnum;
+    for (int i = 1; i < n - k + 1; i++) {       
+        if (nums[i + k - 1] > maxnum) {
+            maxnum = nums[i + k - 1];
+        }        
+        if (nums[i - 1] == maxnum) {
+            maxnum = nums[i]; 
+            for (int j = i + 1; j < i + k; j++) {
+                if (nums[j] > maxnum) {
+                    maxnum = nums[j];
+                }
+            }
+        }
+        
+        maxnums[i] = maxnum;
+    }
+
+    for (int i = 0; i < n - k + 1; i++) {
+        cout << maxnums[i] << " ";
+    }
+    cout << endl;
+    return 0;
+}

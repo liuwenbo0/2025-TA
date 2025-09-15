@@ -1,0 +1,45 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    Linklist first = new node;
+    first->next = list->next;
+    first->prior = list -> prior;
+    first -> num = list -> num;
+    Linklist ji = new node;
+    Linklist ou = new node;
+    Linklist ret = new node;
+    ji->num = first->next->num;
+    ou->num = first->next->next->num;
+    ji->prior = ou;
+    ou->next = ji;
+    ret = ji;
+    int kk = 0;
+    list = list->next;
+    while(1)
+    {
+        list = list->next;
+        if(list->next == first->next)break;
+        if(kk % 2 == 0)
+        {
+            Linklist by = new node;
+            by -> num = list -> num;
+            by -> next = ou;
+            ou->prior = by;
+            ou = ou->prior;
+        }
+        else
+        {
+            Linklist by = new node;
+            by -> num = list -> num;
+            by -> prior = ji;
+            ji->next = by;
+            ji = ji->next;
+        }
+        kk++;
+    }
+    ji->next = ou;
+    ou->prior = ji;
+    list = ret->prior;
+    
+
+}

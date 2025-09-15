@@ -1,0 +1,52 @@
+#include"Linklist.hpp"
+//按要求修改双向循环链表的元素顺序
+//@param
+//list:待处理双向循环链表的head
+void changeList(Linklist &list){
+//请在这里完成你的代码
+ int i=1,j=1;
+ for(j<=n){
+    list[i]=list[j];
+    list[n-i+1]=list[i+1];
+    i++;
+    j=j+2;
+
+ }
+ }
+
+ #include<iostream>
+
+using namespace std;
+
+struct node{
+	int num;
+	node *prior, *next;
+};
+
+using Linklist = node*;
+
+void changeList(Linklist &list);
+
+int main(){
+	int n;
+	Linklist head, tail, point;
+    head = tail = new node();
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        point = new node();
+        cin >> point->num;
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    head->prior = tail;
+    tail->next = head;
+    changeList(head);
+    point = head->next;
+    while(point != head->prior){
+    	cout << point->num << " ";
+    	point = point->next;
+	}
+	cout << point->num;
+	return 0;
+}

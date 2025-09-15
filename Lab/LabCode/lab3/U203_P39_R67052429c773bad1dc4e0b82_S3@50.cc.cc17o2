@@ -1,0 +1,38 @@
+#include "ThreeWayQuickSort.h"  
+  
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {  
+    if (p >= q) {  
+        return; // 如果子数组为空或只有一个元素，则无需排序  
+    }  
+  
+    // 选择基准元素，这里选择 nums[p] 作为基准（也可以选择其他位置的元素）  
+    int pivot = nums[p];  
+    int lt = p; // 小于基准的元素的边界  
+    int gt = q; // 大于基准的元素的边界  
+    int i = p + 1; // 当前考察的元素的索引  
+  
+    while (i <= gt) {  
+        if (nums[i] < pivot) {  
+            std::swap(nums[lt++], nums[i++]); // 小于基准的元素移到左边，并移动两个指针  
+        } else if (nums[i] > pivot) {  
+            std::swap(nums[i], nums[gt--]); // 大于基准的元素移到右边，只移动 gt 指针  
+        } else {  
+            // 等于基准的元素留在中间，只移动 i 指针  
+            ++i;  
+        }  
+    }  
+  
+    // 此时，nums[p] 到 nums[lt-1] 是小于基准的元素  
+    // nums[lt] 到 nums[gt+1] 是等于基准的元素（注意 gt 已经在等于基准的元素之后了，所以要加1）  
+    // nums[gt+1] 到 nums[q] 是大于基准的元素  
+    // 递归地对小于和大于基准的子数组进行排序  
+    three_way_quick_sort(nums, p, lt - 1);  
+    three_way_quick_sort(nums, gt + 1, q);  
+}  
+  
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {  
+    if (nums.size() == 0) {  
+        return;  
+    }  
+    three_way_quick_sort(nums, 0, nums.size() - 1);  
+}

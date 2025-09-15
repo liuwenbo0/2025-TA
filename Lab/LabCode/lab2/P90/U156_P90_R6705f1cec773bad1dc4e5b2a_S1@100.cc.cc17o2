@@ -1,0 +1,49 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;  
+
+bool nodeExists(const vector<int>& tree, int idx) {
+    return idx >= 0 && idx < (int)tree.size() && tree[idx] != -1;
+}
+
+int calculateHeight(const vector<int>& tree, int root) {
+    if (!nodeExists(tree, root)) return 0;
+
+    int leftHeight = calculateHeight(tree, 2 * root + 1);
+    int rightHeight = calculateHeight(tree, 2 * root + 2);
+  
+    return max(leftHeight, rightHeight) + 1;
+}
+
+int maxPathSum(const vector<int>& tree, int root) {
+    if (!nodeExists(tree, root)) return 0;
+
+    int leftSum = maxPathSum(tree, 2 * root + 1);
+    int rightSum = maxPathSum(tree, 2 * root + 2);
+
+    return max(leftSum, rightSum) + tree[root];
+}
+  
+int customFunction(const vector<int>& tree, int root, int nodeCount) {
+    bool leftExists = 2 * root + 1 < nodeCount && tree[2 * root + 1] != -1;
+    bool rightExists = 2 * root + 2 < nodeCount && tree[2 * root + 2] != -1;
+    if (root >= nodeCount || tree[root] == -1 || (!leftExists && !rightExists)) return 0;
+
+    if (tree[root] > (leftExists ? tree[2 * root + 1] : -1) && tree[root] > (rightExists ? tree[2 * root + 2] : -1)) {
+        return tree[root] + customFunction(tree, 2 * root + 1, nodeCount) + customFunction(tree, 2 * root + 2, nodeCount);
+    }
+    return customFunction(tree, 2 * root + 1, nodeCount) + customFunction(tree, 2 * root + 2, nodeCount);
+
+}
+
+int main() {
+    int num;
+    vector<int> tree;
+    while (cin >> num) {
+        tree.push_back(num);
+    }
+
+    cout << calculateHeight(tree, 0) << endl << maxPathSum(tree, 0) << endl << customFunction(tree, 0, tree.size()) << endl;  
+    return 0;
+}

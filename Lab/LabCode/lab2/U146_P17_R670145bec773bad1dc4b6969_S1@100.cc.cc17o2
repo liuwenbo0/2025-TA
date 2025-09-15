@@ -1,0 +1,23 @@
+#include "Solution.h"
+
+using namespace std;
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int>> schedule(n, vector<int>(n, 0));
+    for (int i = 0; i < n; ++i) {
+        schedule[i][0] = i + 1;
+    }
+
+    for (int size = 2; size <= n; size *= 2) {
+        for (int start = 0; start < n; start += size) {
+            for (int i = 0; i < size / 2; ++i) {
+                for (int j = 0; j < size / 2; ++j) {
+                    schedule[start + i + size / 2][start + j] = schedule[start + i][start + j] + size / 2;
+                    schedule[start + i][start + j + size / 2] = schedule[start + i + size / 2][start + j];
+                    schedule[start + i + size / 2][start + j + size / 2] = schedule[start + i][start + j];
+                }
+            }
+        }
+    }
+    return schedule;
+}

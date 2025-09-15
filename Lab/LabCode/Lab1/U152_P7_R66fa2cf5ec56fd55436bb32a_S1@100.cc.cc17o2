@@ -1,0 +1,40 @@
+#include "MergeSort.h"
+
+void merge(std::vector<int>& nums, int left, int mid, int right) {
+    std::vector<int> temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+    
+    // 合并两个子数组到临时数组
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+        }
+    }
+    
+    //左边有剩
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+    }
+    
+    //右边有剩
+    while (j <= right) {
+        temp[k++] = nums[j++];
+    }
+    
+    // 将临时数组复制回原数组
+    for (i = left, k = 0; i <= right; ++i) {
+        nums[i] = temp[k++];
+    }
+}
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        merge_sort_aux(nums, left, mid);
+        merge_sort_aux(nums, mid + 1, right);
+        merge(nums, left, mid, right);     
+    }
+}

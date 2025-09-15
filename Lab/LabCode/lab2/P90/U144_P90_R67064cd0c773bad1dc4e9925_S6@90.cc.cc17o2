@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+const int SIZE = 2e6 + 5;
+int values[SIZE], temp[SIZE];
+int elementCount = 0, total;
+int result, height;
+
+int traverse(int index, int limit) {
+    if (index > limit) return 0;
+    temp[index] = values[index] + max(traverse(index * 2 + 1, limit), traverse(index * 2 + 2, limit));
+    if (temp[index] < 0) return 0;
+    return temp[index];
+}
+
+int main() {
+    while (cin >> values[elementCount]) {
+        elementCount++;
+    }
+    total = elementCount;
+
+    while (total) {
+        total /= 2;
+        height++;
+    }
+
+    int f = 1;
+    for (int i = elementCount / 2; i < elementCount; i++) {
+        if (values[i] != -1) f = 0;
+    }
+    height -= f;
+    cout << height << endl;
+
+    cout << traverse(0, elementCount - 1) << endl;
+    total = 1;
+    while (height--) total *= 2;
+
+    for (int i = 0; i <= total * 2 - 1; i++) {
+        if (values[i] == 0) values[i] = -1;
+    }
+
+    total--;
+    for (int i = 0; i < total; i++) {
+        if (values[i * 2 + 1] != -1 || values[i * 2 + 2] != -1) {
+            if (values[i] > max(values[i * 2 + 1], values[i * 2 + 2]))
+                result += values[i];
+        }
+    }
+    
+    cout << result << endl;
+    return 0;
+}

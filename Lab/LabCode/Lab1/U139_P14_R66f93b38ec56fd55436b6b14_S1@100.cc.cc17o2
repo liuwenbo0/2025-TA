@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+long long mergeCount = 0;
+
+void mergeAndCount(vector<int>& arr, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    vector<int> L(n1);
+    vector<int> R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k++] = L[i++];
+        } else {
+            // 发现逆序对
+            arr[k++] = R[j++];
+            mergeCount += (n1 - i); // L数组中剩余元素均构成逆序对
+        }
+    }
+
+    while (i < n1) {
+        arr[k++] = L[i++];
+    }
+
+    while (j < n2) {
+        arr[k++] = R[j++];
+    }
+}
+
+void mergeSortAndCount(vector<int>& arr, int l, int right) {
+    if (l < right) {
+        int mid = l + (right - l) / 2;
+
+        mergeSortAndCount(arr, l, mid);
+        mergeSortAndCount(arr, mid + 1, right);
+        mergeAndCount(arr, l, mid, right);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    mergeSortAndCount(arr, 0, n - 1);
+
+    cout << mergeCount << endl;
+
+    return 0;
+}

@@ -1,0 +1,37 @@
+#include"Linklist.h"
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list || list->next->next == list) return;
+
+    Linklist oddHead = list->next; 
+    Linklist evenHead = oddHead->next; 
+    Linklist oddTail = oddHead;
+    Linklist evenTail = evenHead;
+
+    
+    Linklist current = evenHead->next;
+    bool isOdd = true;
+
+    while (current != list) {
+        if (isOdd) {
+            oddTail->next = current;
+            current->prior = oddTail;
+            oddTail = current;
+        } else {
+            evenTail->next = current;
+            current->prior = evenTail;
+            evenTail = current;
+        }
+        current = current->next;
+        isOdd = !isOdd; 
+    }
+
+    
+    oddTail->next = evenHead; 
+    evenTail->next = oddHead; 
+
+    
+    list->next = oddHead; 
+    oddHead->prior = list; 
+    evenTail->next = list; 
+    list->prior = evenTail; 
+}

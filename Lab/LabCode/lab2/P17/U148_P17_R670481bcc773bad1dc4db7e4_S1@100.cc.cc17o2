@@ -1,0 +1,18 @@
+#include "Solution.h"
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> Solution::round_robin_schedule(int numOfAthletes) {
+    vector<vector<int>> matchSchedule(numOfAthletes, vector<int>(numOfAthletes, 0));
+        
+            for (int athleteIdx = 0; athleteIdx < numOfAthletes; ++athleteIdx) {
+                    matchSchedule[athleteIdx][0] = athleteIdx + 1; // Set the first round opponent
+                            for (int roundNum = 1; roundNum < numOfAthletes; ++roundNum) {
+                                        int opponentIdx = athleteIdx ^ roundNum; // Calculate the opponent index using XOR
+                                                    matchSchedule[athleteIdx][roundNum] = opponentIdx + 1; // Convert to 1-based indexing for the opponent
+                                                            }
+                                                                }
+                                                                    
+                                                                        return matchSchedule;
+                                                                        }

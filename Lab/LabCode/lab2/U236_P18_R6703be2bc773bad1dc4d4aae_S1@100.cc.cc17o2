@@ -1,0 +1,52 @@
+#include "Solution.h"
+#include<cmath>
+void permutation(vector<int>& nums,int k)
+{
+	if (k == 1) {
+		nums[0] = 1;
+		return;
+	}
+	else {
+		int n = 1, m;
+		for (m = 1; ; m++) {
+			n *= 2;
+			if (n >= k) {
+				break;
+			}
+		}
+		n /= 2;
+		permutation(nums, n);
+		vector<int> temp = nums;
+		for (int i = 0; i < n; i++) {
+			nums[i] = temp[i] * 2 - 1;
+			nums[i + n] = temp[i] * 2;
+		}
+		if (n * 2 >= nums.size()) {
+			for (int i = 0; i < n * 2; i++) {
+				if (nums[i] > k) {
+					nums[i] = 0;
+				}
+			}
+		}
+	}
+}
+
+vector<int> Solution::perfect_permutation(int n) {
+    int i, k = 1;
+    for (i = 0; ; i++) {
+	    k *= 2;
+	    if (k >= n) {
+		    break;
+	    }
+    }
+    vector<int> ans(n), mid(k);
+    // 请在这里完成你的代码
+    permutation(mid, n);
+    for (int j = 0, l = 0; j < k; j++){
+        if(mid[j]){
+            ans[l] = mid[j];
+            l++;
+        }
+    }
+    return ans;
+}

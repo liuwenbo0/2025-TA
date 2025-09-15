@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int minCutsToEqualHeight(int n, int q, vector<int>& heights) {
+    unordered_map<int, vector<int>> heightMap;
+
+    for (int height : heights) {
+        int currentHeight = height;
+        int cuts = 0;
+        while (currentHeight > 0) {
+            heightMap[currentHeight].push_back(cuts);
+            currentHeight /= 2;
+            cuts++;
+        }
+    }
+
+    int minCuts = INT_MAX;
+
+    for (const auto& entry : heightMap) {
+        const vector<int>& cutList = entry.second;
+        if (cutList.size() >= static_cast<size_t>(q)) {
+            vector<int> sortedCuts = cutList; 
+            sort(sortedCuts.begin(), sortedCuts.end());
+            int totalCuts = 0;
+            for (int i = 0; i < q; ++i) {
+                totalCuts += sortedCuts[i];
+            }
+            minCuts = min(minCuts, totalCuts);
+        }
+    }
+
+    return (minCuts == INT_MAX) ? 0 : minCuts;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    cout << minCutsToEqualHeight(n, q, heights) << endl;
+
+    return 0;
+}

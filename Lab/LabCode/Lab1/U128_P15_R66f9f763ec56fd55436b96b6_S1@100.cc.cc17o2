@@ -1,0 +1,72 @@
+#include <iostream>  
+#include <vector>  
+using namespace std;
+int count1 = 0;
+int count2 = 0;
+
+
+
+
+//归并
+void MergeSort(std::vector<int>& nums, int left, int right) 
+{
+    if (left < right) 
+    {
+        int mid = left + (right - left) / 2;
+        MergeSort(nums, left, mid);
+        MergeSort(nums, mid + 1, right);
+        std::vector<int> leftArray(nums.begin() + left, nums.begin() + mid + 1);
+        std::vector<int> rightArray(nums.begin() + mid + 1, nums.begin() + right + 1);
+        int i = 0, j = 0, k = left;
+        while (i < leftArray.size() && j < rightArray.size()) 
+        {
+            count1++;
+            if (leftArray[i] <= rightArray[j]) 
+            {
+                nums[k++] = leftArray[i++];
+            } 
+            else 
+            {
+                nums[k++] = rightArray[j++];
+            }
+        }
+        while (i < leftArray.size()) {
+            nums[k++] = leftArray[i++];
+        }
+        while (j < rightArray.size()) 
+        {
+            nums[k++] = rightArray[j++];
+        }
+    }
+}	  
+//插入
+void InsertionSort(std::vector<int>& array)
+{
+    int n = array.size();
+    for(int i=1;i < n;i++)
+    {
+        int key = array[i]; 
+        int j = i - 1;
+        while (j >= 0 && array[j] > key) 
+        {
+            count2++;
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = key;
+        if (j >= 0) count2++;
+    }
+}
+int main() 
+{
+    int N;
+    cin >> N;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++)
+        cin >> arr[i];
+    vector<int> a = arr;
+    MergeSort(a ,0, N - 1);
+    InsertionSort(arr);
+    cout << count1 << " " << count2 << endl;
+    return 0;
+}

@@ -1,0 +1,142 @@
+#include<iostream>
+#include <vector>
+#include<cmath>
+using namespace std;
+int n,q;
+int quick_paixu(vector<int> &A,int p,int q)
+{
+    srand( (unsigned)time( NULL ) );
+    int x=p+rand()%(q-p+1);
+    swap(A[p],A[x]);
+    int temp=A[p];
+    while(p<q)
+    {
+        while(p<q&&A[q]>temp)
+        {
+            q--;
+        }
+        if(p<q&&A[q]<=temp)
+        {
+            A[p]=A[q];
+            p++;
+        }
+        while(p<q&&A[p]<temp)
+        {
+            p++;
+        }
+        if(p<q&&A[p]>=temp)
+        {
+            A[q]=A[p];
+            q--;
+        }
+    }
+        A[p]=temp;
+        return p;
+}
+void paixu(vector<int> &A,int l, int r)
+{
+    if(l>r)
+    {
+        return ;
+    }
+    int mid=quick_paixu(A,l,r);
+    paixu(A,l,mid-1);
+    paixu(A,mid+1,r);
+}
+int main()
+{
+    cin>>n>>q;
+    // vector<int> nums(n);
+    vector<int> temp(n);
+    vector<int> nums1(n);
+    for(int i=0;i<n;i++)
+    {
+        cin>>nums1[i];
+    }
+    paixu(nums1,0,n-1);
+    // for(int i=0;i<n;i++)
+    // {
+    //     nums1[i]=nums[i];
+    // }
+    // int count=0;
+    // for(int i=0;i<n;i++)
+    // {
+    //     count=1;
+    //     while(nums[i]/2!=1)
+    //     {
+    //         nums[i]=nums[i]/2;
+    //         count++;
+    //     }
+    //     nums[i]=count;
+    // }
+    int number=1;
+    int i=0;
+    int MAX=0;
+    while(i<n)
+    {
+        if(nums1[i]==nums1[i+1])
+        {
+            number++;
+            i++;
+        }
+        else if(nums1[i]!=nums1[i+1]){
+            // temp[j]=number;
+            // j++;
+            i++;
+            number=1;
+        }
+        MAX=max(MAX,number);
+    }
+    //temp记录每个数值的个数
+    // int MAX=0;
+    // for(int i=0;i<j-1;i++)
+    // {
+    //     MAX=max(max(temp[i],temp[i+1]),MAX);
+    // }//找出最多的数有多少个
+    //temp是 用来算化为1的次数
+    //nums1 是排序后的
+    //nums是化为1 的次数
+    //
+    i=0;
+    number=1;
+    while(i<n-1&&number!=MAX)
+    {
+        if(nums1[i]==nums1[i+1])
+        {
+            number++;
+            i++;
+        }
+        else if(nums1[i]!=nums1[i+1]){
+            i++;
+            number=1;
+        }
+    }
+    
+    int result=0;
+    int most=nums1[i];
+    int m=0;
+    while(MAX<q)
+    {
+        if(m<n)
+        {
+        int x=nums1[i+1];
+        while(x/2>=most)
+        {
+            x=x/2;
+            m++;
+        }
+        if(x==most)
+        {
+            result+=m;
+            MAX+=m;
+        }
+        m=0;
+        i++;
+        }else
+        {
+            break;
+        }
+    }
+    cout<<result;
+
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include "limits.h"
+using namespace std;
+
+long long merge_sort_aux(vector<long long> &nums, int left, int right)
+{
+    long long a=0;
+    int b=0;
+    int mid;
+    if(left<right){
+        mid=(left+right)/2;
+        a+=merge_sort_aux(nums,left,mid);
+        a+=merge_sort_aux(nums,mid+1,right);
+        vector<long long> L;
+        vector<long long> R;
+        for(int i=left;i<=mid;i++){
+            L.push_back(nums[i]);
+        }
+        L.push_back(INT_MAX);
+        for(int i=mid+1;i<=right;i++){
+            R.push_back(nums[i]);
+        }
+        R.push_back(INT_MAX);
+        int i=0;
+        int j=0;
+        for(int k=left;k<=right;k++){
+            if(L[i]<=R[j]){
+                nums[k]=L[i];
+                i++;
+                a+=b;
+            }
+            else{
+                nums[k]=R[j];
+                j++;
+                b++;
+            }
+        }
+    }
+    return a;
+}
+
+int main() {
+    int N;
+    vector<long long> vec;
+    cin >> N;
+    double k=0;
+    for(int i=0;i<N;i++){
+        cin >> k;
+        vec.push_back(k);
+    }
+    long long sum=0;
+    sum=merge_sort_aux(vec,0,N-1);
+    cout << sum;
+}

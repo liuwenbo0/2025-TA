@@ -1,0 +1,42 @@
+#include "Solution.h"
+
+    vector<vector<int>> Solution::round_robin_schedule(int n) {
+        vector<vector<int>> ans;
+        for(int i = 0; i < n; i++) {
+            ans.push_back(vector<int>(n, -1));
+        }
+        for(int i = 0; i < n; i++) {
+            ans[i][0] = i;
+            ans[0][i] = i;
+            ans[i][i] = 0;
+        }
+        for(int j = 1; j < n; j++){
+            for(int i = 1; i < n; i++){
+                vector<int> temp(n, 0);
+                for (int k = 0; k < n; ++k) {
+                    if (ans[i][k] != -1) {
+                        temp[ans[i][k]] = 1;
+                    }
+                    if (ans[k][j] != -1) {
+                        temp[ans[k][j]] = 1;
+                    }
+                }
+
+                if(ans[i][j] == -1){
+                    for(int x = 0; x < n; ++x){
+                        if(temp[x] == 0 && x != i){
+                            ans[i][j] = x;
+                            ans[x][j] = i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                    ans[i][j] += 1;
+            }
+        }
+        return ans;
+    }

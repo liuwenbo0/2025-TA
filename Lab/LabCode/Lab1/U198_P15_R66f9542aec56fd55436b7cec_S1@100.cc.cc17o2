@@ -1,0 +1,86 @@
+#include <vector>
+#include <iostream>
+using namespace std;
+
+static int cnt_m = 0;
+static int cnt_i = 0;
+
+void using_Merge_sort(vector<int> nums, int left, int right)
+{
+	
+    if (left == right) return;
+    int mid = (left + right) / 2;
+    using_Merge_sort(nums, left, mid);
+    using_Merge_sort(nums, mid + 1, right);
+
+    int i = left, j = mid + 1;
+    vector<int> order;
+    for (; i <= mid && j <= right;)
+    {
+        if (nums[i] <= nums[j])
+        {
+            order.push_back(nums[i++]);
+            cnt_m++;
+        }
+        else
+        {
+            order.push_back(nums[j++]);
+            cnt_m++;
+        }
+    }
+    while (i <= mid)
+    {
+        order.push_back(nums[i++]);
+        cnt_m++;
+    }
+    while (j <= right)
+    {
+        order.push_back(nums[j++]);
+        cnt_m++;
+    }
+
+    for (int i = left, p = 0; i <= right; i++, p++)
+    {
+        nums[i] = order[p];
+    }
+}
+
+void using_insert_sort(vector<int> nums)
+{
+    int n = (int)nums.size();
+    for (int i = 1; i < n; i++)
+    {
+        int key = nums[i];
+        int j = i - 1;
+
+        while (j >= 0 && nums[j] > key)
+        {
+            nums[j + 1] = nums[j];
+            j--;
+            cnt_i++;
+        }
+        if(j!=-1) cnt_i++;
+        nums[j+1] = key;
+    }
+}
+
+
+int main()
+{
+    vector<int> num;
+    int times;
+    cin >> times;
+    for (int i = 0; i < times; i++)
+    {
+        int x;
+        cin >> x;
+        num.push_back(x);
+    }
+
+    vector<int> num2(num);
+
+    using_insert_sort(num2);
+    using_Merge_sort(num, 0, times-1);
+
+    cout << cnt_m << " " << cnt_i;
+}

@@ -1,0 +1,34 @@
+#include "Linklist.h"
+#include <vector>
+
+void changeList(Linklist &list) {
+    if (list->next == list || list->next->next == list) {
+
+        return;
+    }
+    vector<node*> nodes;
+    node* current = list->next; 
+    
+    while (current != list) {
+        nodes.push_back(current);
+        current = current->next;
+    }
+    int n = nodes.size(); 
+    int i = 0, j = (n % 2 == 0) ? n - 1 : n - 2;  
+    node* prev = list; 
+    while (i < n) {
+        prev->next = nodes[i];
+        nodes[i]->prior = prev;
+        prev = nodes[i];
+        i += 2;  
+    }
+    while (j >= 0) {
+        prev->next = nodes[j];
+        nodes[j]->prior = prev;
+        prev = nodes[j];
+        j -= 2; 
+    }
+
+    prev->next = list;
+    list->prior = prev;
+}

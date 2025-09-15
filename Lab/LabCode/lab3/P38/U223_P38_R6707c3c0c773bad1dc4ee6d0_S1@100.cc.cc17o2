@@ -1,0 +1,37 @@
+#include "QuickSort.h"
+#include <cstdlib> // 为了使用 rand()
+#include <ctime>   // 为了使用 time()
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 随机选择一个基准元素并交换到最后位置
+    int random_index = p + rand() % (q - p + 1);
+    std::swap(nums[random_index], nums[q]);
+    
+    int pivot = nums[q]; // 现在基准在最后
+    int i = p - 1; // 小于基准的元素指针
+
+    // 遍历数组，进行分区
+    for (int j = p; j < q; ++j) {
+        if (nums[j] <= pivot) { // 注意：这里用 <= 以处理重复元素
+            i++;
+            std::swap(nums[i], nums[j]); // 将当前元素与小于基准的元素交换
+        }
+    }
+    std::swap(nums[i + 1], nums[q]); // 将基准元素放到正确的位置
+    return i + 1; // 返回基准元素的索引
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r) {
+        int pivot_index = partition(nums, l, r); // 获取基准元素的索引
+        quick_sort(nums, l, pivot_index - 1); // 对基准左侧进行递归排序
+        quick_sort(nums, pivot_index + 1, r); // 对基准右侧进行递归排序
+    }
+}
+
+// 外部调用排序函数
+void QuickSort::mysort(std::vector<int>& nums) {
+    // 初始化随机数生成器
+    srand(static_cast<unsigned>(time(0))); // 使用当前时间作为种子
+    quick_sort(nums, 0, nums.size() - 1);
+}

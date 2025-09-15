@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int mergeOperationCount = 0;
+int insertionOperationCount = 0;
+
+void mergeSortHelper(vector<int>& elements, int from, int to) {
+    if (from < to)
+     {
+        int midpoint = from + (to - from) / 2;
+        mergeSortHelper(elements, from, midpoint);
+        mergeSortHelper(elements, midpoint + 1, to);
+        vector<int> leftSection(elements.begin() + from, elements.begin() + midpoint + 1);
+        vector<int> rightSection(elements.begin() + midpoint + 1, elements.begin() + to + 1);
+        int leftIndex = 0, rightIndex = 0, targetIndex = from;
+        while (leftIndex < leftSection.size() && rightIndex < rightSection.size()) 
+        {
+            mergeOperationCount++;
+            if (leftSection[leftIndex] <= rightSection[rightIndex]) 
+            {
+                elements[targetIndex++] = leftSection[leftIndex++];
+            } else {
+                elements[targetIndex++] = rightSection[rightIndex++];
+            }
+        }
+        while (leftIndex < leftSection.size()) 
+        {
+            elements[targetIndex++] = leftSection[leftIndex++];
+        }
+        while (rightIndex < rightSection.size()) 
+        {
+            elements[targetIndex++] = rightSection[rightIndex++];
+        }
+    }
+}
+
+void insertionSort(vector<int>& elements) 
+{
+    int length = elements.size();
+    for (int idx = 1; idx < length; ++idx) 
+    {
+        int pivot = elements[idx];
+        int scanIndex = idx - 1;
+        while (scanIndex >= 0 && elements[scanIndex] > pivot)
+        {
+            insertionOperationCount++;
+            elements[scanIndex + 1] = elements[scanIndex];
+            scanIndex--;
+        }
+        elements[scanIndex + 1] = pivot;
+        if (scanIndex >= 0) insertionOperationCount++;
+    }
+}
+
+int main() {
+    int size;
+    cin >> size;
+    vector<int> data(size);
+    for (int i = 0; i < size; i++)
+        cin >> data[i];
+    vector<int> sortedByMerge = data;
+    mergeSortHelper(sortedByMerge, 0, size - 1);
+    insertionSort(data);
+    cout << mergeOperationCount << " " << insertionOperationCount << endl;
+    return 0;
+}

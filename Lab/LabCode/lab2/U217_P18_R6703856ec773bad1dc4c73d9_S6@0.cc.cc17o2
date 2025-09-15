@@ -1,0 +1,17 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+   int half = (n + 1) / 2; // 计算一半的大小
+    for (int i = 0; i < half; i++) {
+        ans[2 * i] = 2 * i + 1; // 填充奇数
+    }
+    for (int i = 0; i < n / 2; i++) {
+        ans[2 * i + 1] = 2 * i + 2; // 填充偶数
+    }
+    // 如果n是奇数，最后一个数单独处理
+    if (n % 2 == 1) {
+        ans[n - 1] = n;
+    }
+    return ans;
+}

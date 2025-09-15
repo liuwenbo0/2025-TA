@@ -1,0 +1,62 @@
+#include "MyStack.h"
+// 判断栈空, 若为空栈,则Empty()返回true；否则返回false
+bool MyStack::Empty() {
+    if(top==-1)
+   {
+     return true;
+   }
+   else{
+    return false;
+   }
+}
+// 判断栈满，若栈满，则Full()为true；否则为false
+bool MyStack::Full() 
+   {
+      if(top==MAXLENG-1)
+   {
+     return true;
+   }
+   else
+   {
+   return false;
+   }
+}
+// 元素e进栈，若栈满，则无法成功插入，插入成功返回true，否则返回false
+// e: 将要入栈的元素
+bool MyStack::Push(ElementType e)
+ {
+ if(top==MAXLENG-1)
+  {
+  return false;
+  }
+ else
+    {
+    elem[++top]=e;
+    return true;
+    }
+}
+bool MyStack::Gettop(ElementType &e) 
+{
+    if(top==-1)
+    {
+    return false;
+    }
+    else
+    { 
+    e=elem[top];
+    return true;
+    }
+}
+bool MyStack::Pop(ElementType &e) 
+{
+    if(top==-1)
+    {
+    return false;
+    }
+    else
+    {
+    e=elem[top];
+    top--;
+    return true;
+    }
+}

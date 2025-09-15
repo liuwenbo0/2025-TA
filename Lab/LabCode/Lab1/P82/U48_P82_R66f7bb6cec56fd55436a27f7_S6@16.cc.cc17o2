@@ -1,0 +1,77 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    if (!list || list->next == list || list->next->next == list) return; // 检查有效性
+
+    node* slow = list->next; // 使用快慢指针找中点
+    node* fast = list->next;
+
+    // 找到链表的中间节点
+    while (fast != list && fast->next != list) {
+        slow = slow->next; // 慢指针移动一步
+        fast = fast->next->next; // 快指针移动两步
+    }
+
+    node* mid = slow; // 中点
+    node* secondHalf = mid->next; // 后半部分
+    mid->next = list; // 将前半部分的尾部指向头
+    secondHalf->prior = mid; // 后半部分的前驱指向中点
+    
+    // 检查中间节点是否指向链表
+    if (secondHalf == list) return;
+
+    // 反转后半部分链表
+    node* prev = nullptr;
+    node* curr = secondHalf;
+
+    while (curr != list) {
+        node* nextNode = curr->next; // 保存下一个节点
+        curr->next = prev;            // 反转指针
+        curr->prior = nextNode;       // 更新反转后指针
+        prev = curr;                  // 移动 prev
+        curr = nextNode;              // 移动到下一个节点
+    }
+
+    // prev 现在是反转后的后半部分的头节点
+    secondHalf = prev;
+
+    // 交替合并
+    node* firstHalf = list->next; // 前半部分头部
+    list->next = firstHalf;        // 保持头节点在前
+    firstHalf->prior = list;       // 更新头节点指针
+
+    // 开始交替合并
+    while (secondHalf != list && firstHalf != mid) {
+        node* temp1 = firstHalf->next; // 保存前半部分下一个
+        node* temp2 = secondHalf->next; // 保存后半部分下一个
+
+        // 连接前半部分的节点
+        firstHalf->next = secondHalf;
+        secondHalf->prior = firstHalf;
+
+        // 连接后半部分的节点
+        secondHalf->next = temp1;
+        // 确保不超过中间节点
+        if (temp1 == mid) break;
+        temp1->prior = secondHalf;
+
+        // 移动指针
+        firstHalf = temp1;
+        secondHalf = temp2;
+    }
+
+    // 完成链接
+    // 更新最后一个节点的 next 和 prior
+    if (firstHalf != mid) {
+        firstHalf->next = mid; 
+        mid->prior = firstHalf; 
+    }
+
+    // 如果后半部分还有节点
+    if (secondHalf != list) {
+        secondHalf->next = list; 
+        list->prior = secondHalf; 
+    }
+}
+
+// Linklist.h 和 main() 函数不变，直接替换 changeList 函数

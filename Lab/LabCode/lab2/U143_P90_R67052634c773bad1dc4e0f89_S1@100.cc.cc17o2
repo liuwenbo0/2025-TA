@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> x(2000005),y(2000005);
+int h,r;
+
+
+int chuan(int a, int b) {
+    if (a > b) return 0;
+    y[a] = x[a] + max(chuan(a * 2 + 1, b), chuan(a * 2 + 2, b));
+    if (y[a] < 0) return 0;
+    return y[a];
+}
+int main() {
+    int s = 0, t;
+    while (cin >> x[s]) {
+        ++s;
+    }
+    t = s;
+    while (t) {
+        t /= 2;
+        h++;
+    }
+    int f = 1;
+    for (int i = s / 2; i < s; ++i) {
+        if (x[i] != -1) f = 0;
+    }
+    h -= f;
+    printf("%d\n",h);
+    r=chuan(0, s - 1);
+    printf("%d\n",r);
+    t = 1;
+    while (--h) 
+    t *= 2;
+    for (int i = 0; i <= t * 2 - 1; ++i) {
+        if (x[i] == 0) x[i] = -1;
+    }
+    t--;
+    r=0;
+    for (int i = 0; i <t ; i++) {
+        if (x[i * 2 + 1] != -1 || x[i * 2 + 2] != -1) {
+            if (x[i] > max(x[i * 2 + 1], x[i * 2 + 2])){
+                r += x[i];
+            }
+        }
+    }
+    printf("%d\n",r);
+    return 0;
+}

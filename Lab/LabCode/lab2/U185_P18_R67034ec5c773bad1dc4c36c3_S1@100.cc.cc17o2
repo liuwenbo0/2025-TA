@@ -1,0 +1,21 @@
+#include "Solution.h"
+#include <iostream>
+#include <vector>
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+    int media[2048]={},length=1;
+    media[1]=1;
+   for(;length<=n;length*=2){
+        for(int i=1;i<=length;i++){
+            media[i+length]=media[i]<<1;
+            media[i]=media[i]*2-1;
+        }
+    }
+    for(int j=1;j<=length;j++){
+            if(media[j]<=n&&media[j]>=1) ans.push_back(media[j]);
+        }
+    
+    return ans;
+}

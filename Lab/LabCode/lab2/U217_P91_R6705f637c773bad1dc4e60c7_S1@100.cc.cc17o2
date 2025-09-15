@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+long long gaodu(long long energy) {
+    if (energy <= 1) return 1; 
+    return 2 * gaodu (energy / 2) + 1;
+}
+
+long long zongshu(long long nengli, long long zuo, long long you, long long range_start, long long range_end) {
+
+    if (nengli == 0) return 0; 
+    if (nengli == 1) {
+        return (zuo >= range_start && you <= range_end) ? 1 : 0;
+    }
+
+    // 计算中间位置
+    long long zhongjian = zuo + (you - zuo) / 2; 
+    long long total_ones = 0;
+
+    if (range_start <= zhongjian - 1 && range_end >= zuo) {
+        total_ones += zongshu(nengli / 2, zuo, zhongjian - 1, range_start, range_end);
+    }
+
+    if (zhongjian >= range_start && zhongjian <= range_end && nengli % 2 == 1) {
+        total_ones += 1;
+    }
+
+    if (range_start <= you && range_end >= zhongjian + 1) {
+        total_ones += zongshu(nengli / 2, zhongjian + 1, you, range_start, range_end);
+    }
+
+    return total_ones;
+}
+
+int main() {
+    long long nengli, query_start, query_end;
+    
+    cin >> nengli >> query_start >> query_end;
+
+    long long full_size = gaodu(nengli); //晶体树长度 
+
+    long long total_ones_in_query = zongshu(nengli, 1, full_size, query_start, query_end);
+
+    cout << total_ones_in_query << endl;
+
+    return 0;
+}

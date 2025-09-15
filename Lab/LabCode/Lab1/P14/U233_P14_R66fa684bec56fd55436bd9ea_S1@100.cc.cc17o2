@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+long long mergeAndCount(vector<int>& nums, int left, int mid, int right){
+    vector<int> leftSub(nums.begin() + left, nums.begin() + mid + 1);
+    vector<int> rightSub(nums.begin() + mid + 1, nums.begin() + right + 1);
+    int i = 0, j = 0, k = left;
+    long long invCount = 0;
+    while (i < leftSub.size() && j < rightSub.size()){
+        if (leftSub[i] <= rightSub[j]) {
+            nums[k++] = leftSub[i++];
+        } else {
+            nums[k++] = rightSub[j++];
+            invCount += (mid + 1) - (left + i);
+        }
+    }
+    while (i < leftSub.size()){
+        nums[k++] = leftSub[i++];
+    }
+    while (j < rightSub.size()){
+        nums[k++] = rightSub[j++];
+    }
+    return invCount;
+}
+//分别计算逆序对数目
+
+long long mergeSortAndCount(vector<int>& nums, int left, int right){
+    long long invCount = 0;
+    if (left < right){
+        int mid = left + (right - left) / 2;
+        invCount += mergeSortAndCount(nums, left, mid);
+        invCount += mergeSortAndCount(nums, mid + 1, right);
+        invCount += mergeAndCount(nums, left, mid, right);
+    }
+    return invCount;
+}
+//分成三部分
+
+int main(){
+    int n;
+    cin >> n;
+    //初始化表示序列中数据个数的变量并赋值
+    vector<int> nums(n);
+    //定义储存数据的数组
+    for (int i = 0; i < n; i++){
+        cin >> nums[i];
+    }
+    //从控制台输入具体数据
+    long long Count = mergeSortAndCount(nums, 0, n - 1);
+    cout << Count << endl;
+    return 0;
+}

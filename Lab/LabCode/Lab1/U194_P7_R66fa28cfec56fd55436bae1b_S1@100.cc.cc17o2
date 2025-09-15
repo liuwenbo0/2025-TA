@@ -1,0 +1,43 @@
+#include "MergeSort.h"
+
+
+// 通过归并排序对int队列nums中的[left, right]区间进行升序排序
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right) {
+    if (left >= right) return;
+
+    // 计算中间点
+    int mid = left + (right - left) / 2;
+
+    // 递归排序左半部分
+    merge_sort_aux(nums, left, mid);
+    // 递归排序右半部分
+    merge_sort_aux(nums, mid + 1, right);
+
+    // 创建临时数组以存储合并的结果
+    std::vector<int> temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+
+    // 合并两个已排序的子数组
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+        }
+    }
+
+    // 复制剩余的左子数组元素
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+    }
+
+    // 复制剩余的右子数组元素
+    while (j <= right) {
+        temp[k++] = nums[j++];
+    }
+
+    // 将排序后的数据复制回原数组
+    for (i = left, k = 0; i <= right; i++, k++) {
+        nums[i] = temp[k];
+    }
+}

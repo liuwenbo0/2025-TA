@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+#include <numeric> 
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+
+    vector<int> height(n);
+    unordered_map<int, vector<int>> Xiujian;
+
+    for (int i = 0; i < n; ++i) {
+        cin >> height[i];
+    }
+
+    for (int h : height) {
+        int current_height = h;
+        int cut = 0;
+
+        while (current_height > 0) {
+            if (Xiujian.find(current_height) == Xiujian.end()) {
+                Xiujian[current_height] = vector<int>();
+            }
+            Xiujian[current_height].push_back(cut);
+            current_height /= 2;
+            cut++;
+        }
+    }
+
+    int result = INT_MAX;
+
+    for (const auto& X : Xiujian) {
+        const vector<int>& cut = X.second;
+        if (cut.size() >= static_cast<size_t>(q)) {
+            // 创建一个可修改的备份
+            vector<int> temp(cut);
+            // 对备份进行排序
+            sort(temp.begin(), temp.end());
+            // 计算总和
+            int current = accumulate(temp.begin(), temp.begin() + q, 0);
+            result = min(result, current);
+        }
+    }
+    cout << result << endl;
+    return 0;
+}

@@ -1,0 +1,18 @@
+#include "SqList.h"
+#include <vector>
+using namespace std;
+
+void insert(SqList& list, int num){
+    int i = 0;
+    while (i < list.size() && list[i] < num) {
+        ++i;
+    }
+
+    list.push_back(0); 
+
+    for (int k = list.size() - 1; k > i; --k) {
+        list[k] = list[k-1];
+    }
+
+    list[i] = num;
+}

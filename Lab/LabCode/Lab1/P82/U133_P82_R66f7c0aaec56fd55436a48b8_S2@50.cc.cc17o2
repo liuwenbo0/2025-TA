@@ -1,0 +1,35 @@
+#include "Linklist.h"
+#include <vector> // 添加这一行
+
+void changeList(node *&list) {
+    // 使用一个vector来存储节点指针
+    std::vector<node*> nodes; // 使用std命名空间
+
+    // 遍历链表，收集所有节点
+    node* current = list->next; // 从第一个有效节点开始
+    while (current != list) {
+        nodes.push_back(current);
+        current = current->next;
+    }
+
+    // 清空原有的链表
+    list->next = list->prior = list;
+
+    // 添加奇数索引的节点
+    for (int i = 0; i < nodes.size(); i += 2) { // i = 0, 2, 4, ...
+        node* newNode = nodes[i];
+        list->prior->next = newNode; // 将新节点添加到链表尾部
+        newNode->prior = list->prior;
+        list->prior = newNode; // 更新链表的尾指针
+        newNode->next = list; // 新节点的next指向head
+    }
+
+    // 添加偶数索引的节点（反向）
+    for (int i = nodes.size() - 2; i > 0; i -= 2) { // i = n-2, n-4, ...
+        node* newNode = nodes[i];
+        list->prior->next = newNode; // 将新节点添加到链表尾部
+        newNode->prior = list->prior;
+        list->prior = newNode; // 更新链表的尾指针
+        newNode->next = list; // 新节点的next指向head
+    }
+}

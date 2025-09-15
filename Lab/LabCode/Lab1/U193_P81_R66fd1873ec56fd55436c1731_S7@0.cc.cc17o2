@@ -1,0 +1,13 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+  int list num,i;
+for (size_ i = 0; i < list.size(); ++i) { if (list[i] >= num)
+{ 
+list.insert(list.begin() + i, num); return; 
+}
+ }
+ list.push_back(num);
+
+
+    //在此处添加代码
+}

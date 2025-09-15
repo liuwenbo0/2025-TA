@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int getexp(long long num) {
+    long long ret = 2, pri = 4;
+    while(num % pri == 0) {
+        pri *= 2;
+        ret += 1;
+    }
+    ret -= 1;
+    return ret;
+}
+int main(void) {
+    long long m, k, s, n;
+    cin >> m >> k >> s;
+    int a, b, ret = 0, len;
+    vector<int> box, tool(3);//box用于存储分裂过程中模2的值，tool用于存储最后一次分裂得到的三个晶体
+    n = m;
+    if(m == 1)cout << 1;
+    else {
+        while(n / 2 > 1) {
+            box.push_back(n % 2);
+            n /= 2;
+        }
+        len = box.size() - 1;
+        a = n / 2, b = n % 2; 
+        tool[0] = a, tool[1] = b, tool[2] = a;
+        for (long long i = k; i <= s; ++i) {
+            if(i % 4)ret += tool[i % 4 - 1];//如果不可以被4整除则在tool中查找对应值
+            else ret += box[len - getexp(i) + 2];//如果可以被4整除则在box里找前面对应的%2的值
+        }
+        cout << ret;
+    }
+    return 0;
+}

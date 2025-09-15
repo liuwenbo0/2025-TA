@@ -1,0 +1,28 @@
+#include "Solution.h"
+
+std::vector<int> Solution::perfect_permutation(int n) {
+    std::vector<int> result(n, 0);
+    if (n == 1) {
+        result[0] = 1;
+        return result;
+    } else {
+        std::vector<int> halfPermutation;
+        if (n % 2 == 0) {
+            halfPermutation = perfect_permutation(n / 2);
+            for (int i = 0; i < n / 2; i++) {
+                result[i] = halfPermutation[i] * 2 - 1;
+                result[i + n / 2] = halfPermutation[i] * 2;
+            }
+        } else {
+            std::vector<int> halfPermutation2 = perfect_permutation(n / 2 + 1);
+            for (int i = 0; i < n / 2 + 1; i++) {
+                result[i] = halfPermutation2[i] * 2 - 1;
+            }
+            halfPermutation = perfect_permutation(n / 2);
+            for (int i = 0; i < n / 2; i++) {
+                result[i + n / 2 + 1] = halfPermutation[i] * 2;
+            }
+        }
+    }
+    return result;
+}

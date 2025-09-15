@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_SIZE = 2000005;
+int treeData[MAX_SIZE], dpTable[MAX_SIZE];
+int elemIndex = 0, fullSetSize;
+int maxValAccum = 0, treeDepth = 0;
+int exploreNode(int node, int limit) {
+    if (node > limit) return 0;
+
+    dpTable[node] = treeData[node] + max(exploreNode(node * 2 + 1, limit), exploreNode(node * 2 + 2, limit));
+    
+    if (dpTable[node] < 0) return 0;
+    return dpTable[node];
+}
+void initializeTree() {
+    fullSetSize = elemIndex;
+    while (fullSetSize) {
+        fullSetSize /= 2;
+        ++treeDepth;
+    }
+}
+void checkTreeCompleteness() {
+    bool completeSet = true;
+    for (int i = elemIndex / 2; i < elemIndex; ++i) {
+        if (treeData[i] != -1) {
+            completeSet = false;
+        }
+    }
+    treeDepth -= completeSet;
+}
+int main() {
+    while (cin >> treeData[elemIndex]) {
+        ++elemIndex;
+    }
+    initializeTree();
+    checkTreeCompleteness();
+    cout << treeDepth << endl;
+    cout << exploreNode(0, elemIndex - 1) << endl;
+    int nodesAtLevel = 1;
+    while (--treeDepth) {
+        nodesAtLevel *= 2;
+    }
+    for (int i = 0; i <= nodesAtLevel * 2 - 1; ++i) {
+        if (treeData[i] == 0) treeData[i] = -1;
+    }
+
+    nodesAtLevel--;
+    for (int i = 0; i < nodesAtLevel; ++i) {
+        if (treeData[2 * i + 1] != -1 || treeData[2 * i + 2] != -1) {
+            if (treeData[i] > max(treeData[2 * i + 1], treeData[2 * i + 2])) {
+                maxValAccum += treeData[i];
+            }
+        }
+    }
+    cout << maxValAccum << endl;
+    return 0;
+}
+// #include<iostream>
+// using namespace std;
+// typedef struct tree{
+//     int data;
+//     tree* lchild;
+//     tree* rchild;
+// }tree,*My_tree;
+// int k=0;
+// int n=0;
+// void pushin(My_tree& A)
+// {
+//     int ch;
+//     if(!(cin>>ch))
+//     {
+//         return;
+//     }
+//     else if(ch==-1)
+//     {
+//         A=nullptr;
+//         n++;
+//     }else
+//     {
+//         A=new(tree);
+//         A->data=ch;
+//         k++;
+//         A->lchild=nullptr;
+//         A->rchild=nullptr;
+//         pushin(A->lchild);
+//         pushin(A->rchild);
+//     } 
+// }
+// int MAXtree(My_tree A)
+// {   if(!A) return 0;
+//    int lchildresourse= MAXtree(A->lchild);
+//    int rchildresourse= MAXtree(A->rchild);
+//     int maxresourse=max(lchildresourse,rchildresourse);
+//     return A->data+maxresourse;
+// }
+// int main()
+// {
+//     My_tree root=nullptr;
+//     pushin (root);
+//     int i=0,N=n+k+1;
+//     int max=MAXtree(root);
+//     for(i=0;N!=1;i++)
+//     {   
+//         N=N/2;
+//     }
+//     cout<<i<<endl;
+
+//     cout<<max<<endl;
+//     return 0;
+// }
+// void printTree(My_tree& root, int space = 0) {
+//     if (root == nullptr) return;
+//     space += 5;
+//     printTree(root->rchild, space);
+//     cout << endl;
+//     for (int i = 5; i < space; i++) cout << " ";
+//     cout << root->data << endl;
+//     printTree(root->lchild, space);
+// }
+    // printTree(root);

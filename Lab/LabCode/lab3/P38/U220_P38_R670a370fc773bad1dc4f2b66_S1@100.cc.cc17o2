@@ -1,0 +1,55 @@
+#include "QuickSort.h"
+#include <vector>
+#include <algorithm>
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 三数取中法选择基准
+    int mid = p + (q - p) / 2;
+    int pivot = nums[mid];
+    std::swap(nums[mid], nums[q]); // 将基准放到末尾
+
+    int i = p - 1; // 较小元素的索引
+
+    for (int j = p; j < q; j++) {
+        if (nums[j] <= pivot) {
+            i++;
+            std::swap(nums[i], nums[j]);
+        }
+    }
+    std::swap(nums[i + 1], nums[q]); // 将基准放到正确的位置
+    return i + 1; // 返回基准元素的索引
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    while (l < r) {
+        // 对小数组使用插入排序
+        if (r - l < 10) {
+            for (int i = l + 1; i <= r; i++) {
+                int key = nums[i];
+                int j = i - 1;
+                while (j >= l && nums[j] > key) {
+                    nums[j + 1] = nums[j];
+                    j--;
+                }
+                nums[j + 1] = key;
+            }
+            return; // 小数组已排序，返回
+        }
+
+        int pivot_index = partition(nums, l, r);
+        // 优化递归，选择较小的子数组进行递归
+        if (pivot_index - l < r - pivot_index) {
+            quick_sort(nums, l, pivot_index - 1);
+            l = pivot_index + 1; // 迭代处理较大的子数组
+        } else {
+            quick_sort(nums, pivot_index + 1, r);
+            r = pivot_index - 1; // 迭代处理较大的子数组
+        }
+    }
+
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

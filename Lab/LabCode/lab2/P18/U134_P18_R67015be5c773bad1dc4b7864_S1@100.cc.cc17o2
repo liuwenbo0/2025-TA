@@ -1,0 +1,23 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    vector<int> N;
+    N.push_back(1);
+    while(int(N.size())<=n)
+    {
+        int remain=int(N.size());
+        for(int i=0;i<remain;i++)
+        {
+            N.push_back(N[i]*2);
+            N[i]=N[i]*2-1;
+        }
+    }
+    for(int i =0;i<int(N.size());i++)
+    {
+        if(N[i]<=n)
+        {
+            ans.push_back(N[i]);
+        }
+    }
+    return ans;
+}

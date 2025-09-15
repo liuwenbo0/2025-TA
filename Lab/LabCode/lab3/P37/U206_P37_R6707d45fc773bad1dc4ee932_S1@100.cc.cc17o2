@@ -1,0 +1,51 @@
+#include "HeapSort.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+#include <climits>
+using namespace std;
+void HeapSort::max_heapify(vector<int>& nums, int i) 
+{
+    // 初始化最大子树的根索引为 i
+    int a = i;
+    int l = 2 * i; // 左子节点
+    int r = 2 * i + 1; // 右子节点
+    if (r <= length && nums[r] > nums[a])
+        a = r;// 如果右子节点存在且大于当前最大值，更新最大值
+    if (l <= length && nums[l] > nums[a])
+        a = l;// 如果左子节点存在且大于根节点，更新最大值
+    if (a != i) // 如果最大值索引不是根节点，交换，并递归维护交换后的子树
+    {
+        swap(nums[i], nums[a]);
+        max_heapify(nums, a); 
+        // 递归调用max_heapify
+    }
+}
+void HeapSort::build_max_heap(vector<int>& nums) 
+{
+    int i = length / 2;
+    // 从最后一个非叶子节点开始，向下构建最大堆
+    while (i >= 1)
+    {
+        max_heapify(nums, i);
+        i--;
+    }
+}
+void HeapSort::mysort(vector<int>& nums) 
+{
+    nums.insert(nums.begin(), 0 );
+    length = nums.size() - 1;
+    build_max_heap(nums);// 构建最大堆
+    // 从堆中提取元素并排序
+    for (int i = length;i >= 2; i--) 
+    {
+        // 交换堆顶（最大元素）和末尾元素
+        swap(nums[1], nums[i]);
+        length--;
+        // 减小堆的大小并维护最大堆
+        max_heapify(nums, 1);
+    }
+    nums.erase(nums.begin()); // 删除开头的最小元素
+}

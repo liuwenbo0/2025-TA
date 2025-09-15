@@ -1,0 +1,34 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+long long nnn=0;
+int nums[500010];
+void merge_sort_aux(int left, int right)
+{
+    if(right>left){
+        int a[right+1];
+        int mid=(right+left)/2;
+        merge_sort_aux(left,mid);
+        merge_sort_aux(mid+1,right);
+        int i=mid,j=right,k=right;
+        while(i!=left-1 && j!=mid){
+            if(nums[i]>nums[j]){
+                a[k--]=nums[i--];
+                nnn=nnn+1ll*(j-mid);
+            }
+            else a[k--]=nums[j--];
+        }
+        while(i!=left-1) a[k--]=nums[i--];
+        while(j!=mid) a[k--]=nums[j--];
+        for(i=left;i<=right;i++) nums[i]=a[i];
+        
+    }
+    
+}
+int main(){
+    int N=0;
+    cin >> N;
+    for(int i=0;i<N;i++) cin >> nums[i];
+    merge_sort_aux(0,N-1);
+    cout << nnn << endl;
+}

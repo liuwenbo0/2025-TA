@@ -1,0 +1,130 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+//int mergeCount = 0;
+int insertionCount = 0;
+
+
+/*
+void merge_sort_aux(vector<int>& nums, int left, int right) {
+    if (left >= right) return;
+    
+    int mid=(right+left)/2;
+
+    merge_sort_aux(nums,left, mid);
+    merge_sort_aux(nums,mid+1,right);
+    
+    int *tem=new int[right-left+1];
+    int i=left;
+    int j=mid+1;
+    int k=0;
+    
+    while(i<=mid&&j<=right){
+        
+        if(nums[i]<nums[j]){
+            
+            tem[k++]=nums[i++];
+        }
+        else{
+            tem[k++]=nums[j++];
+            
+        }
+        mergeCount++;
+    }
+    
+    while(i>mid&&j<=right){
+        tem[k++]=nums[j++];
+        
+    }
+
+    while(j>right&&i<=mid){
+        tem[k++]=nums[i++];
+        
+    }
+    for(int i=left,j=0;i<=right;i++){
+        nums[i]=tem[j++];
+    }
+    delete []tem;
+
+}
+*/
+int merge(vector<int> &nums, vector<int> &tem, int left, int mid, int right) {
+    int con = 0;
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            tem[k++] = nums[i++];
+        } else {
+            tem[k++] = nums[j++];
+            
+        }
+        con++;
+    }
+    while (i <= mid) {
+        tem[k++] = nums[i++];
+    }
+    while (j <= right) {
+        tem[k++] = nums[j++];
+    }
+    for (int i = left; i <= right; i++) {
+        nums[i] = tem[i];
+    }
+
+    return con;
+}
+
+int mergesort(vector<int>& arr, vector<int>& tem, int left, int right) {
+    int Con = 0;
+    if (left < right) {
+        int mid = (left + right) / 2;
+
+        Con += mergesort(arr, tem, left, mid);
+        Con += mergesort(arr, tem, mid + 1, right);
+        Con += merge(arr, tem, left, mid, right); 
+    }
+    return Con;
+}
+
+
+
+void insertionSort(vector<int>& nums) {
+    for (auto it = nums.begin()+1;it!=nums.end();it++)
+	{
+		
+        int key=*it;
+        nums.erase(it); 
+		auto i = it-1;
+		while (key<*i && i!=nums.begin()-1)
+		{i--;
+        insertionCount++;
+		}
+        if(i>nums.begin()-1)insertionCount++;
+        
+        
+		nums.insert(i+1,key); 
+	}
+}
+
+int main(void)
+{
+    int N;
+    cin >> N;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+    vector<int> arr2 = arr;
+    vector<int> tem(arr.size());
+
+    int mergeCount=mergesort(arr,tem, 0, N - 1);
+        
+    insertionSort(arr2);
+
+    cout << mergeCount << " " << insertionCount << endl;
+
+    return 0;
+}

@@ -1,0 +1,79 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+using namespace std;
+// int N,o=0,p=0;
+// cin >> N;
+// vector<int> nums[N];
+// for(int i=0;i<N;i++){
+//     cin >> nums[i];
+// }
+int merge_sort_aux(vector<int> &nums, int left, int right)
+{
+    int o=0;
+    if(left<right){
+        int q=(left+right)/2;
+        o+=merge_sort_aux(nums, left, q);
+        o+=merge_sort_aux(nums, q+1, right);
+        int n1=q-left+1;
+        int n2=right-q;
+        int *L=new int[n1+1];
+        int *R=new int[n2+1];
+        for(int i=0;i<=n1-1;i++){
+            L[i]=nums[left+i];
+        }
+        for(int j=0;j<=n2-1;j++){
+            R[j]=nums[q+j+1];
+        }
+        L[n1]=2147483647;
+        R[n2]=2147483647;
+        int k;
+        // int m=0,n=0;
+        for(k=left;k<=right;k++){
+            // if(L[m]<=R[n]){
+            //     nums[k]=L[m];
+            //     m++;
+            // }
+            // else{
+            //     nums[k]=R[n];
+            //     n++;
+            // }
+            o++;
+        }
+        return o;
+    }
+    else return 0;
+}
+int InsertionSort(vector<int>& nums,int n1) {
+    int i,j=1,key,p=0;
+    while(j<=n1-1){
+        key=nums[j];
+        i=j-1;
+        p+=j;
+        while(i>=0 && nums[i]>key){
+            nums[i+1]=nums[i];
+            i-=1;
+        }
+        p-=i;
+        if(i==-1) {
+            p-=1;
+        }
+        nums[i+1]=key;
+        j++;
+    }
+    return p;
+}
+int  main(){ 
+    int N,sum1,sum2;
+    cin >> N;
+    vector<int> nums(N);
+    for(int i=0;i<N;i++){
+        cin >> nums[i];
+    }
+    sum1=merge_sort_aux(nums, 0 , N-1);
+    sum2=InsertionSort(nums,N);
+    //sum1=merge_sort_aux(nums, 0 , N-1);
+    cout << sum1 << " "<< sum2<< endl;
+}

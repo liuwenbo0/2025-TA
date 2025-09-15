@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>  
+#include <cmath> 
+using namespace std;
+
+int measureHeight(int n) { 
+    int x=0; 
+    if (n==0) return 0;  
+    else{
+        x=log2(n)+1;
+        return x;
+    }  
+}  
+int findMaxPathSum(const vector<int>& A, int index) { 
+    int n=A.size(); 
+    if (index>n||A[index]==-1) {return 0;}  
+    int leftSum =findMaxPathSum(A, 2*index + 1);
+    int rightSum =findMaxPathSum(A, 2*index + 2);
+    return A[index] + max(leftSum, rightSum);
+} 
+ 
+int findSpecialRegionSum(const vector<int>& A, int index)  { 
+    int n=A.size(); 
+    if (index>n||A[index]==-1) {return 0;} 
+    int sum=0;
+     bool hasLeftChild = 2 * index + 1 <n&& A[2*index+1] != -1;
+     bool hasRightChild = 2 * index + 2 <n&& A[2*index+2] != -1;
+
+ if (hasLeftChild || hasRightChild) { 
+ bool Children = true;
+
+ if (hasLeftChild && A[2 * index + 1] >= A[index]) {
+ Children = false;
+ }
+ if (hasRightChild && A[2 * index + 2] >= A[index]) {
+ Children = false;
+ }
+
+ if (Children) {
+ sum+= A[index];
+ }
+ }
+ sum+= findSpecialRegionSum(A, 2 * index + 1);
+ sum+= findSpecialRegionSum(A, 2 * index + 2);
+ return sum; 
+     
+}  
+int main() {  
+    vector<int> A;  
+    for(int i=0;;i++){
+        int a=0;
+        cin>>a;
+        if(cin.eof()){break;}
+        else{A.push_back(a);}
+    }
+    int n=A.size();  
+    int height=measureHeight(n);    
+    int maxPathSum=findMaxPathSum(A,0);    
+    int specialRegionSum=findSpecialRegionSum(A,0);
+    cout<<height<<endl;  
+    cout<<maxPathSum<<endl;  
+    cout<<specialRegionSum<<endl;
+    return 0;
+    }

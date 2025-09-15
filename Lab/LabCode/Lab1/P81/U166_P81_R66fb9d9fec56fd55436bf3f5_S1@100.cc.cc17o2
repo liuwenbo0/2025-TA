@@ -1,0 +1,21 @@
+#include "SqList.h"
+#include <vector>
+#include<list>
+void insert(SqList& list, int num) {
+
+   if (list.empty() || num <= list[0]) {
+        list[0]=num;
+    } else { 
+        size_t i = 0;
+        while (i < list.size() && list[i] < num) {
+            i++; 
+        }
+    list.resize(list.size()+1); 
+    for( size_t j=list.size();j>=i+1;j--)
+    {
+       
+       list[j]=list[j-1];
+    }
+    list[i]=num;
+    }
+}

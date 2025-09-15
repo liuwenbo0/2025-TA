@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+
+std::vector<int> maxSlidingWindow(const std::vector<int>& nums, int k) {
+    std::vector<int> result;
+    if (nums.empty() || k <= 0 || k > static_cast<int>(nums.size())) return result;
+    
+    std::deque<int> deque; 
+
+    for (int i = 0; i < nums.size(); ++i) {
+        
+        if (!deque.empty() && deque.front() == i - k) {
+            deque.pop_front();
+        }
+   
+        while (!deque.empty() && nums[deque.back()] < nums[i]) {
+            deque.pop_back();
+        }
+        
+        deque.push_back(i);
+        
+        if (i >= k - 1) {
+            result.push_back(nums[deque.front()]);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    int n, k;
+    std::cin >> n >> k;
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    std::vector<int> result = maxSlidingWindow(nums, k);
+
+    for (int i = 0; i < result.size(); ++i) {
+        std::cout << result[i] << (i < result.size() - 1 ? " " : "\n");
+    }
+
+    return 0;
+}

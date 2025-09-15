@@ -1,0 +1,37 @@
+#include "Solution.h"
+//复制，将一个矩阵复制到另一个矩阵中
+void copy(vector<vector<int>>&A,int a,int b,int c,int d,int n)
+  { 
+    for(int i=0;i<n;i++)
+    {
+      for(int j=0;j<n;j++)
+      {
+        A[c+i][d+j]=A[a+i][b+j];
+      }
+    }
+  }
+void buildarr(vector<vector<int>>&A,int a,int b,int n)
+{
+  if(n==1)
+    return;
+    else{
+      //分治思想，把矩阵分为几个小的矩阵
+      buildarr(A,a,b,n/2);
+      buildarr(A,a+n/2,b,n/2);
+      copy(A,a,b,a+n/2,b+n/2,n/2);
+      copy(A,a+n/2,b,a,b+n/2,n/2);
+    }
+}
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    for(int i=0;i<n;i++)
+    {
+      ans[i][0]=i+1;
+    }
+    buildarr(ans,0,0,n);
+    return ans;
+  }

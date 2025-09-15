@@ -1,0 +1,52 @@
+#include "Solution.h"
+#include <algorithm>  // 引入std::max
+
+// 求跨越中点的最大子序列和
+int Solution::find_maximum_crossing_subarray(std::vector<int> &A, int low, int mid, int high) {
+    int left_sum = -1000000;  // 设定为极小值，确保能找到正确的最大值
+    int sum = 0;
+    
+    // 从中点向左扫描，找到左边的最大子序列和
+    for (int i = mid; i >= low; --i) {
+        sum += A[i];
+        if (sum > left_sum) {
+            left_sum = sum;
+        }
+    }
+    
+    int right_sum = -1000000;
+    sum = 0;
+    
+    // 从中点向右扫描，找到右边的最大子序列和
+    for (int j = mid + 1; j <= high; ++j) {
+        sum += A[j];
+        if (sum > right_sum) {
+            right_sum = sum;
+        }
+    }
+    
+    // 返回跨越中点的最大子序列和
+    return left_sum + right_sum;
+}
+
+// 使用分治法求解最大子序列和
+int Solution::find_maximum_subarray(std::vector<int> &A, int low, int high) {
+    if (low == high) {
+        // 只有一个元素时，最大子序列和就是该元素本身
+        return A[low];
+    }
+    
+    int mid = low + (high - low) / 2;
+    
+    // 递归求解左半部分的最大子序列和
+    int left_max = find_maximum_subarray(A, low, mid);
+    
+    // 递归求解右半部分的最大子序列和
+    int right_max = find_maximum_subarray(A, mid + 1, high);
+    
+    // 求解跨越中点的最大子序列和
+    int cross_max = find_maximum_crossing_subarray(A, low, mid, high);
+    
+    // 返回左半部分、右半部分和跨越中点的最大值
+    return std::max({left_max, right_max, cross_max});
+}

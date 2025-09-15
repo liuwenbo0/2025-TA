@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include<deque>
+using namespace std;
+
+int main()
+{
+    int m,k,s;
+    cin>>m>>k>>s;
+    deque<int> nums;
+    nums.push_back(m);
+    int range=0;
+    int count=0;
+    while(!nums.empty())
+    {
+        int cond=nums.front();
+        nums.pop_front();
+        if(cond>1)
+        {
+            int girl=cond/2;
+            int boy=cond%2;
+            nums.push_front(girl);
+            nums.push_front(boy);
+            nums.push_front(girl);
+        }
+        else
+        {
+            range++;
+            if(cond==1&&range>=k&&range<=s)
+            count++;
+        }
+
+    }
+    cout<<count;
+}

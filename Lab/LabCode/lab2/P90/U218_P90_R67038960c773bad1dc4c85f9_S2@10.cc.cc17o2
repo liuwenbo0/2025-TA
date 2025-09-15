@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <climits>
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+class Solution {
+public:
+    TreeNode* buildTree(const std::vector<int>& nodes) {
+        if (nodes.empty() || nodes[0] == -1) return nullptr;
+        TreeNode* root = new TreeNode(nodes[0]);
+        std::queue<TreeNode*> q;
+        q.push(root);
+        size_t i = 1; // 使用 size_t 以避免警告
+        while (!q.empty() && i < nodes.size()) {
+            TreeNode* current = q.front();
+            q.pop();
+            if (i < nodes.size() && nodes[i] != -1) {
+                current->left = new TreeNode(nodes[i]);
+                q.push(current->left);
+            }
+            i++;
+            if (i < nodes.size() && nodes[i] != -1) {
+                current->right = new TreeNode(nodes[i]);
+                q.push(current->right);
+            }
+            i++;
+        }
+        return root;
+    }
+
+    int treeHeight(TreeNode* root) {
+        if (!root) return 0;
+        return 1 + std::max(treeHeight(root->left), treeHeight(root->right));
+    }
+
+    int maxResourcePath(TreeNode* root) {
+        int maxSum = INT_MIN;
+        maxResourcePathHelper(root, 0, maxSum);
+        return maxSum;
+    }
+
+    int specialRegionSum(TreeNode* root) {
+        return specialRegionSumHelper(root);
+    }
+
+private:
+    void maxResourcePathHelper(TreeNode* root, int currentSum, int& maxSum) {
+        if (!root) return;
+        currentSum += root->val;
+        if (!root->left && !root->right) { // 如果是叶子节点
+            maxSum = std::max(maxSum, currentSum);
+        }
+        maxResourcePathHelper(root->left, currentSum, maxSum);
+        maxResourcePathHelper(root->right, currentSum, maxSum);
+    }
+
+    int specialRegionSumHelper(TreeNode* root) {
+        if (!root || (!root->left && !root->right)) return 0;
+        int sum = 0;
+        bool isSpecial = true;
+        if (root->left && root->val <= root->left->val) {
+            isSpecial = false;
+        }
+        if (root->right && root->val <= root->right->val) {
+            isSpecial = false;
+        }
+        if (isSpecial && (root->left || root->right)) { // 确保是非叶子节点
+            sum += root->val;
+        }
+        sum += specialRegionSumHelper(root->left);
+        sum += specialRegionSumHelper(root->right);
+        return sum;
+    }
+};
+
+int main() {
+    Solution solution;
+    std::vector<int> nodes;
+    int value;
+    while (std::cin >> value) {
+        nodes.push_back(value);
+    }
+    TreeNode* root = solution.buildTree(nodes);
+
+    int height = solution.treeHeight(root);
+    int maxPathSum = solution.maxResourcePath(root);
+    int specialSum = solution.specialRegionSum(root);
+
+    std::cout << height << std::endl;
+    std::cout << maxPathSum << std::endl;
+    std::cout << specialSum << std::endl;
+
+    return 0;
+}

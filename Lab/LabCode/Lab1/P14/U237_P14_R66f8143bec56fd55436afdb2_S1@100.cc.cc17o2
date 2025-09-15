@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1e6+5;
+int n;
+long long tr[maxn];
+struct node{
+    int val;
+    int id;
+}a[maxn];
+bool cmp(node a,node b){
+    return a.val>=b.val;
+}
+int lowbit(int x){
+    return x&(-x);
+}
+void update(int x,int k){
+    for(;x<=n;x+=lowbit(x)){
+        tr[x]+=k;
+    }
+    return;
+}
+long long getsum(int x){
+    long long tot=0;
+    for(;x>0;x-=lowbit(x)){
+        tot+=tr[x];
+    }
+    return tot;
+}
+void solve(){
+    long long ans=0;
+    stable_sort(a+1,a+1+n,cmp);
+    for(int i=1;i<=n;i++){
+        update(a[i].id,1);
+        ans+=getsum(a[i].id-1);
+    }
+    cout<<ans;
+    return;
+}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>a[i].val;
+        a[i].id=i;
+    }
+    solve();
+
+    return 0;
+}

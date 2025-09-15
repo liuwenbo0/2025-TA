@@ -1,0 +1,16 @@
+#include"SqList.h"
+void insert(SqList& list, int num)
+{
+	list.push_back(0);
+
+	int i = list.size() - 2;
+
+	while (i > 0 && list[i] > num)
+	{
+		list[i + 1] = list[i];
+		i--;
+	}
+
+	list[i + 1] = num;
+
+};

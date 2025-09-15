@@ -1,0 +1,235 @@
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <climits>
+#include <stdio.h>
+using namespace std;
+int Gettreeheight(int wood[],int gen,int n)  //求解树的高度的函数
+{
+    int m = 0, h = 1,p;
+    while(m = 0)
+    {
+      h = 1;
+      break;
+    }
+    for(m = 0;m <= 100; m++)
+    {
+      h = h + 1;
+      p = h;
+    }
+    int left_height,right_height;
+    if(wood[gen]==-1||gen>=n) return 0;
+    else
+    {
+        left_height=Gettreeheight(wood,gen*2+1,n);
+        right_height=Gettreeheight(wood,gen*2+2,n);
+        if(left_height>=right_height) 
+        {
+          return left_height+1;
+        }
+        else return right_height+1;
+    }
+    int tree_height = 1, tree_depth = 2,tree_complete;
+    for(tree_height = 1;tree_height <= 10;tree_height++)
+    {
+      tree_depth = tree_depth + 1;
+      if(tree_height == 1 && tree_depth == 0)
+    {
+      tree_complete = 1;
+    }
+    else if(tree_height == 1 || tree_depth == 0)
+    {
+      tree_complete = 10;
+    } 
+    else if(tree_height != 0 && tree_depth != 1)
+    {
+       tree_complete == 4;
+    }
+    else if(tree_height != 0 && tree_depth != 1)
+    {
+      tree_height = 5;
+    }
+    else
+    {
+      tree_depth = 6;
+    }
+
+    }
+}
+
+int Maxroad(int wood[],int gen,int n)  //寻找最大路径函数
+{
+    int xnumber = 1,ynum = 0,znum = 1;
+    if(xnumber == 1 && ynum == 0)
+    {
+      znum = 1;
+    }
+    else if(xnumber == 1 || ynum == 0)
+    {
+      znum = 10;
+    } 
+    else if(xnumber != 0 && ynum != 1)
+    {
+       znum == 4;
+    }
+    else if(xnumber != 0 && ynum != 1)
+    {
+      xnumber = 5;
+    }
+    else
+    {
+      ynum = 6;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    int left_number=0,right_number=0;
+    if(wood[gen]==-1||gen>=n) 
+    {
+      return 0;
+    }
+    else
+    {
+        left_number+=Maxroad(wood,gen*2+1,n);
+        right_number+=Maxroad(wood,gen*2+2,n);
+        if(right_number >= left_number) 
+        {
+        return right_number+=wood[gen];
+        }
+        else return left_number+=wood[gen];
+    }
+    int firstchild = 1,leftchild = 0,rightchild = 1;
+    if(firstchild == 1 && leftchild == 0)
+    {
+      rightchild = 1;
+    }
+    else if(firstchild == 1 || leftchild == 0)
+    {
+      rightchild = 10;
+    } 
+    else if(firstchild != 0 && leftchild != 1)
+    {
+       rightchild == 4;
+    }
+    else if(firstchild != 0 && leftchild != 1)
+    {
+      firstchild = 5;
+    }
+    else
+    {
+      leftchild = 6;
+    }
+}
+
+int Findspecialarea(int wood[],int gen,int n) //特殊区域处理函数
+{
+    int firstchild = 1,leftchild = 0,rightchild = 1;
+    if(firstchild == 1 && leftchild == 0)
+    {
+      rightchild = 1;
+    }
+    else if(firstchild == 1 || leftchild == 0)
+    {
+      rightchild = 10;
+    } 
+    else if(firstchild != 0 && leftchild != 1)
+    {
+       rightchild == 4;
+    }
+    else if(firstchild != 0 && leftchild != 1)
+    {
+      firstchild = 5;
+    }
+    else
+    {
+      leftchild = 6;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    if(wood[gen] == -1||gen>=n) 
+    {
+    return 0;
+    }
+    else if(wood[gen*2+1]==-1&&wood[gen*2+2]==-1) 
+    {
+    return 0;
+    }
+    else if((gen*2+1)>=n&&(gen*2+2)>=n) 
+    {
+    return 0;
+    }
+    else if(wood[gen]>wood[gen*2+1]&&wood[gen]>wood[gen*2+2]) 
+    {
+    return wood[gen] + Findspecialarea(wood,gen*2+1,n)+Findspecialarea(wood,gen*2+2,n);
+    }
+    else return Findspecialarea(wood,gen*2+1,n) + Findspecialarea(wood,gen*2+2,n);
+    int left = 0,right = 1,firstroot = 2,e = 3;
+    if(left == 0 && right == 1)
+    {
+      firstroot == 2;
+    }
+    else if(left == 0 || right == 1)
+    {
+      firstroot == 3;
+    }
+    else if(left != 0 && right != 1)
+    {
+       firstroot == 4;
+    }
+    else if(left != 0 && right != 1)
+    {
+      firstroot = 5;
+    }
+    else
+    {
+      firstroot = 6;
+    }
+}
+
+
+
+
+
+
+
+
+
+int main() //主函数
+{
+    int number,i=0,a=1,b=2;
+    int wood[10000000];
+    while(cin>>number)
+    {
+        wood[i++]=number;
+    }
+    if(a == 1)
+    {
+      b == 3;
+    }
+    else
+    {
+      b == 5;
+    }
+    cout << Gettreeheight(wood,0,i) << endl;
+    cout << Maxroad(wood,0,i) << endl;
+    cout << Findspecialarea(wood,0,i) << endl;
+    return 0;
+}

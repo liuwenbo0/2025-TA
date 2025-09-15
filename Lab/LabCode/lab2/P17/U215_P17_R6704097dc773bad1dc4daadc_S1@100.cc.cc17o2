@@ -1,0 +1,28 @@
+#include "Solution.h"
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+
+    vector<vector<int>> schedule_matrix(n, vector<int>(n, 0));
+
+    if (n == 1) {
+        schedule_matrix[0][0] = 1;
+        return schedule_matrix;
+    }
+
+    vector<vector<int>> smaller_matrix = round_robin_schedule(n / 2);
+    int half_n = n / 2;
+
+    for (int row = 0; row < half_n; row++) {
+        for (int col = 0; col < half_n; col++) {
+            int top_left = smaller_matrix[row][col];  // 获取左上象限的值
+int offset = top_left + half_n;           // 预计算偏移量
+
+schedule_matrix[row][col] = top_left;                       // 左上象限
+schedule_matrix[row + half_n][col + half_n] = top_left;     // 右下象限
+schedule_matrix[row + half_n][col] = offset;                // 左下象限
+schedule_matrix[row][col + half_n] = offset;  
+        }
+    }
+
+    return schedule_matrix;
+}

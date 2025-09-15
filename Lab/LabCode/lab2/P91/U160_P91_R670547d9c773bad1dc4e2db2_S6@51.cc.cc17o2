@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int i=0;
+void decompose(vector<int> &A, unsigned long long x) {
+    if (x == 0) return;
+    if (x > 1) {
+        decompose(A, x / 2);
+    }
+    A.push_back(x % 2);
+    i++;
+    decompose(A, x / 2);
+}
+int main() {
+    unsigned long long m, k, s;
+    cin >> m >> k >> s;
+    vector<int> ans;
+    decompose(ans, m);
+    int count = 0;
+//    for (int num : ans) {
+//         cout << num;
+//     }
+//     cout << endl;
+    for (unsigned long long i = k - 1; i <s; i++) {
+        if (ans[i] == 1) count++;
+    }
+    cout<< count << endl;
+    return 0;
+}
+// #include <iostream>
+// #include<vector>
+// using namespace std;
+// int n=0;
+// vector<int> ans;
+// unsigned long long m, k, s;
+// void decompose(vector<int> &A,unsigned long long int x,int t)
+// {
+//     if(x/2==1)
+//     {
+//         A.push_back(x/2);
+//         n++;
+//         A.push_back(x%2);
+//         n++;
+//         A.push_back(x/2);
+//         n++;
+//     }else decompose(ans,x/2,x%2);
+//     if(x==m)
+//     return ;
+//     A.push_back(t);
+//     n++;
+//     for(int i=0;i<n-1;i++)
+//     {
+//         A.push_back(A[i]);
+//     }
+//     n=2*n-1;
+// }
+// int main() {
+//     cin >> m >> k >> s;
+//     decompose(ans,m,m%2);
+//     // for(int i=0;i<n;i++)
+//     // {
+//     //     cout<<ans[i];
+//     // }
+
+//     int count=0;
+//     for(unsigned long long int i=k-1;i<=s-1;i++)
+//     {
+//         if(ans[i]==1)
+//         count++;
+//     }
+//     cout<<count<<endl;
+//     return 0;
+// }

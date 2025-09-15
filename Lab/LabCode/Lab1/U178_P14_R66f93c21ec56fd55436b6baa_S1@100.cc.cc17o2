@@ -1,0 +1,86 @@
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
+long long int ReverseCount(vector<int> &nums, int left, int right)
+{
+    if(left==right)
+    {
+      return 0;
+    }
+    int mid=(left+right)/2;
+    long long int leftcount = ReverseCount(nums,left,mid);
+    long long int rightcount = ReverseCount(nums,mid+1,right);
+    long long int count=0;
+    int i,j,k;
+    j=mid+1;
+    for(i=left;i<=mid;i++)
+    {
+        while(nums[i]>nums[j] && j<=right)
+        {
+            j++;
+        }
+        count+=j-(mid+1);
+    }
+    int length_L=mid-left+1;
+    int length_R=right-mid;
+    vector<int> array_L(length_L);
+    vector<int> array_R(length_R);
+    for(i=0;i<length_L;i++)
+    {
+      array_L[i]=nums[left+i];
+    }
+    for(j=0;j<length_R;j++)
+    {
+      array_R[j]=nums[mid+1+j];
+    }
+    i=j=k=0;
+    while(i<length_L && j<length_R)
+    {
+      if(array_L[i]<array_R[j])
+      {
+        nums[left+k]=array_L[i];
+        i++;
+      }else
+      {
+        nums[left+k]=array_R[j];
+        j++;
+      }
+      k++;
+    }
+    if(i==length_L)
+    {
+      while(j<length_R)
+      {
+        nums[left+k]=array_R[j];
+        k++;
+        j++;
+      }
+    }else
+    {
+      while(i<length_L)
+      {
+        nums[left+k]=array_L[i];
+        k++;
+        i++;
+      }
+    }
+    return leftcount+rightcount+count;
+}
+
+
+int main(){
+    int n,i,num;
+    scanf("%d",&n);
+    getchar();
+    vector<int> array;
+    for(i=0;i<n;i++)
+    {
+      scanf("%d",&num);
+      getchar();
+      array.emplace_back(num);
+    }
+    printf("%lld",ReverseCount(array, 0, n-1));
+    return 0;
+}

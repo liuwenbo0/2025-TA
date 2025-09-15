@@ -1,0 +1,64 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int static countin = 0, countme = 0;
+void Merge(std::vector<int>& nums, int left, int mid, int right) {  
+    int n1 = mid - left + 1;  
+    int n2 = right - mid, k = left;  
+    vector<int> num1(n1), num2(n2);  
+    for (int i = 0; i < n1; ++i) {  
+        num1[i] = nums[left + i];  
+    }  
+    for (int j = 0; j < n2; ++j) {  
+        num2[j] = nums[mid + 1 + j];  
+    }
+    int i = 0, j = 0;   
+    while(i < n1 && j < n2) {
+        if(num1[i] <= num2[j]){nums[k] = num1[i]; ++i;}
+        else {nums[k] = num2[j]; ++j;}
+        ++k;
+        ++countme;
+    }
+    while(i < n1) {
+        nums[k] = num1[i];
+        ++k, ++i;
+    }
+    while(j < n2) {
+        nums[k] = num2[j];
+        ++k, ++j;
+    }
+}
+void merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    //请在这里完成你的代码
+    if(left < right){
+        int mid = (left + right) / 2;
+        merge_sort_aux(nums, left, mid);
+        merge_sort_aux(nums, mid + 1, right);
+        Merge(nums, left, mid, right);
+    }
+}
+void mysort(std::vector<int>& nums) {
+    // 请在这里完成你的代码
+    int i, j, key, m = nums.size();
+    for (i = 1; i < m; ++i) {
+        key = nums[i];
+        for (j = i - 1; j >= 0; --j) {
+            ++countin;
+            if(nums[j] <= key)break;
+            nums[j + 1] = nums[j]; 
+
+        }
+        nums[j + 1] = key;
+    }
+}
+int main(void) {
+    int n;
+    cin >> n;
+    vector<int> nums1(n), nums2(n);
+    for (int i = 0; i < n; ++i) {cin >> nums1[i]; nums2[i] = nums1[i];}
+    merge_sort_aux(nums1, 0, n - 1);
+    mysort(nums2);
+    cout << countme << ' ' << countin;
+    return 0;
+}

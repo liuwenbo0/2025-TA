@@ -1,0 +1,41 @@
+#include"Linklist.h"
+#include<vector>
+void changeList(Linklist &list){
+    int n=0;
+    vector<int> nums;
+    Linklist tail,point=list->next;
+    while(point != list){
+        nums.push_back(point->num);
+        point=point->next;
+        n++;
+    }
+
+    list=tail=new node();
+    for(int i = 0; i < n; i=i+2){
+        point = new node();
+        point->num=nums[i];
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    if(n%2==0){
+        for(int i = n-1; i > 0; i=i-2){
+        point = new node();
+        point->num=nums[i];
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    }
+    else {
+        for(int i = n-2; i > 0; i=i-2){
+        point = new node();
+        point->num=nums[i];
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    }
+    list->prior = tail;
+    tail->next = list;
+}

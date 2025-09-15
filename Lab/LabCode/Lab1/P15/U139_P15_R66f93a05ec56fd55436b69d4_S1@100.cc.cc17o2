@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+int insertionCount = 0;
+
+// 插入排序函数，并返回比较次数
+int insertionSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0) {
+            insertionCount++;
+            if (arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            } else {
+                break;
+            }
+        }
+        arr[j + 1] = key;
+    }
+    return insertionCount;
+}
+
+// 归并排序的合并函数，返回本次合并的比较次数
+int merge(vector<int>& arr, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    vector<int> L(n1), R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    int compareCount = 0; // 局部比较计数器
+    while (i < n1 && j < n2) {
+        compareCount++;
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // 复制剩余元素，不涉及比较
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+
+    return compareCount; // 返回本次合并的比较次数
+}
+
+// 归并排序函数，并返回比较次数
+int mergeSort(vector<int>& arr, int left, int right) {
+    if (left >= right)
+        return 0;
+
+    int mid = left + (right - left) / 2;
+    int leftCompareCount = mergeSort(arr, left, mid);     // 排序左半部分
+    int rightCompareCount = mergeSort(arr, mid + 1, right); // 排序右半部分
+    int mergeCompareCount = merge(arr, left, mid, right); // 合并两部分，并返回比较次数
+
+    return leftCompareCount + rightCompareCount + mergeCompareCount; // 返回总比较次数
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+
+    vector<int> arrCopy1(arr); // 用于插入排序的副本
+    vector<int> arrCopy2(arr); // 用于归并排序的副本
+    int insertionCompareCount = insertionSort(arrCopy1);
+    int mergeCompareCount = mergeSort(arrCopy2, 0, N - 1);
+
+    cout << mergeCompareCount << " "<< insertionCompareCount  << endl;
+
+    return 0;
+}

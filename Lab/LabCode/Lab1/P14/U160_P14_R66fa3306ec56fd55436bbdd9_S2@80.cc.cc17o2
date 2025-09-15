@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int mergeSubArray(vector<int>& data, int leftIndex, int middleIndex, int rightIndex, int& inversionCount) {
+    vector<int> temp(rightIndex - leftIndex + 1);
+    int i = leftIndex, j = middleIndex + 1, k = 0;
+    while (i <= middleIndex && j <= rightIndex) {
+        if (data[i] <= data[j]) {
+            temp[k++] = data[i++];
+        } else {
+            temp[k++] = data[j++];
+            inversionCount += (middleIndex - i + 1); // 计算逆序对数量
+        }
+    }
+    while (i <= middleIndex) temp[k++] = data[i++];
+    while (j <= rightIndex) temp[k++] = data[j++];
+    for (i = leftIndex, k = 0; i <= rightIndex; i++, k++) {
+        data[i] = temp[k];
+    }
+    return inversionCount;
+}
+
+int mergeSortCountInversions(vector<int>& data, int leftIndex, int rightIndex, int& inversionCount) {
+    if (leftIndex >= rightIndex) return inversionCount;
+    int midIndex = leftIndex + (rightIndex - leftIndex) / 2;
+    inversionCount = mergeSortCountInversions(data, leftIndex, midIndex, inversionCount);
+    inversionCount = mergeSortCountInversions(data, midIndex + 1, rightIndex, inversionCount);
+    inversionCount = mergeSubArray(data, leftIndex, midIndex, rightIndex, inversionCount);
+    return inversionCount;
+}
+
+int main() {
+    int size;
+    cin >> size;
+    vector<int> array(size);
+    for (int i = 0; i < size; i++) cin >> array[i];
+    int totalInversions = 0;
+    cin >> totalInversions; // 这个输入是多余的，应该移除
+    cout << mergeSortCountInversions(array, 0, size - 1, totalInversions) << endl;
+    return 0;
+}

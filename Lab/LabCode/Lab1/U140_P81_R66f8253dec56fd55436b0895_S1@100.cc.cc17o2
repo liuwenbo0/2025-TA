@@ -1,0 +1,15 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    std::vector<int>::size_type qian=list.size();
+    for(std::vector<int>::size_type i=0;i<list.size();i++){
+        if(list[i]>=num){
+            qian=i;
+            break;
+        }
+    }
+    list.push_back(0);
+    for(std::vector<int>::size_type j=list.size()-1;j>qian;j--){
+        list[j]=list[j-1];
+    }
+    list[qian]=num;
+}

@@ -1,0 +1,24 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    long unsigned int a=0;
+    while(list[a]!=0){
+        a++;
+    }
+    //cout << a;
+    for(long unsigned int i=0;i<=a;i++){
+        if(i==a){
+            list[i+1]=num;
+            break;
+        }
+        if(num<=list[i]){
+            for(long unsigned int j=a;j>=i;j--){
+                list[j+1]=list[j];
+            }
+            list[i]=num;
+            break;
+        }
+    }
+    cout << list[0] << " ";
+    for(long unsigned int k=0;k<=a;k++)
+    list[k]=list[k+1];
+}

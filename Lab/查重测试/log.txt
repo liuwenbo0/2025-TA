@@ -1,0 +1,6 @@
+File ./A.cpp: 239 tokens, 43 lines (not NL-terminated)
+File ./B.cpp: 252 tokens, 49 lines
+File ./sim_c++.exe: 167 tokens, 3 lines (not NL-terminated), 1342 non-ASCII characters
+Total input: 3 files (3 new, 0 old), 658 tokens
+
+./A.cpp consists for 82 % of ./B.cpp material

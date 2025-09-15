@@ -1,0 +1,35 @@
+#include "Linklist.h"
+#include<vector>
+
+void changeList(Linklist &list) {
+    //在此处添加代码
+    if (list == nullptr || list->next == list || list->next == nullptr) {
+        return; 
+    }
+     vector<Linklist> temp;
+     Linklist current = list->next; 
+    
+     while (current != list) {
+         temp.push_back(current);
+         current = current->next;
+     }
+     int n = temp.size(); 
+     int i = 0;
+     int j = (n%2 == 0) ? n - 1 : n - 2; 
+     Linklist prev = list; 
+     while (i < n) {
+         prev->next = temp[i];
+         temp[i]->prior = prev;
+         prev = temp[i];
+         i += 2; 
+     }
+     while (j >= 0) {
+         prev->next = temp[j];
+         temp[j]->prior = prev;
+         prev = temp[j];
+         j -= 2; 
+     }
+
+     prev->next = list;
+     list->prior = prev;
+}

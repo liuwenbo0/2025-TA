@@ -1,0 +1,30 @@
+#include "Solution.h"
+#include <cmath>
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    // 请在这里完成你的代码
+    ans[0][0] = 1;
+    ans[0][1] = 2;
+    ans[1][0] = 2;
+    ans[1][1] = 1;
+    //先初始化一个一定会存在的最小方块矩阵
+    if(n > 2){
+        for (int size = 2; size < n; size *= 2){
+            for (int i = 0; i < size; i++){
+                for (int j = 0; j < size; j++){
+                    ans[i][j + size] = ans[i][j] + size;
+                    //右上，左上加矩阵边长
+                    ans[i + size][j] = ans[i][j] + size;
+                    //左下，左上加矩阵边长
+                    ans[i + size][j + size] = ans[i][j];
+                    //右下，复制左上
+                }
+            }
+        }
+    }
+    return ans;
+  }

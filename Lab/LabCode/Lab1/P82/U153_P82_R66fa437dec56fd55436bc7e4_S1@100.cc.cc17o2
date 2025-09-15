@@ -1,0 +1,70 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    if (!list || list->next == list) return; // 空链表或只有一个元素
+
+    Linklist oddHead = nullptr, oddTail = nullptr;
+    Linklist evenHead = nullptr, evenTail = nullptr;
+
+    Linklist current = list->next;
+    int count = 0;
+
+    // 遍历链表，分离奇数和偶数节点
+    while (current != list) {
+        Linklist newNode = new node();
+        newNode->num = current->num;
+        newNode->next = nullptr;  // 初始化指针
+        newNode->prior = nullptr;
+
+        if (count % 2 == 0) { // 奇数位置
+            if (!oddHead) {
+                oddHead = oddTail = newNode;
+            } else {
+                oddTail->next = newNode;
+                newNode->prior = oddTail;
+                oddTail = newNode;
+            }
+        } else { // 偶数位置
+            if (!evenHead) {
+                evenHead = evenTail = newNode;
+            } else {
+                evenTail->next = newNode;
+                newNode->prior = evenTail;
+                evenTail = newNode;
+            }
+        }
+        current = current->next;
+        count++;
+    }
+
+    // 反转偶数链表
+    Linklist originalEvenHead = evenHead; // 记录原始偶数链表头，用于反转后作为新的偶数链表尾
+    if (evenHead) {
+        Linklist prev = nullptr;
+        Linklist temp = evenHead;
+        while (temp) {
+            Linklist next = temp->next;
+            temp->next = prev;
+            temp->prior = next;
+            prev = temp;
+            temp = next;
+        }
+        evenHead = prev; // 反转后的偶数链表头
+        evenTail = originalEvenHead; // 反转后的偶数链表尾
+    }
+
+    // 连接奇数链表和反转后的偶数链表
+    if (oddHead) {
+        list->next = oddHead; // 头节点指向奇数链表
+        oddTail->next = evenHead; // 奇数链表尾指向偶数链表头
+        if (evenHead) {
+            evenHead->prior = oddTail; // 偶数链表头的前指针指向奇数链表尾
+            evenTail->next = list; // 偶数链表尾指向头节点
+            list->prior = evenTail; // 头节点的前指针指向偶数链表尾
+        } else {
+            // 如果没有偶数链表，奇数链表尾直接指向头节点
+            oddTail->next = list;
+            list->prior = oddTail;
+        }
+    }
+}

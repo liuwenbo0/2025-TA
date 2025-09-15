@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_SIZE = 2000000;
+int totalOnes = 0, inputNumber, upperBound, lowerBound, remainingLength;
+
+void processRecursively(int currentElement) {
+    if (remainingLength == 0) return; 
+    if (currentElement == 0) {
+        if (lowerBound > 1) {
+            --lowerBound;
+        } else if (remainingLength > 0) {
+            totalOnes += 0; 
+            --remainingLength;
+        }
+        return;
+    }
+    if (currentElement == 1) {
+        if (lowerBound > 1) {
+            --lowerBound;
+        } else if (remainingLength > 0) {
+            totalOnes += 1; 
+            --remainingLength;
+        }
+        return;
+    }
+    processRecursively(currentElement / 2);
+    if (remainingLength > 0) {
+        processRecursively(currentElement % 2);
+    }
+    processRecursively(currentElement / 2);
+}
+
+int main() {
+    cin >> inputNumber >> lowerBound >> upperBound;
+    remainingLength = upperBound - lowerBound + 1; 
+    processRecursively(inputNumber); 
+    cout << totalOnes; 
+    return 0;
+}

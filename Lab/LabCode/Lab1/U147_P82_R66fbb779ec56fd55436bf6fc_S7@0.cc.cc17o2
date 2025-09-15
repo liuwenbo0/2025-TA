@@ -1,0 +1,68 @@
+#include "Linklist.h"
+
+void rearrangeList(Linklist &list) {
+    if (list == list->next->next) { // 检查链表是否为空或只有两个节点
+        return;
+    }
+
+    node *firstNode = list->next; // 获取真实头节点
+    node *lastNode = list->prior;  // 获取真实尾节点
+    list->next = nullptr;           // 清空虚拟头节点的连接
+    list->prior = nullptr;          // 清空虚拟尾节点的连接
+
+    firstNode->prior = nullptr;     // 清空头节点的前驱
+    lastNode->next = nullptr;       // 清空尾节点的后继
+
+    node *oddTail = nullptr;        // 奇数链表的尾部
+    node *evenHead = firstNode->next; // 偶数链表的头部
+
+    // 分离奇偶节点
+    for (node *currentOdd = firstNode; currentOdd != nullptr;) {
+        if (oddTail) {
+            oddTail->next = currentOdd; // 连接奇数链表
+            currentOdd->prior = oddTail;
+        } else {
+            oddTail = currentOdd; // 初始化奇数链表的头
+        }
+
+        currentOdd = currentOdd->next; // 移动到下一个节点
+        if (currentOdd) {
+            if (currentOdd->next) {
+                oddTail->next = currentOdd->next; // 跳过偶数节点
+                oddTail = oddTail->next; // 更新奇数链表尾部
+                oddTail->prior = currentOdd; // 设置前驱
+                currentOdd = currentOdd->next; // 移动到下一个节点
+            } else {
+                break; // 结束循环
+            }
+        }
+    }
+    if (oddTail) oddTail->next = nullptr; // 确保奇数链表结束
+
+    // 反转偶数链表
+    node *prevEven = nullptr;
+    node *currentEven = evenHead;
+
+    while (currentEven != nullptr) {
+        node *nextEven = currentEven->next; // 暂存下一节点
+        currentEven->next = prevEven;       // 反转指针
+        if (prevEven) prevEven->prior = currentEven; // 设置前驱
+        prevEven = currentEven; // 更新前驱
+        currentEven = nextEven; // 移动到下一节点
+    }
+    
+    // 合并奇数和反转后的偶数链表
+    if (oddTail) {
+        oddTail->next = prevEven; // 连接奇数链表和偶数链表
+        if (prevEven) prevEven->prior = oddTail; // 设置偶数链表的前驱
+    }
+
+    // 更新尾部指针
+    if (prevEven) {
+        prevEven->next = list; 
+        list->prior = prevEven; 
+    } else {
+        firstNode->prior = list; 
+        list->next = firstNode; 
+    }
+}

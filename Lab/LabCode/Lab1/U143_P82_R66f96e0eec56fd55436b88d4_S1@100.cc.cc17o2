@@ -1,0 +1,96 @@
+#include<iostream>
+
+using namespace std;
+
+struct node{
+	int num;
+	node *prior, *next;
+};
+
+using Linklist = node*;
+
+void changeList(Linklist &list);
+
+int main()
+{
+	int n;
+	Linklist head, tail, point;
+    head = tail = new node();
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        point = new node();
+        cin >> point->num;
+        tail->next = point;
+        point->prior = tail;
+        tail = point;
+    }
+    if(n == 1)
+    {
+        puts("1");
+        return 0;
+    }
+    head->prior = tail;
+    tail->next = head;
+    changeList(head);
+    point = head->next;
+    while(point != head->prior){
+    	cout << point->num << " ";
+    	point = point->next;
+	}
+	cout << point->num;
+	return 0;
+}
+void changeList(Linklist &list)
+{
+	Linklist head_even,tail_even,point_even;
+	Linklist head_odd,tail_odd,point_odd;
+	head_even = tail_even = new node();
+	head_odd = tail_odd = new node();
+	int index = 1;
+	node* tmp = list->next;
+	while(tmp != list)
+	{
+		node* point = new node();
+		point->num = tmp->num;
+		if(index % 2 == 1)
+		{
+			tail_odd->next = point;
+			point->prior = tail_odd;
+			tail_odd = point;
+		}
+		else
+		{
+            tail_even->next = point;
+			point->prior = tail_even;
+			tail_even = point;
+		}
+		tmp = tmp->next;
+        index++;
+	}
+    head_even->prior = tail_even;
+    tail_even->next = head_even;
+    Linklist head_even_new,tail_even_new;
+    head_even_new = tail_even_new = new node();
+    
+    
+    tmp = tail_even;
+    do
+    {
+        node* point = new node();
+        point->num = tmp->num;
+        tail_even_new->next = point;
+        point->prior = tail_even_new;
+        tail_even_new = point;
+        tmp = tmp->prior;
+    }while(tmp != tail_even);
+    
+    head_even_new->prior = tail_even_new;
+    tail_even_new->next = head_even_new;
+	node* tmp1 = head_odd->next;
+
+    head_odd->prior = tail_even_new->prior;
+    tail_odd->next = head_even_new->next;
+    head_even_new->prior = tail_odd;
+    tail_even_new->prior->next = head_odd;
+    list = head_odd;
+}

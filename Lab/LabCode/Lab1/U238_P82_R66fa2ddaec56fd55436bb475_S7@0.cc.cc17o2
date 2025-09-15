@@ -1,0 +1,28 @@
+#include "Linklist.h"
+#include<vector>
+
+void changeList(Linklist &list){
+    int length=Linklist.size();
+    if(length%2==0){
+        int half=length/2;
+        vector <int> tempt(half-1);
+        for(int i=0;i<half;i++){
+            tempt[i]=list[2i];
+        }
+        for(int j=0;j<half;j++){
+            list[length-1-j]=list[2j+1];
+            list[j]=tempt[j];
+        }
+    if(length%2!=0){
+        int half=(length-1)/2;
+        vector <int> tempt(half);
+        for(int i=0;i<=half;i++){
+            tempt[i]=list[2i];
+        }
+        for(int j=0;j<=half;j++){
+            list[length-1-j]=list[2j+1];
+            list[j]=tempt[j];
+        }
+    }
+
+}

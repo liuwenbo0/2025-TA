@@ -1,0 +1,33 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+long long calculate(long long m){
+    long long size = 1;
+    while(m > 1){
+        m = m / 2;
+        size = size *2 + 1;
+    }
+    return size;
+}
+long long count(long long m, long long left, long long right,long long currentleft, long long currentright){
+    if(m==0||left > right||currentleft > right || currentright < left){
+        return 0;
+    }
+    else if(m == 1){
+        return(left <= currentleft && currentright <= right)? 1 : 0;
+    }
+    long long mid = (currentleft + currentright)/2;
+    long long countleft = count(m/2, left, right, currentleft, mid-1);
+    long long countmid = (mid >= left && mid <= right && (m%2 ==1)) ? 1 : 0;
+    long long countright = count(m/2, left, right, mid+1, currentright);
+    return countleft + countmid + countright;
+}
+int main(){
+    long long m=0,k=0,s=0;
+    cin>> m >> k >> s;
+    long long total = calculate(m);
+    long long result = count(m,k-1,s-1,0,total-1);
+    cout<<result<<endl; 
+}

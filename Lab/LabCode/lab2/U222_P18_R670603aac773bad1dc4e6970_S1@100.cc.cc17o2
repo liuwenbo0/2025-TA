@@ -1,0 +1,31 @@
+#include "Solution.h"
+void r(vector<int>& arr, int n) {
+    if (n <= 1) return;
+    int half_n = n / 2;
+    vector<int> odd;
+    vector<int> even;
+    for (int i = 0; i < n; i++) {
+        if (i % 2 == 0) {
+            odd.push_back(arr[i]);
+        } else {
+            even.push_back(arr[i]);
+        }
+    }
+    r(odd, odd.size());
+    r(even, even.size());
+    int index = 0;
+    for (int num : odd) {
+        arr[index++] = num;
+    }
+    for (int num : even) {
+        arr[index++] = num;
+    }
+}
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    for(int i=1;i<=n;i++){
+        ans.push_back(i);
+     }
+    r(ans,n);
+    return ans;
+}

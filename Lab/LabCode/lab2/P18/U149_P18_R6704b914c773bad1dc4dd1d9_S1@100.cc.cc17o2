@@ -1,0 +1,20 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+        if(n == 1){
+            ans.emplace_back(1);
+            return ans;
+        }
+        int n_2 = (n+1) / 2 ;
+        int n_2_1 = n / 2;
+        vector<int> beautiful_n_2 =   perfect_permutation(n_2);
+        vector<int> beautiful_n_2_1 =  perfect_permutation(n_2_1);
+        for(auto i:beautiful_n_2){
+            ans.emplace_back(i*2-1);
+        }
+        for(auto i:beautiful_n_2_1){
+            ans.emplace_back(i*2);
+        }
+    return ans;
+}

@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <sstream>
+#include <climits>
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(0), right(0) {}
+};
+void inorderTraversal(TreeNode* root) {
+    if (root == 0) return;
+    inorderTraversal(root->left);
+    std::cout << root->val << " ";
+    inorderTraversal(root->right);
+}
+int treeHeight(TreeNode* root) {
+    if (root == 0) return 0;
+    int leftHeight = treeHeight(root->left);
+    int rightHeight = treeHeight(root->right);
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+int maxRootToLeafPathSum(TreeNode* root) {
+    if (root == 0) return INT_MIN;
+    if (root->left == 0 && root->right == 0) return root->val;
+    int leftSum = maxRootToLeafPathSum(root->left);
+    int rightSum = maxRootToLeafPathSum(root->right);
+    int maxChildSum = (leftSum > rightSum ? leftSum : rightSum);
+
+    return root->val + maxChildSum;
+}
+void sumNodesGreaterThanChildren(TreeNode* root, int& sum) {
+    if (root == 0) return;
+    if (root->left != 0 || root->right != 0) {
+        bool isGreater = true;
+        if (root->left != 0 && root->val <= root->left->val) {
+            isGreater = false;
+        }
+        if (root->right != 0 && root->val <= root->right->val) {
+            isGreater = false;
+        }
+        if (isGreater) {
+            sum += root->val;
+        }
+    }
+    sumNodesGreaterThanChildren(root->left, sum);
+    sumNodesGreaterThanChildren(root->right, sum);
+}
+
+int main() {
+    std::vector<int> nodes;
+    int val;
+    std::string line;
+    getline(std::cin, line);
+    std::istringstream iss(line);
+    while (iss >> val) {
+        nodes.push_back(val);
+    }
+    TreeNode* root = new TreeNode(nodes[0]);
+    std::queue<std::pair<TreeNode*, int> > q;
+    q.push(std::make_pair(root, 0));
+	  while (!q.empty()) {
+        TreeNode* node = q.front().first;
+        int idx = q.front().second;
+        q.pop();
+
+        int left_idx = 2*idx + 1;
+        int right_idx = 2*idx + 2;
+
+        if (left_idx < nodes.size() && nodes[left_idx] != -1) {
+            node->left = new TreeNode(nodes[left_idx]);
+            q.push(std::make_pair(node->left, left_idx));
+        }
+        if (right_idx < nodes.size() && nodes[right_idx] != -1) {
+            node->right = new TreeNode(nodes[right_idx]);
+            q.push(std::make_pair(node->right, right_idx));
+        }
+    }
+    int height = treeHeight(root);
+    std::cout  << height << std::endl;
+    int maxRootLeafSum = maxRootToLeafPathSum(root);
+    std::cout  << maxRootLeafSum << std::endl;
+    int sum = 0;
+    sumNodesGreaterThanChildren(root, sum);
+    std::cout  << sum << std::endl;
+    std::queue<TreeNode*> deleteQueue;
+    deleteQueue.push(root);
+    while (!deleteQueue.empty()) {
+        TreeNode* node = deleteQueue.front();
+        deleteQueue.pop();
+        if (node->left != 0) {
+            deleteQueue.push(node->left);
+        }
+        if (node->right != 0) {
+            deleteQueue.push(node->right);
+        }
+        delete node;
+    }
+
+    return 0;
+}

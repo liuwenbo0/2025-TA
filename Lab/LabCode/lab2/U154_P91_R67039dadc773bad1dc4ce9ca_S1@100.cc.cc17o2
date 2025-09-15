@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+
+long long calculate_size(long long m) {
+    if (m <= 1) return 1;
+    return 2 * calculate_size(m / 2) + 1;
+}
+
+long long count_ones(long long m, long long left, long long right, long long k, long long s) {
+    if (m == 0) return 0; 
+    if (m == 1) {
+        if (left >= k && right <= s) return 1; 
+        else return 0;
+    }
+
+    long long mid = left + (right - left) / 2; 
+
+    long long ones_count = 0;
+
+    if (k <= mid - 1 && s >= left) {
+        ones_count += count_ones(m / 2, left, mid - 1, k, s);
+    }
+
+    if (mid >= k && mid <= s && m % 2 == 1) {
+        ones_count += 1;
+    }
+
+    if (k <= right && s >= mid + 1) {
+        ones_count += count_ones(m / 2, mid + 1, right, k, s);
+    }
+
+    return ones_count;
+}
+
+int main() {
+    long long m, k, s;
+    cin >> m >> k >> s;
+    long long total_size = calculate_size(m);
+
+    long long result = count_ones(m, 1, total_size, k, s);
+
+    cout << result << endl;
+
+    return 0;
+}

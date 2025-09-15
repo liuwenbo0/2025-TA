@@ -1,0 +1,52 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    Linklist head=list;//将list的表头变为现在函数的head
+    Linklist tail=head;
+    int n=0;
+    //找到tail，并找出结点个数
+    while(tail->next!=head)
+    {
+        tail=tail->next;
+        n++;
+    }
+    //cout<<n;
+    //如果节点数是偶数则执行程序1，否则执行2
+    if(n%2==0) 
+    {
+        //奇数结点以next相连
+        for(Linklist test=head->next;test->next!=tail;test=(test->next))
+    {
+        (test->next)=(test->next)->next;
+    }
+     Linklist up=tail;
+     //为这个函数后的输入作准备
+     head->prior=((head->next)->next)->prior;
+     //顺着双向链表，把偶数结点以prior相连
+     while(up->prior!=head->next)
+     {
+        up->next=(up->prior)->prior;
+        up=up->next;
+     }
+    }
+    else{
+        for(Linklist test=head->next;test->next!=head;test=(test->next))
+    {
+        (test->next)=(test->next)->next;
+    }
+     Linklist up=tail;
+     head->prior=((head->next)->next)->prior;
+     while(up->prior!=head->next)
+     {
+        if(up==tail)
+        {
+            up->next=up->prior;
+            up=up->next;
+        }
+        else{
+            up->next=(up->prior)->prior;
+            up=up->next;
+        }
+     }
+    }
+    
+}

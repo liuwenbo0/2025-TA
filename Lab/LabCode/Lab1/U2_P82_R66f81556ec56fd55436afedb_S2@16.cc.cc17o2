@@ -1,0 +1,58 @@
+#include"Linklist.h"
+void changeList(Linklist &list) {
+    if (!list || !list->next || list->next == list) return; // 空链表或只有1个节点
+
+    Linklist oddHead = nullptr;   // 奇数位置链表的头
+    Linklist evenHead = nullptr;  // 偶数位置链表的头
+    Linklist oddTail = nullptr;   // 奇数位置链表的尾
+    Linklist evenTail = nullptr;  // 偶数位置链表的尾
+
+    Linklist curr = list->next;  // 从第一个节点开始
+    Linklist temp;
+    bool isOdd = true;           // 用来判断当前节点是奇数位置还是偶数位置
+
+    // 分离奇数位和偶数位节点
+    while (curr != list) {
+        temp = curr->next; // 保存下一个节点
+        if (isOdd) {
+            if (!oddHead) {       // 如果奇数链表为空
+                oddHead = curr;
+                oddTail = curr;
+            } else {
+                oddTail->next = curr;
+                curr->prior = oddTail;
+                oddTail = curr;
+            }
+        } else {
+            if (!evenHead) {      // 如果偶数链表为空
+                evenHead = curr;
+                evenTail = curr;
+            } else {
+                evenTail->next = curr;
+                curr->prior = evenTail;
+                evenTail = curr;
+            }
+        }
+        curr = temp;  // 移动到下一个节点
+        isOdd = !isOdd;  // 切换位置
+    }
+
+    // 断开最后的连接，避免无限循环
+    if (oddTail) oddTail->next = nullptr;
+    if (evenTail) evenTail->next = nullptr;
+
+    // 合并奇数和偶数链表
+    if (oddTail && evenHead) {
+        oddTail->next = evenHead;   // 奇数链表的尾部连到偶数链表的头部
+        evenHead->prior = oddTail;  // 偶数链表的头部指向奇数链表的尾部
+    }
+
+    // 将偶数链表的尾部重新连接到奇数链表的头部，形成循环
+    if (evenTail) {
+        evenTail->next = list;  // 偶数链表的尾部连到头结点
+        list->prior = evenTail; // 头结点的 prior 指向偶数链表的尾部
+    } else if (oddTail) {
+        oddTail->next = list;   // 如果没有偶数节点，奇数链表尾部连到头结点
+        list->prior = oddTail;  // 头结点的 prior 指向奇数链表的尾部
+    }
+}

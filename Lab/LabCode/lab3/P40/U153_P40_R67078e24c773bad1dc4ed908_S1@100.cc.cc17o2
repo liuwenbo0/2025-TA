@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <climits>
+
+using namespace std;
+
+int minCut(vector<int>& arr, int q) {
+    unordered_map<int, priority_queue<int>> map; // 存储每个高度及其对应的修剪次数
+    for (int i : arr) {
+        int j = 0;
+        while (i > 0) {
+            if (map.count(i) == 0) {
+                map[i] = priority_queue<int>(); // 初始化优先队列
+            }
+            map[i].push(j);
+            i >>= 1; // 将高度除以2
+            j++;
+        }
+    }
+    int ans = INT_MAX;
+    for (auto& p : map) {
+        while (p.second.size() > static_cast<size_t>(q)) {
+            p.second.pop(); // 移除最大的元素，即修剪次数最多的
+        }
+        if (p.second.size() == static_cast<size_t>(q)) {
+            int sum = 0;
+            while (!p.second.empty()) {
+                sum += p.second.top(); // 计算总修剪次数
+                p.second.pop();
+            }
+            ans = min(ans, sum); // 更新最小修剪次数
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> arr(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> arr[i];
+    }
+    cout << minCut(arr, q) << endl;
+    return 0;
+}

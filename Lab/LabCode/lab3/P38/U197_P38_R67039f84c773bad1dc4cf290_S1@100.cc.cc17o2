@@ -1,0 +1,44 @@
+#include "QuickSort.h"
+#include <ctime>
+#include <cstdlib>
+
+inline void swap(int& a, int& b)
+{
+    auto tmp = a;
+    a = b;
+    b = tmp;
+}
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q)
+{
+    std::srand(std::time(NULL));
+    auto midInd = rand() % (q - p + 1) + p;
+    swap(nums[midInd], nums[q]);
+    auto midVal = nums[q];
+    int i = p, j = p;
+    for (; j <= q; j++)
+    {
+        if (nums[j] < midVal)
+        {
+            swap(nums[i], nums[j]);
+            i++;
+        }
+    }
+    swap(nums[q], nums[i]);
+    return i;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r)
+{
+    if (l >= r)
+        return;
+    auto mid = partition(nums, l, r);
+    quick_sort(nums, l, mid - 1);
+    quick_sort(nums, mid + 1, r);
+}
+void QuickSort::mysort(std::vector<int>& nums)
+{
+    if (nums.size() == 0)
+        return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

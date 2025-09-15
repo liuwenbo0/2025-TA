@@ -1,0 +1,60 @@
+#include <cmath>
+#include <iostream>
+#include <vector>
+using namespace std;
+
+//自定义log2（）
+int log2(int l){
+    int lo = log(l)/log(2);
+    return lo;
+}
+
+int max(vector<int> &wise, int i){
+    if(i >= wise.size() || wise[i] == -1) return 0;
+    else if(wise.size() == 1) return wise[0];
+    else{
+        int left_max = max(wise, 2 * i + 1);;
+        int right_max =max(wise, 2 * i + 2);;
+        return wise[i] + max(left_max, right_max);
+    }
+}
+
+//求特殊区域节点之和
+int special(vector <int> &wise,int i){ 
+    if(i >= wise.size()|| wise[i] == -1) return 0;
+    else{
+        int sum = 0;
+        int left_next = 2 * i + 1;  
+        int right_next = 2 * i + 2; 
+        int left_wise = (left_next < wise.size()) ? wise[left_next] : -1; 
+        //左子节点值
+        int right_wise = (right_next < wise.size()) ? wise[right_next] : -1; 
+        //右子节点值
+        if ((wise[i] > left_wise) && (wise[i] > right_wise) && !(left_wise ==-1 && right_wise ==-1)){
+            sum += wise[i];
+        }
+        //递归计算左右子树的特殊区域值之和
+        sum += special(wise, left_next);
+        sum += special(wise, right_next);
+        return sum;
+    }
+}
+int main(){
+    int h = 0,maxsum = 0,spesum = 0;//树的高度,资源最丰富路径的结点值之和,特殊区域的结点值之和
+    vector <int> wise;
+    int input;
+    while(cin >> input){
+        wise.push_back(input);//自动扩展空间
+    }   
+    int length = wise.size();
+    h = log2(length) + 1;//计算树高
+
+    int maxv0 = 0,maxv1 = 0;//指向双亲，指向孩子
+
+    //计算资源最丰富路径的结点值之和
+    maxsum = max(wise,0);
+    //计算特殊区域的结点值之和
+    spesum = special(wise,0); 
+    cout << h << "\n" << maxsum << "\n" << spesum << endl;
+    return 0;
+}

@@ -1,0 +1,71 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+
+int resource(vector<int> &ans, int n,int high)
+{
+    int max_resource=0;
+    int below_bg=pow(2,high-1)+1;
+    
+    for(int i=below_bg;i<n;i++)
+    {
+        int sum=0;
+        if(ans[i]!=-1)
+        sum=ans[i];
+        int j=(i-1)/2;
+        while(j>=0){
+            sum+=ans[j];
+            if(j==0)
+            break;
+            j=(j-1)/2;
+        }
+        if(sum>max_resource)
+        max_resource=sum;
+    }
+
+    for(int i=(n-2)/2+1;i<below_bg;i++)
+    {
+        int sum=0;
+        if(ans[i]!=-1)
+        sum=ans[i];
+        int j=(i-1)/2;
+        while(j>=0){
+            if(ans[j]!=-1)
+            sum+=ans[j];
+            if(j==0)
+            break;
+            j=(j-1)/2;
+        }
+        if(sum>max_resource)
+        max_resource=sum;
+    }
+    return max_resource;
+
+
+}
+
+
+
+
+
+int main()
+{
+    vector<int> tree;
+    int num=0;
+    while(cin>>num)
+    {
+        tree.push_back(num);
+    }
+    int n=tree.size();
+    int high=log(n)/log(2)+1;
+    int spsum=0;
+    for(int i=0;i<=n/2-1;i++)
+    {
+        if((tree[i]>tree[2*i+1]&&tree[i]>tree[2*i+2])&&(tree[2*i+1]!=-1||tree[2*i+2]!=-1))
+        spsum+=tree[i];
+    }
+    int max_resource=resource(tree,n,high);
+    cout<<high<<endl<<max_resource<<endl<<spsum;
+
+}

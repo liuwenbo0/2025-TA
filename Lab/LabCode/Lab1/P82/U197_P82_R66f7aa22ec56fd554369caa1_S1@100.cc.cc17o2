@@ -1,0 +1,31 @@
+#include"Linklist.h"
+#include <vector>
+
+void changeList(Linklist& list)
+{
+	std::vector<node*> frontPart, backPart;
+	backPart.push_back(list);
+	node* current = list->next;
+	for (int i = 1; current != list; i++)
+	{
+		if (i % 2 != 0)
+			frontPart.push_back(current);
+		else
+			backPart.push_back(current);
+		current = current->next;
+	}
+	for (int i = 0; i < frontPart.size() - 1; i++)
+	{
+		frontPart.at(i)->next = frontPart.at(i + 1);
+		frontPart.at(i + 1)->prior = frontPart.at(i);
+	}
+	for (int i = backPart.size() - 1; i > 0; i--)
+	{
+		backPart.at(i)->next = backPart.at(i - 1);
+		backPart.at(i - 1)->prior = backPart.at(i);
+	}
+	frontPart.back()->next = backPart.back();
+	backPart.back()->prior = frontPart.back();
+	frontPart.front()->prior = backPart.front();
+	backPart.front()->next = frontPart.front();
+}

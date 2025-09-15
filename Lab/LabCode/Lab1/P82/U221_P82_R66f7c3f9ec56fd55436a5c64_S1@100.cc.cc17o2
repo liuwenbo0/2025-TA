@@ -1,0 +1,66 @@
+#include "Linklist.h"  
+
+// 按要求修改双向循环链表的元素顺序  
+// @param  
+// list: 待处理双向循环链表的head  
+void changeList(Linklist &list) {  
+    if (list == nullptr || list->next == nullptr || list->next == list) {  
+        return;  
+    }  
+
+    // 获取链表的长度  
+    int length = 0;  
+    Linklist p = list->next;  
+    do {  
+        length++;  
+        p = p->next;  
+    } while (p != list);  
+
+    // 将链表中的元素存储到一个数组中  
+    int* arr = new int[length];  
+    if (!arr) {  
+        // 处理内存分配失败  
+        return;  
+    }  
+
+    p = list->next;  
+    for (int i = 0; i < length; i++) {  
+        arr[i] = p->num;  
+        p = p->next;  
+    }  
+
+    // 将链表重新排序
+    if (length % 2 == 0){
+        p = list->next;  
+        for (int i = 0; i < length; i++) {  
+            if (i < length / 2) {  
+                p->num = arr[i * 2];  
+            } else {  
+                p->num = arr[length - (i - length / 2) * 2 - 1];  
+            }  
+            if (p->next == list) {  
+                break;  
+            }  
+            p = p->next;  
+    }  
+
+    }
+    else{
+        p = list->next;  
+        int mid = length / 2;  
+        for (int i = 0; i < mid; i++) {  
+            p->num = arr[i * 2];  
+            p = p->next;  
+        }  
+        p->num = arr[length - 1];  
+        p = p->next;  
+        for (int i = mid - 1; i >= 0; i--) {  
+            p->num = arr[i * 2 + 1];  
+            p = p->next;  
+        }  
+
+    }  
+    
+
+    delete[] arr;  
+}

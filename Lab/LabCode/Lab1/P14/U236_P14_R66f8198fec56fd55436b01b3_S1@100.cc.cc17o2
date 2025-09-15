@@ -1,0 +1,44 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void merge_sort(vector<int> &nums, int left, int right, long &inversion)
+{
+	if (left >= right)
+		return;
+	int mid = left + (right - left) / 2;
+	merge_sort(nums, left, mid, inversion);
+	merge_sort(nums, mid + 1, right, inversion);
+	vector<int> temp(right - left + 1);
+	int i = left, j = mid + 1, k = 0;  
+    while (i <= mid && j <= right) {  
+        if (nums[i] <= nums[j]) {  
+            temp[k++] = nums[i++];  
+        } else {  
+            temp[k++] = nums[j++];  
+            inversion += (mid - i + 1);   
+        }
+    }
+    while (i <= mid) {  
+        temp[k++] = nums[i++];  
+    }
+    while (j <= right) {  
+        temp[k++] = nums[j++];  
+    }
+    for (int p = 0; p < temp.size(); p++) {  
+        nums[left + p] = temp[p];  
+    }
+}
+
+int main()
+{
+    int n;
+    long ni = 0;
+    cin >> n;
+    vector<int> array1(n);
+    for (int i = 0; i < n; i++){
+        cin >> array1[i];
+    }
+    merge_sort(array1, 0, n-1, ni);
+    cout << ni << endl;
+}

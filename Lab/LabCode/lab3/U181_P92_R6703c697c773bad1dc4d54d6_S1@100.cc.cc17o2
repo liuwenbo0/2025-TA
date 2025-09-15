@@ -1,0 +1,37 @@
+#include <iostream>
+#include <deque>
+#include <vector>
+
+using namespace std;
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    deque<int> dq; 
+    vector<int> result; 
+
+    for (int i = 0; i < n; i++) {
+        if (!dq.empty() && dq.front() < i - k + 1) {
+            dq.pop_front();
+        }
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {
+            dq.pop_back();
+        }
+        dq.push_back(i);
+
+        if (i >= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+    int size = result.size() - 1;
+    for (int i = 0; i < size; i++) {
+        cout << result[i] << " ";
+    }
+ 
+    cout << result[size] << endl;
+    return 0;
+}

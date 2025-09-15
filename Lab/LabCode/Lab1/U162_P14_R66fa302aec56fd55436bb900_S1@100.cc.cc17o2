@@ -1,0 +1,145 @@
+/*
+#include<iostream>
+#include<vector>
+using namespace std;
+
+#define int long long
+
+int  merge(std::vector<int> &nums,vector<int>& tem, int left, int right)
+{
+    //请在这里完成你的代码
+    int con=0;
+    int mid=(left+right)/2;
+    
+   
+    int i=left;
+    int j=mid+1;
+    int k=left;
+    
+    while(i<=mid&&j<=right){
+        if(nums[i]<nums[j]){
+            tem[k++]=nums[i++];
+        }
+        else{
+            tem[k++]=nums[j++];
+            con+=mid+1-i;
+        }
+        
+    }
+    while(i<=mid){
+        tem[k++]=nums[i++];
+    }
+    while(j <= right){
+        tem[k++]=nums[j++];
+    }
+    for(int i=left,j=left;i<=right;i++){
+        nums[i]=tem[j++];
+    }
+    
+    return con;
+
+}
+
+int mergesort(vector<int>& arr, vector<int>& tem, int left, int right) {
+    int Con = 0;
+    if (left < right) {
+        int mid = (left + right) / 2;
+
+        Con += mergesort(arr, tem, left, mid);
+        Con += mergesort(arr, tem, mid + 1, right);
+        Con += merge(arr, tem, left,right);
+    }
+    return Con;
+}
+
+
+int count(vector<int>& arr) {
+    vector<int> tem(arr.size());
+    return mergesort(arr, tem, 0, arr.size() - 1);
+}
+
+
+signed main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin>>N;
+
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+    int result = count(arr);
+    cout << result <<endl;
+    
+   
+
+}
+*/
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define int long long
+
+int merge(vector<int> &nums, vector<int> &tem, int left, int mid, int right) {
+    int con = 0;
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            tem[k++] = nums[i++];
+        } else {
+            tem[k++] = nums[j++];
+            con += (mid + 1 - i); 
+        }
+    }
+    while (i <= mid) {
+        tem[k++] = nums[i++];
+    }
+    while (j <= right) {
+        tem[k++] = nums[j++];
+    }
+    for (int i = left; i <= right; i++) {
+        nums[i] = tem[i];
+    }
+
+    return con;
+}
+
+int mergesort(vector<int>& arr, vector<int>& tem, int left, int right) {
+    int Con = 0;
+    if (left < right) {
+        int mid = (left + right) / 2;
+
+        Con += mergesort(arr, tem, left, mid);
+        Con += mergesort(arr, tem, mid + 1, right);
+        Con += merge(arr, tem, left, mid, right); 
+    }
+    return Con;
+}
+
+int count(vector<int>& arr) {
+    vector<int> tem(arr.size());
+    return mergesort(arr, tem, 0, arr.size() - 1);
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+    int result = count(arr);
+    cout << result << endl;
+
+    return 0;
+}

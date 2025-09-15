@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 插入排序函数
+void insertionSort(vector<int>& arr, int& compareCount) {
+    compareCount = 0;
+    for (size_t i = 1; i < arr.size(); i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && ++compareCount && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// 归并排序函数
+void merge(vector<int>& arr, int left, int mid, int right, int& compareCount) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    vector<int> L(n1), R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        compareCount++;
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(vector<int>& arr, int left, int right, int& compareCount) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid, compareCount);
+        mergeSort(arr, mid + 1, right, compareCount);
+        merge(arr, left, mid, right, compareCount);
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++)
+        cin >> arr[i];
+
+    int compareInsertion = 0, compareMerge = 0;
+    vector<int> arrInsertion = arr, arrMerge = arr;
+
+    insertionSort(arrInsertion, compareInsertion);
+    mergeSort(arrMerge, 0, N - 1, compareMerge);
+
+    cout << compareMerge << " " << compareInsertion << endl;
+
+    return 0;
+}

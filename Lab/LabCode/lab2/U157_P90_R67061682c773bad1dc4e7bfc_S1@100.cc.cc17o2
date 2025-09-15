@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn=2e6+5;
+int a[maxn],b[maxn];
+int cnt=0,n;
+int ans,hight;
+int findmax(int per_n,int N){
+    if(per_n>N) return 0;
+    b[per_n]=a[per_n]+max(findmax(per_n*2+1,N),findmax(per_n*2+2,N));
+    if(b[per_n]<0) return 0;
+    return b[per_n];
+}
+int main(){
+    while(cin>>a[cnt]){
+     ++cnt;
+    }
+     n=cnt;
+    while(n){
+        n=n/2;
+        ++hight;
+    }
+    int flg=1;
+    for(int i=cnt/2;i<cnt;++i){
+      if(a[i]!=-1) flg=0;
+    }
+    hight-=flg;
+    cout<<hight<<endl;
+    cout<<findmax(0,cnt-1)<<endl;
+    n=1;
+    while(--hight) n*=2;
+    for(int i=0;i<=n*2-1;++i){
+      if(a[i]==0) a[i]=-1;
+    }
+    n--;
+    for(int i=0;i<n;++i){
+        if(a[i*2+1]!=-1 || a[i*2+2]!=-1){
+            if(a[i]>max(a[i*2+1],a[i*2+2]))
+            ans+=a[i];
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
+}

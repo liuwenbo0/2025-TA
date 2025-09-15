@@ -1,0 +1,16 @@
+# include "SqList.h"
+void insert(SqList& list, int num)
+{
+    int k = -1;
+    for (int j = 0; j < (int)list.size(); j++)
+    {
+
+        if (num < list[j])
+        {
+            k = j;
+            break;
+        }
+    }
+    if (k != -1) list.insert(list.begin() + k, num);
+    else list.push_back(num);
+}

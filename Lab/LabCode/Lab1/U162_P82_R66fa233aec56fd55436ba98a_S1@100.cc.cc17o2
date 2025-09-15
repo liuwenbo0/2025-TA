@@ -1,0 +1,98 @@
+#include "Linklist.h"
+/*
+void changeList(Linklist &list){
+   
+          Linklist point1 = list->next;   
+    Linklist _new=new node();
+    list->next=_new;
+    _new->prior=list;
+    Linklist point2=_new;
+    Linklist tem;
+
+    while(point1->next!=list&&point1->next->next!=list){      
+        point2->num=point1->num;
+        
+        point2->next=new node();
+        tem=point2;
+        point2=point2->next;
+        point2->prior=tem;
+
+        point1=point1->next->next;
+    }
+    point2->num=point1->num;
+
+    point2->next=new node();
+    tem=point2;
+    point2=point2->next;
+    point2->prior=tem;
+    
+    if(point1->next==list)point1=point1->prior;
+    
+    if(point1->next->next==list)point1=point1->next;
+
+    while(point1!=list){
+        point2->num=point1->num;
+
+        point2->next=new node();
+        tem=point2;
+        point2=point2->next;
+        point2->prior=tem;
+
+        point1=point1->prior->prior;
+
+    }
+    point2=point2->prior;
+    point2->next=list;
+    list->prior=point2;
+}
+*/
+void changeList(Linklist &list){
+    //请在这里完成你的代码
+    Linklist point1 = list->next;   
+    Linklist _new=new node();
+    
+    _new->prior=list;
+    Linklist point2=_new;
+    Linklist tem;
+
+
+    while(point1->next!=list&&point1->next->next!=list){      
+        point2->num=point1->num;
+        
+        point2->next=new node();
+        tem=point2;
+        point2=point2->next;
+        point2->prior=tem;
+
+        point1=point1->next->next;
+    }
+    point2->num=point1->num;
+
+    point2->next=new node();
+    tem=point2;
+    point2=point2->next;
+    point2->prior=tem;
+    
+    if(point1->next==list){
+        point1=point1->prior;
+    }
+    
+    else if(point1->next->next==list)point1=point1->next;
+
+    while(point1!=list){
+        point2->num=point1->num;
+
+        point2->next=new node();
+        tem=point2;
+        point2=point2->next;
+        point2->prior=tem;
+
+        point1=point1->prior->prior;
+
+    }
+    point2=point2->prior;
+    point2->next=list;
+    list->prior=point2;
+    list->next=_new;
+    return;
+}

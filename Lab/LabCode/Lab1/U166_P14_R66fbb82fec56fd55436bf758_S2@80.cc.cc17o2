@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int merge_and_count(vector<int>& nums, int left, int mid, int right) {
+    vector<int> temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+    int count = 0;
+
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+            count += (mid - i + 1); // Count inversions
+        }
+    }
+
+    while (i <= mid) temp[k++] = nums[i++];
+    while (j <= right) temp[k++] = nums[j++];
+
+    for (int s = 0; s < temp.size(); ++s) {
+        nums[left + s] = temp[s]; // Copy back sorted elements
+    }
+
+    return count;
+}
+
+int merge_sort_aux(vector<int>& nums, int left, int right) {
+    if (left >= right) return 0;
+
+    int mid = left + (right - left) / 2; // Avoids overflow
+    int count = merge_sort_aux(nums, left, mid);
+    count += merge_sort_aux(nums, mid + 1, right);
+    count += merge_and_count(nums, left, mid, right); // Combine counts
+
+    return count;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    if (n <= 0) {
+        cout << 0 << endl;
+        return 0;
+    }
+
+    vector<int> a(n);
+    for (int& x : a) cin >> x; // Use range-based for loop for input
+
+    cout << merge_sort_aux(a, 0, n - 1) << endl; // Output the count of inversions
+}

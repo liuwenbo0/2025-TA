@@ -1,0 +1,21 @@
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+using namespace std;
+int a[1001000],ans[1001000];
+int list[1001000],head,tail;//维护单调队列 
+int main()
+{
+	int n,m;scanf("%d%d",&n,&m);
+	for(int i=1;i<=n;i++) scanf("%d",&a[i]);
+	list[head=tail=1]=1;
+	for(int i=2;i<=n;i++)
+	{
+		while(head<=tail && i-list[head]>=m) head++;
+		ans[i]=max(a[i],a[list[head]]);
+		while(head<=tail && a[i]>=a[list[tail]]) tail--;
+		list[++tail]=i;
+	}
+	for(int i=m;i<=n;i++) cout << ans[i] << " ";
+	return 0;
+}

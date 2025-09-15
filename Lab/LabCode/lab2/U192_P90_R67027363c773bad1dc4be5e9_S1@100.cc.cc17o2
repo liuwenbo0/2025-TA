@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int getHeight(vector<int>& tree, long long index) {
+    if (index >= tree.size() || tree[index] == -1) {
+        return 0;
+    }
+    int leftHeight = getHeight(tree, 2 * index + 1);
+    int rightHeight = getHeight(tree, 2 * index + 2);
+    return 1 + max(leftHeight, rightHeight);
+}
+long long maxResourcePath(vector<int>& tree, long long index, long long currentSum) {
+    if (index >= tree.size() || tree[index] == -1) {
+        return 0;
+    }
+    currentSum +=(long long)tree[index];
+    long long leftPath = maxResourcePath(tree, 2 * index + 1, currentSum);
+    long long rightPath = maxResourcePath(tree, 2 * index + 2, currentSum);
+    if (leftPath == 0 && rightPath == 0) {
+        return currentSum;
+    }
+    return max(leftPath, rightPath);
+}
+long long specialAreas(vector<int>& tree, long long index) {
+    if (index >= tree.size() || tree[index] == -1) {
+        return 0;
+    }
+    long long leftIndex = 2 * index + 1;
+    long long rightIndex = 2 * index + 2;
+    long long specialSum = 0;
+    bool isSpecial = true;
+    if (leftIndex < tree.size() && tree[leftIndex] != -1) {
+        if (tree[index] <= tree[leftIndex]) {
+            isSpecial = false;
+        }
+    }
+    if (rightIndex <= tree.size() && tree[rightIndex] != -1) {
+        if (tree[index] <= tree[rightIndex]) {
+            isSpecial = false;
+        }
+    }
+    if(leftIndex<tree.size()&&rightIndex<=tree.size()&&tree[leftIndex]==-1&&tree[rightIndex]==-1){
+        isSpecial=false;
+    }
+    if (isSpecial && (leftIndex < tree.size() || rightIndex <= tree.size())) {
+        specialSum += (long long)tree[index];
+    }
+    return specialSum + specialAreas(tree, leftIndex) + specialAreas(tree, rightIndex);
+}
+int main() {
+    vector<int> tree;
+    int val;
+    while (cin >> val) {
+        tree.push_back(val);
+    }
+    int height = getHeight(tree, 0);
+    cout << height << endl;
+    long long maxResource = maxResourcePath(tree, 0, 0);
+    cout << maxResource << endl;
+    long long specialSum = specialAreas(tree, 0);
+    cout << specialSum << endl;
+    return 0;
+}

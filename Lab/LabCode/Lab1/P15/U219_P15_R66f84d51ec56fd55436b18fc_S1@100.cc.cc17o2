@@ -1,0 +1,85 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int Intersort(vector<int>& nums,int n) {
+    int t = 0; 
+    for (int i = 1; i < n; i++) { 
+        int k = nums[i];
+        int j;
+        for (j = i - 1; j >= 0; j--) {
+            t++; 
+            if (nums[j] > k) {
+                nums[j + 1] = nums[j];
+            } else {
+                break; 
+            }
+        }
+        nums[j + 1] = k;
+    }
+    return t;
+}
+int merge_sort_aux(vector<int> &nums, int left, int right)
+{
+
+    int comparisons = 0;
+    if(left<right){
+
+       int mid = left + (right - left) / 2;
+        comparisons += merge_sort_aux(nums, left, mid);
+        comparisons += merge_sort_aux(nums, mid + 1, right);
+
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        vector<int> leftArr(n1);
+        vector<int> rightArr(n2);
+
+        for (int i = 0; i < n1; ++i)
+            leftArr[i] = nums[left + i];
+        for (int j = 0; j < n2; ++j)
+            rightArr[j] = nums[mid + 1 + j];
+
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            comparisons++;
+            if (leftArr[i] <= rightArr[j]) {
+                nums[k] = leftArr[i];
+                i++;
+            } else {
+                nums[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            nums[k] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            nums[k] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+    return comparisons;
+    }
+
+
+
+
+int main(){
+    int N;
+    cin>>N;
+    vector<int> nums(N);
+    vector<int> nums1(N);
+    for (int i = 0;i<=N-1;i++){
+        cin>>nums[i];
+        nums1[i]= nums[i];}
+    int k = merge_sort_aux(nums,0,N-1);
+    int h = Intersort(nums1,N);
+    cout<<k<<" "<<h;
+}

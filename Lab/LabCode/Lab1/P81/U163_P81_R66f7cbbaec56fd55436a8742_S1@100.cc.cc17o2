@@ -1,0 +1,10 @@
+#include"SqList.h"
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void insert(SqList& list, int num){
+    int i=0;
+    while (list[i]<num &&i<list.end()-list.begin() )i++;
+list.insert(list.begin()+i,num);
+    }

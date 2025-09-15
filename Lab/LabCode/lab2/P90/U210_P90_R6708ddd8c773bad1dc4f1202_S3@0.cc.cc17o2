@@ -1,0 +1,95 @@
+#include <iostream>  
+#include <vector>  
+#include <algorithm>  
+#include <climits>  
+  
+using namespace std;  
+  
+// 定义树节点结构  
+struct TreeNode {  
+    int val;  
+    TreeNode* left;  
+    TreeNode* right;  
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}  
+};  
+  
+// 辅助函数：构建二叉树  
+TreeNode* buildTree(const vector<int>& data, int& index) {  
+    if (index >= data.size() || data[index] == -1) {  
+        return NULL;  
+    }  
+    TreeNode* root = new TreeNode(data[index++]);  
+    root->left = buildTree(data, index);  
+    root->right = buildTree(data, index);  
+    return root;  
+}  
+  
+// 辅助函数：计算树的高度  
+int treeHeight(TreeNode* root) {  
+    if (root == NULL) {  
+        return 0;  
+    }  
+    return 1 + max(treeHeight(root->left), treeHeight(root->right));  
+}  
+  
+// 辅助函数：找到资源最丰富的路径  
+int maxPathSum(TreeNode* root, int& maxSum) {  
+    if (root == NULL) {  
+        return 0;  
+    }  
+    int leftSum = max(0, maxPathSum(root->left, maxSum));  
+    int rightSum = max(0, maxPathSum(root->right, maxSum));  
+    int currentSum = root->val + leftSum + rightSum;  
+    maxSum = max(maxSum, currentSum);  
+    return root->val + max(leftSum, rightSum);  
+}  
+  
+// 辅助函数：查找特殊区域  
+int findSpecialRegions(TreeNode* root, int& specialSum) {  
+    if (root == NULL) {  
+        return 0;  
+    }  
+    int leftVal = (root->left ? root->left->val : INT_MIN);  
+    int rightVal = (root->right ? root->right->val : INT_MIN);  
+    if (root->val > leftVal && root->val > rightVal && root->left && root->right) {  
+        specialSum += root->val;  
+    }  
+    findSpecialRegions(root->left, specialSum);  
+    findSpecialRegions(root->right, specialSum);  
+    return 0;  
+}  
+  
+int main() {  
+    string inputLine;  
+    getline(cin, inputLine);  
+    vector<int> data;  
+    size_t pos = 0;  
+    while ((pos = inputLine.find(' ')) != string::npos) {  
+        data.push_back(stoi(inputLine.substr(0, pos)));  
+        inputLine.erase(0, pos + 1);  
+    }  
+    data.push_back(stoi(inputLine));  
+  
+    int index = 0;  
+    TreeNode* root = buildTree(data, index);  
+  
+    // 计算树的高度  
+    int height = treeHeight(root);  
+    cout << height << endl;  
+  
+    // 找到资源最丰富的路径  
+    int maxSum = INT_MIN;  
+    maxPathSum(root, maxSum);  
+    cout << maxSum << endl;  
+  
+    // 查找特殊区域  
+    int specialSum = 0;  
+    findSpecialRegions(root, specialSum);  
+    cout << specialSum << endl;  
+  
+    // 释放内存（可选，但在这个例子中很重要，因为树很大时可能会导致内存泄漏）  
+    // 注意：这里没有实现完整的内存释放逻辑，仅为了示例。  
+    // 在实际使用中，应该实现一个递归函数来删除所有节点。  
+  
+    return 0;  
+}

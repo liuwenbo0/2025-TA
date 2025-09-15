@@ -1,0 +1,26 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+long long Energy(long long m, long long left, long long right,long long currentleft, long long currentright){
+    if(m==0|| left > right || currentleft > right || currentright < left){
+        return 0;
+    }
+    if(m == 1){
+        return(left <= currentleft && currentright <= right)? 1 : 0;
+    }
+    long long currentmid = (currentleft + currentright)/2;
+    long long energyleft = Energy(m/2, left, right, currentleft, currentmid-1);
+    long long energymid = (currentmid >= left && currentmid <= right && (m%2 ==1)) ? 1 : 0;
+    long long energyright = Energy(m/2, left, right, currentmid+1, currentright);
+    return energyleft + energymid + energyright;
+}
+int main(){
+    long long m,k,s;
+    cin>> m >> k >> s;
+    long long size = 1,x = m;
+    while(x > 1){
+        x = x / 2;
+        size = size *2 + 1;
+    }
+    cout<<Energy(m,k-1,s-1,0,size-1)<<endl; 
+}

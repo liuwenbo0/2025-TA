@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class Tree {
+public:
+    vector<int> nodes;
+
+    Tree() {
+        int inputValue;
+        while (cin >> inputValue && !cin.eof()) {
+            if (inputValue == -1) {
+                inputValue = 0;
+            }
+            nodes.push_back(inputValue);
+        }
+    }
+
+    int height() {
+        return static_cast<int>(floor(log2(nodes.size()))) + 1;
+    }
+
+    int maxPathSum() {
+        int maxPathSum = 0;
+        nodes.insert(nodes.begin(), 0);
+        size_t totalNodes = nodes.size();
+
+        for (size_t i = totalNodes - 1; i > 0; i--) {
+            int pathSum = 0;
+            for (size_t j = i; j > 0; j /= 2) {
+                pathSum += nodes[j];
+            }
+            if (pathSum > maxPathSum) {
+                maxPathSum = pathSum;
+            }
+        }
+        nodes.erase(nodes.begin());
+        return maxPathSum;
+    }
+
+    int specialSum() {
+        int totalSum = 0;
+        nodes.insert(nodes.begin(), 0);
+        size_t totalNodes = nodes.size() - 1;
+
+        for (size_t i = 1; i <= totalNodes; i++) {
+            size_t leftChild = 2 * i;
+            size_t rightChild = 2 * i + 1;
+
+            if (leftChild > totalNodes || nodes[leftChild] >= nodes[i]) {
+                continue;
+            }
+
+            if (rightChild > totalNodes) {
+                totalSum += nodes[i];
+            } else if (nodes[rightChild] == 0 && nodes[leftChild] == 0) {
+                continue;
+            } else if (nodes[rightChild] < nodes[i]) {
+                totalSum += nodes[i];
+            }
+        }
+        return totalSum;
+    }
+};
+
+int main() {
+    Tree tree;
+    cout << tree.height() << endl;
+    cout << tree.maxPathSum() << endl;
+    cout << tree.specialSum() << endl;
+    return 0;
+}

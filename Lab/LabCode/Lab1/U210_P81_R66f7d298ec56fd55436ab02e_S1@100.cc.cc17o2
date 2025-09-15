@@ -1,0 +1,29 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+/*using namespace std;
+int a=0;
+int b=0;
+cin>>a;
+for(int i=0;i<a;++i)
+    {
+    cin>>b;
+    list.push_back(b);
+    }   
+//cin>>num;*/
+list.push_back(num);
+//a=a-1;
+int a=list.size();
+a=a-1;
+for(;list[a]<list[a-1];){
+    int flag;
+    flag=list[a];
+    list[a]=list[a-1];
+    list[a-1]=flag;
+    a=a-1;
+    }
+/*for(int n:list)
+    {
+    cout<<n<<" ";    
+    }
+cout<<endl;*/
+}

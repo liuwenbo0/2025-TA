@@ -1,0 +1,113 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+using namespace std;
+int insert = 0, mer = 0;
+class MySort {
+public:
+    virtual void mysort(std::vector<int>& nums) = 0;
+};
+
+class InsertionSort : public MySort {
+public:
+    void mysort(std::vector<int>& nums_B)
+    {
+        int i, j, point;
+        for (j = 1; j < nums_B.size(); j++)
+        {
+            point = nums_B[j];
+            for (i = j - 1; i >= 0; i--)
+            {
+                insert++;
+                nums_B[i + 1] = nums_B[i];
+                if (i == 0 && nums_B[i] > point)
+                {
+                    nums_B[i] = point;
+                    continue;
+                }
+                //if (nums[i] == point)
+                //{
+                //    insert--;
+                //}
+                if (nums_B[i] <= point)
+                {
+                    nums_B[i+1] = point;
+                    break;
+                }
+
+            }
+        }
+    }
+private:
+    int cnt;
+};
+class MergeSort : public MySort
+{
+public:
+    void merge_sort_aux(std::vector<int>& nums, int left, int right)
+    {
+        
+        int l, r, mid;
+        l = left, r = right, mid = (l + r) / 2;
+        if(r-l<=0)
+        {
+            return;
+        }
+        merge_sort_aux(nums, l, mid);
+        merge_sort_aux(nums, mid+1, r);
+        vector<int> temp(r-l+1);
+        int p1 = l, p2 = mid+1,k = 0;
+        while (p1 <= mid && p2 <= r)
+        {
+            if (nums[p1] > nums[p2])
+            {
+                temp[k++] = nums[p2++];
+            }
+            else
+            {
+                temp[k++] = nums[p1++];
+            }
+            mer++;
+        }
+        while(p1 <= mid)
+        {
+            temp[k++] = nums[p1++];
+        }
+        while (p2 <= r)
+        {
+            temp[k++] = nums[p2++];
+        }
+        for (int i = l; i <= r; i++)
+        {
+            nums[i] = temp[i - l];
+        }
+        
+    }
+    
+    void mysort(std::vector<int>& nums)
+    {
+        int n = nums.size();
+        merge_sort_aux(nums, 0, n - 1);
+    }
+};
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> nums(n),nums_B(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> nums[i];
+        nums_B[i] = nums[i];
+    }
+    MergeSort sorter;
+    InsertionSort sorter_B;
+    sorter.mysort(nums); // 调用归并排序k
+    sorter_B.mysort(nums_B);
+
+    
+    cout << endl<< mer <<" "<<insert << endl;
+
+}

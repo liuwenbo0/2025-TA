@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=2e6+5;
+int n;
+long long ans1,ans2,ans3;
+int a[maxn];
+void dfs(int s,int sum,int depth){
+    int l=s*2,r=s*2+1;
+    int leftflag=0,rightflag=0;
+    if(l<=n){
+        if(a[l]!=-1){
+            dfs(l,sum+a[l],depth+1);
+        }
+    }else{
+        leftflag=1;}
+
+    if(r<=n){
+        if(a[r]!=-1){
+            dfs(r,sum+a[r],depth+1);}
+    }
+    else{
+        rightflag=1;}
+
+
+    if(leftflag==0||rightflag==0){
+        if(a[s]>a[l]&&a[s]>a[r]){
+                if(a[l]!=-1||a[r]!=-1){
+                    ans3+=a[s];}
+        }
+    }else{
+        if(ans2<sum){
+            ans2=sum;
+        }
+
+        if(ans1<depth){
+            ans1=depth;
+        }
+    }
+}
+
+int main()
+{
+    n=1;
+    while(cin>>a[n]){
+        n++;}
+    n--;
+    dfs(1,a[1],1);
+    cout<<ans1<<'\n'<<ans2<<'\n'<<ans3;
+    return 0;
+}

@@ -1,0 +1,53 @@
+#include "ThreeWayQuickSort.h"
+
+int median_of_three(const std::vector<int>& nums, int a, int b, int c) {
+    int x = nums[a] - nums[b];
+    int y = nums[b] - nums[c];
+    int z = nums[a] - nums[c];
+    if (x * y > 0) return b;
+    if (x * z > 0) return c;
+    return a;
+}
+
+void insertion_sort(std::vector<int>& nums, int p, int q) {
+    for (int i = p + 1; i <= q; i++) {
+        int temp = nums[i];
+        int j = i - 1;
+        while (j >= p && nums[j] > temp) {
+            nums[j + 1] = nums[j];
+            j--;
+        }
+        nums[j + 1] = temp;
+    }
+}
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    if (p >= q) return;
+    if (q - p < 10) {
+        insertion_sort(nums, p, q);
+        return;
+    }
+
+    int m = median_of_three(nums, p, p + (q - p) / 2, q);
+    std::swap(nums[p], nums[m]);
+    int pivot = nums[p];
+    int lt = p, i = p + 1, gt = q;
+
+    while (i <= gt) {
+        if (nums[i] < pivot) {
+            std::swap(nums[lt++], nums[i++]);
+        } else if (nums[i] > pivot) {
+            std::swap(nums[i], nums[gt--]);
+        } else {
+            i++;
+        }
+    }
+
+    three_way_quick_sort(nums, p, lt - 1);
+    three_way_quick_sort(nums, gt + 1, q);
+}
+
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

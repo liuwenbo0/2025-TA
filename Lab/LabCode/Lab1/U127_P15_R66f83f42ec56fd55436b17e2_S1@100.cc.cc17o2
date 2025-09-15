@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+#include "limits.h"
+
+int sort(vector<int> &nums, int left, int right)
+{
+    int mid;
+    int s=0;
+    if(left<right){
+        mid=(left+right)/2;
+        s+=sort(nums,left,mid);
+        s+=sort(nums,mid+1,right);
+        s+=right-left+1;
+    }
+    return s;
+}
+
+int main() {
+    int N;
+    vector<int> vec;
+    int vec1[10000000];
+    cin >> N;
+    for(int i=0;i<N;i++){
+        int x;
+        cin >> x;
+        vec1[i]=x;
+        vec.push_back(x);
+    }
+    int t1=0;
+    int t2=0;
+    int a=N;
+    for(int i=1;i<a;i++){
+        int k=vec1[i];
+        int j=i-1;
+        while(j>=0){
+            t1++;
+            if(vec1[j]>k){
+                vec1[j+1]=vec1[j];
+            }
+            else
+            break;
+            j--;
+        }
+        vec1[j+1]=k;
+    }
+    t2=sort(vec,0 ,N-1);
+    cout << t2 << " " << t1;
+}

@@ -1,0 +1,86 @@
+#include "Solution.h"
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) {
+    // 请在这里完成你的代码
+    int left_sum=INT_MIN,right_sum = INT_MIN,high_sum = INT_MIN,low_sum = INT_MIN;
+    int sum = 0;
+    //cout<<INT_MIN<<endl;
+    int i,j,k;
+    for(i=mid;i>=low;i--){
+        sum+=A[i];
+        if(sum>left_sum){
+            left_sum=sum;
+        }
+    }
+    sum=0;
+    for (j=mid+1;j<=high;++j) {
+        sum+=A[j];
+        if(sum>right_sum){
+            right_sum=sum;
+        }
+    }
+    k=left_sum+right_sum;
+    sum=0;
+    for(i=high;i>=low;i--){
+        sum+=A[i];
+        if(sum>high_sum){
+            high_sum=sum;
+        }
+    }
+    sum=0;
+    for(i=low;i<=high;i++){
+        sum+=A[i];
+        if(sum>low_sum){
+            low_sum=sum;
+        }
+    }
+    if(k>low_sum&&k>high_sum){
+        return k;
+    }
+    else if(low_sum>high_sum){
+        return low_sum;
+    }
+    else return high_sum;
+}
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) {
+    // 请在这里完成你的代码
+    int mid = (low + high) / 2;
+    int left_sum=INT_MIN,right_sum = INT_MIN,high_sum = INT_MIN,low_sum = INT_MIN;
+    int sum = 0;
+    //cout<<INT_MIN<<endl;
+    int i,j,k;
+    for(i=mid;i>=low;i--){
+        sum+=A[i];
+        if(sum>left_sum){
+            left_sum=sum;
+        }
+    }
+    sum=0;
+    for (j=mid+1;j<=high;++j) {
+        sum+=A[j];
+        if(sum>right_sum){
+            right_sum=sum;
+        }
+    }
+    k=left_sum+right_sum;
+    sum=0;
+    for(i=high;i>=low;i--){
+        sum+=A[i];
+        if(sum>high_sum){
+            high_sum=sum;
+        }
+    }
+    sum=0;
+    for(i=low;i<=high;i++){
+        sum+=A[i];
+        if(sum>low_sum){
+            low_sum=sum;
+        }
+    }
+    if(k>low_sum&&k>high_sum){
+        return k;
+    }
+    else if(low_sum>high_sum){
+        return low_sum;
+    }
+    else return high_sum;
+}

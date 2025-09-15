@@ -1,0 +1,9 @@
+# include"SqList.h"
+void insert(SqList& list, int num){
+	//请在这里完成你的代码
+	std::vector<int>::size_type i = 0;
+	while(i < list.size() && list[i] < num){
+		i++;
+	}
+	list.insert(list.begin() + i, num);
+}

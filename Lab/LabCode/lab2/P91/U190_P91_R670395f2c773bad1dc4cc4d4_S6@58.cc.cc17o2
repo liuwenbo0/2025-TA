@@ -1,0 +1,80 @@
+#include<iostream>
+#include<vector>
+#include<math.h>
+using namespace std;
+int change(vector<int>& A, int begin)
+{
+
+	if ((A[begin] != 0) && (A[begin] != 1))
+	{
+		A.push_back(A[begin] / 2);
+		A.push_back(A[begin] - 2 * (A[begin] / 2));
+		A.push_back(A[begin] / 2);
+		return 3;
+	}
+	if ((A[begin] == 0) || (A[begin] == 1))
+	{
+		A.push_back(A[begin]);
+		return 1;
+	}
+}
+int main()
+{
+	int started;
+	int left;
+	int right;
+	cin >> started;
+	cin >> left;
+	cin >> right;
+	vector<int>crystal;
+	crystal.push_back(started);
+	long p = 1;
+	while (1)
+	{
+		long remain = 0;
+		long count = 0;
+		long q = int(crystal.size());
+		for (long i = q - p; i < q; i++)
+		{
+			if ((crystal[i] != 0) && (crystal[i] != 1))
+			{
+				crystal.push_back(crystal[i] / 2);
+				crystal.push_back(crystal[i] - 2 * (crystal[i] / 2));
+				crystal.push_back(crystal[i] / 2);
+				remain+=3;
+				continue;
+			}
+			if ((crystal[i] == 0) || (crystal[i] == 1))
+			{
+				crystal.push_back(crystal[i]);
+				remain+=1;
+				continue;
+			}
+		}
+		p = remain;
+		for (long i = long(crystal.size()) - p; i<long(crystal.size()); i++)
+		{
+			if ((crystal[i] == 0) || (crystal[i] == 1))
+			{
+				count++;
+			}
+
+		}
+		if (count == p)
+		{
+			long got = 0;
+			for (long i = long(crystal.size()) - p + left - 1; i<long(crystal.size()) - p + right; i++)
+			{
+				if (crystal[i] == 1)
+				{
+					got++;
+				}
+
+			}
+			cout << got << endl;
+			break;
+		}
+	}
+
+
+}

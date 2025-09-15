@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <climits>
+#include <algorithm>
+using namespace std;
+int scissors(vector<int>nums,int n,int q){
+    if (q == 0) {
+         cout << 0 << endl;
+         return 0;
+     }
+     int least = INT_MAX;
+     unordered_map<int, vector<int>> scissormap;
+     for (int i = 0; i < n; i++) {
+         int num = nums[i];
+         int sc = 0;
+
+         while (num > 0) {
+             scissormap[num].push_back(sc);
+             num /= 2;
+             sc++;
+         }
+     }
+
+     for (auto &[num, sc] : scissormap) {
+         if (sc.size() < q) continue; 
+         sort(sc.begin(), sc.end());
+
+         int currentsc = 0;
+         for (int i = 0; i < q; ++i) {
+             currentsc += sc[i];
+         }
+         least = min(least, currentsc);
+     }
+    return least;
+
+}
+int main() {
+     int n, q;
+     cin >> n >> q;
+    vector<int> nums(n);
+     for (int i = 0; i < n; ++i) {
+         cin >> nums[i];
+     }
+     int least = scissors(nums,n,q);
+     cout << least << endl;
+
+     return 0;
+}

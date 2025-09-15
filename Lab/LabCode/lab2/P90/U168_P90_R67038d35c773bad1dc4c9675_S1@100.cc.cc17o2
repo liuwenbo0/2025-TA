@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=10000000;
+int a[maxn],b[maxn];
+int ans,n,h,ct=0;
+int dfs(int p,int n)
+{
+    if(p > n) return 0;
+    b[p] = a[p] + max(dfs(p * 2 + 1,n),dfs(p * 2 + 2,n));
+    if(b[p] < 0) return 0;
+    return b[p];
+}
+int main()
+{
+    int i,flag;
+    while(cin >> a[ct])
+    {
+        ++ct;
+    }
+    n=ct;
+    while(n)
+    {
+        n = n/2;
+        ++h;
+    }
+    flag = 1;
+    for(i = ct/2;i < ct;++i)
+    {
+        if(a[i] != -1) flag = 0;
+    }
+    h -= flag;
+    cout << h << endl;
+    cout << dfs(0,ct-1) << endl;
+    n = 1;
+    while(--h) n *= 2;
+    for(i = 0;i <= n*2-1;++i)
+    {
+        if(a[i] == 0) a[i] = -1;
+    }
+    n--;
+    for(i = 0;i < n;++i)
+    {
+        if(a[i*2+1] != -1 || a[i*2+2] != -1)
+        {
+            if(a[i] > max(a[i*2+1],a[i*2+2]))
+            {
+                ans += a[i];
+            }
+        }
+    }
+    cout << ans << endl;
+    return 0;
+}

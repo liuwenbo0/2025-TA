@@ -1,0 +1,32 @@
+#include "QuickSort.h"
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    swap(nums[p], nums[rand() % (q - p + 1) + p]); // [p,q]中随机选取一个数作为哨兵，交换到当前数组头部
+    int pivot = nums[p];
+    int i = p;
+    for (int j = p + 1; j <= q; j++) // 从前向后遍历
+    {
+      if (nums[j] <= pivot) // 若当前数小于哨兵值，将当前数放到左边
+      {
+        i = i + 1;              // nums[x]，p<x<=i区间中的数均为小于哨兵值的数
+        swap(nums[i], nums[j]); // 将当前数交换到左边
+      }
+    }
+    swap(nums[i], nums[p]); // 最后将p位置的哨兵值与左边区间的最后一个数交换位置
+
+    return i; //[p,i-1]为小于哨兵值的数，[i+1,q]为大于哨兵值的数
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r)
+    {
+      int m = partition(nums, l, r); // 随机选取哨兵值后，根据哨兵值排序后所处的位置划分当前数组，然后递归进行快排
+      quick_sort(nums, l, m - 1);
+      quick_sort(nums, m + 1, r);
+    }
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

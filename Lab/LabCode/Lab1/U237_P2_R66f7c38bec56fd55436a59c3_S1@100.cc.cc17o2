@@ -1,0 +1,25 @@
+#include "MyStack.h"
+
+bool MyStack::Empty() {
+    return top == -1;}
+
+bool MyStack::Full() {
+    return top == MAXLENG - 1;}
+
+bool MyStack::Push(ElementType e) {
+    if (Full()) {
+        return false;}
+    else elem[++top] = e;
+    return true;}
+
+bool MyStack::Gettop(ElementType &e) {
+    if (Empty()) {
+        return false;}
+    else e = elem[top];
+    return true;}
+
+bool MyStack::Pop(ElementType &e) {
+    if (Empty()) {
+        return false;}
+    else e = elem[top--];
+    return true;}

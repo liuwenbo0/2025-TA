@@ -1,0 +1,43 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+vector<int>deverge(long long n){
+    vector<int>leaf;
+    if(!n){
+        leaf.push_back(0);
+        return leaf;
+    }
+    //得到每一层中间节点的值以及最底层左右叶子节点的值
+   while(n){
+        leaf.push_back(n&1);
+        n>>=1;
+    }
+    reverse(leaf.begin(),leaf.end());
+    return leaf;
+}
+int main() {
+    long long m;
+    std::cin >> m;
+    long long k, s;
+    std::cin >> k >> s;
+    vector<int>leaf=deverge(m);
+
+    long long length=pow(2,leaf.size());
+//真正叶子节点个数+1，这样方便表示索引，因为所有中间节点的索引都是2的幂次
+    long long clue,result=0;
+    int sequence;
+     for (long long i = k; i <= s; i++) {
+         if(i>(length>>1)) 
+            clue=length-i;
+         else   clue=i;
+         //根据对称性，找到值
+    for (sequence = 0; (clue & 1) == 0; sequence++, clue>>= 1);
+    result+=leaf[sequence];
+        
+    }
+    std::cout << result << std::endl;
+    return 0;
+}

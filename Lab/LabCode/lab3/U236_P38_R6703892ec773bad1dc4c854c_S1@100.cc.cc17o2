@@ -1,0 +1,35 @@
+#include "QuickSort.h"
+#include<random>
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(p, q);
+    int i = dist(gen);
+    swap(nums[p], nums[i]);
+    int x = nums[p];
+    i = p;
+    for (int j = p + 1; j <= q; j++) {
+	    if (nums[j] <= x) {
+		    i++;
+            swap(nums[i], nums[j]);
+	    }
+    }
+    swap(nums[i], nums[p]);
+    return i;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    // 请在这里完成你的代码
+    if (l < r) {
+	    int q = partition(nums, l, r);
+	    quick_sort(nums, l, q - 1);
+	    quick_sort(nums, q + 1, r);
+    }
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

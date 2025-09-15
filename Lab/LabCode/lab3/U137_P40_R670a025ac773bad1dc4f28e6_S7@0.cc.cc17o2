@@ -1,0 +1,48 @@
+#include <iostream>  
+#include <vector>  
+#include <unordered_map>  
+#include <algorithm>  
+#include <cmath>  
+  
+using namespace std;  
+  
+int minTrimmingToQSegments(int n, int q, const vector<int>& heights) {  
+    unordered_map<int, int> heightCounts;  
+    for (int h : heights) {  
+        int currentHeight = h;  
+        int trimCount = 0;  
+        while (currentHeight > 0) {  
+            heightCounts[currentHeight]++;  
+            if (heightCounts[currentHeight] == q) {  
+                int totalTrimCount = 0;  
+                for (int i = h; i > currentHeight; i /= 2) {   
+                    int steps = 0;  
+                    int original = i;  
+                    while (original > currentHeight) {  
+                        original /= 2;  
+                        steps++;  
+                    }  
+                    totalTrimCount += steps;  
+                }  
+                return totalTrimCount / q;  
+            }  
+            currentHeight /= 2;  
+            trimCount++;  
+        }  
+    }  
+       
+    return -1; 
+  
+int main() {  
+    int n, q;  
+    cin >> n >> q;  
+    vector<int> heights(n);  
+    for (int i = 0; i < n; ++i) {  
+        cin >> heights[i];  
+    }  
+      
+    int result = minTrimmingToQSegments(n, q, heights);  
+    cout << result << endl;  
+      
+    return 0;  
+}

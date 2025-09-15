@@ -1,0 +1,40 @@
+#include "QuickSort.h"
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    int x = nums[p];
+    while(p < q)
+    {
+        while(p < q && nums[q] > x) q--;
+        if(p < q && nums[q] <= x)
+        {
+            nums[p] = nums[q];
+            p++;
+        }
+        while(p < q && nums[p] < x) p++;
+        if(p < q && nums[p] >= x)
+        {
+            nums[q] = nums[p];
+            q--;
+        }
+    }
+    nums[p] = x;
+
+    return p;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    // 请在这里完成你的代码
+    if(l > r)
+    {
+        return;
+    }
+    int j = QuickSort::partition(nums, l, r);
+    QuickSort::quick_sort(nums,l,j - 1);
+    QuickSort::quick_sort(nums,j + 1,r);
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

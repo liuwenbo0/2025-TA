@@ -1,0 +1,72 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+long long s=0;
+void M(std::vector<int>&nums,int mid,int left,int right) 
+{  
+int a =mid-left+1;  
+int b=right-mid,k=left;  
+    vector<int> num1(a),num2(b);  
+    int p=0,q=0;
+    while(p<a) 
+	{  
+    num1[p] = nums[left + p];
+	p++;  
+    }  
+    while(q<b)
+	{  
+    num2[q] = nums[mid + 1 + q];  
+    q++;
+    }
+    int i=0,j=0;   
+    while(j<b&&i<a)
+	{
+    if(num1[i]<=num2[j])
+	{
+	nums[k] = num1[i]; 
+	i++;
+	}
+    else 
+	{
+	nums[k] = num2[j];
+    s+=a-i;
+	j++;
+	}
+    k++;
+    }
+  for(;j<b;j++) 
+	{
+    nums[k] = num2[j];
+    k++; 
+    }
+  for(;i<a;i++) 
+	{
+    nums[k] = num1[i];
+    k++; 
+    }
+}
+
+void merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    //请在这里完成你的代码
+    if(left < right)
+    {
+        int mid=(left + right)/2;
+        merge_sort_aux(nums,left,mid);
+        merge_sort_aux(nums,mid+1,right);
+        M(nums,mid,left,right);
+    }
+}
+int main()
+{
+    int n;
+    cin>>n;
+vector<int>a(n);
+for(int i=0;i<n;i++)
+{
+    cin>>a[i];
+}
+    merge_sort_aux(a,0,n-1);
+    cout<<s;
+    return 0;
+}

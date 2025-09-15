@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <algorithm>
+#include <cstddef> // For size_t
+
+std::vector<int> maxValuesInSlidingWindow(int sequenceLength, int windowLength, const std::vector<int>& sequenceData) {
+    std::vector<int> maxValues(sequenceLength - windowLength + 1);
+    std::deque<int> indexDeque;
+
+    for (int position = 0; position < windowLength; ++position) {
+        while (!indexDeque.empty() && sequenceData[indexDeque.back()] < sequenceData[position]) {
+            indexDeque.pop_back();
+        }
+        indexDeque.push_back(position);
+    }
+
+    for (int position = 0; position < sequenceLength - windowLength + 1; ++position) {
+        if (indexDeque.front() < position) {
+            indexDeque.pop_front();
+        }
+        while (!indexDeque.empty() && sequenceData[indexDeque.back()] < sequenceData[position + windowLength - 1]) {
+            indexDeque.pop_back();
+        }
+        indexDeque.push_back(position + windowLength - 1);
+        maxValues[position] = sequenceData[indexDeque.front()];
+    }
+
+    return maxValues;
+}
+
+int main() {
+    int sequenceLength, windowLength;
+    std::cin >> sequenceLength >> windowLength;
+    std::vector<int> dataSequence(sequenceLength);
+    for (int position = 0; position < sequenceLength; ++position) {
+        std::cin >> dataSequence[position];
+    }
+
+    std::vector<int> maxInWindows = maxValuesInSlidingWindow(sequenceLength, windowLength, dataSequence);
+    for (size_t position = 0; position < maxInWindows.size(); ++position) {
+        std::cout << maxInWindows[position] << (position < maxInWindows.size() - 1 ? ' ' : '\n');
+    }
+
+    return 0;
+}

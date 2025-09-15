@@ -1,0 +1,82 @@
+#include <iostream>  
+#include <vector>  
+#include <algorithm>  
+#include <climits>  
+
+using namespace std;  
+  
+// 存储二叉树  
+struct TreeNode {  
+    int val;  
+    TreeNode* left;  
+    TreeNode* right;  
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}  
+};  
+  
+// 构建二叉树  
+TreeNode* buildTree(const vector<int>& data, int index) {  
+    if (index>=data.size()||data[index] == -1) {  
+        return NULL;  
+    }  
+    TreeNode*root = new TreeNode(data[index]);    
+    root->left = buildTree(data, 2*index+1);  
+    root->right = buildTree(data, 2*index+2);  
+    return root;  
+}  
+
+//高度测量   
+int treeHeight(TreeNode* root) {  
+    if (!root) return 0;  
+    return 1 + max(treeHeight(root->left), treeHeight(root->right));  
+}  
+  
+// 资源调度
+int MAXSum(TreeNode* root, int& maxSum) {  
+    if (root == NULL) return 0;  
+    if(!root->left && !root->right) return root->val;
+    int leftSum = MAXSum(root->left, maxSum);  
+    int rightSum = MAXSum(root->right, maxSum);  
+    int Sum = max(leftSum,rightSum);  
+    maxSum = max(maxSum, Sum+root->val);  
+    return root->val + max(leftSum, rightSum);  
+}  
+  
+// 特殊区域探查 
+void specialRegion(TreeNode* root, int& sum) {  
+    if (!root) return;  
+    if (!root->left && !root->right) return;
+    bool flag=true;
+    if(root->left){
+        specialRegion(root->left,sum);
+        if(root->val<=root->left->val) flag=false;
+    }   
+    if(root->right){
+        specialRegion(root->right,sum);
+        if(root->val<=root->right->val) flag=false;
+    } 
+    if(flag){
+        sum+=root->val;
+    }
+}  
+  
+int main() {  
+    vector<int> data;  
+    int temp;
+    while(cin>>temp){
+        data.push_back(temp);
+    } 
+    TreeNode* root = buildTree(data, 0);  
+    
+    int height = treeHeight(root);  
+    cout << height << endl;  
+    
+    int maxSum = INT_MIN;  
+    MAXSum(root, maxSum);  
+    cout << maxSum << endl;  
+    
+    int sum=0;
+    specialRegion(root,sum);
+    cout << sum << endl;  
+  
+    return 0;  
+}

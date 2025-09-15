@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+int road(vector<int> tree,int a,int s){
+    int left_tree=0;
+    int right_tree=0;
+    if(2*a<=s-1){
+        left_tree=road(tree,2*a,s);
+        if(2*a+1<=s-1)
+        right_tree=road(tree,2*a+1,s);
+    }
+    if(left_tree>=right_tree){
+        //cout << a << ' '<< tree[a-1]+left_tree << ' ';
+        if(left_tree!=-1)
+        return tree[a-1]+left_tree;
+        else
+        return tree[a-1];
+    }
+    else{
+        //cout << a << ' '<< tree[a-1]+right_tree << ' ';
+        if(right_tree!=-1)
+        return tree[a-1]+right_tree;
+        else
+        return tree[a-1];
+    }
+    
+    
+    
+}
+//!cin.eof()
+int main() {
+    vector<int> tree;
+    int x=0;
+    while(cin >> x){
+        //;
+        tree.push_back(x);
+        //cout << x << endl;
+    }
+    
+    int s=0;
+    s=tree.size();
+    //cout << s << endl;
+    int high=0;
+    high=log2(s)+1;
+    int sum=0;
+    sum=road(tree,1,s+1);
+    int sp=0;
+    for(int i=1;2*i<=s;i++){
+        if(tree[i-1]>tree[2*i-1] && tree[i-1]>tree[2*i] && (tree[2*i-1]!=-1 || tree[2*i]!=-1)){
+            sp+=tree[i-1];
+            //cout << tree[i-1] << " " << i << ' ' << tree[2*i-1] << " " << tree[2*i] << endl;
+        }
+        
+    }
+    cout << high << endl << sum << endl << sp << endl;
+    return 0;
+}

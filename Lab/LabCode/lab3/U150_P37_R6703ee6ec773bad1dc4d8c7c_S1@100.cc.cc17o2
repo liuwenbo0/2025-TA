@@ -1,0 +1,37 @@
+#include "HeapSort.h"
+
+void HeapSort::max_heapify(std::vector<int>& nums, int parentIndex) {
+    int leftChildIndex = 2 * parentIndex + 1;
+    int rightChildIndex = 2 * parentIndex + 2;
+    int maxIndex = parentIndex;
+
+    if (leftChildIndex < heap_size && nums[leftChildIndex] > nums[maxIndex]) {
+        maxIndex = leftChildIndex;
+    }
+
+    if (rightChildIndex < heap_size && nums[rightChildIndex] > nums[maxIndex]) {
+        maxIndex = rightChildIndex;
+    }
+
+    if (maxIndex != parentIndex) {
+        std::swap(nums[parentIndex], nums[maxIndex]);
+        max_heapify(nums, maxIndex);
+    }
+}
+
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+    for (int index = heap_size / 2 - 1; index >= 0; --index) {
+        max_heapify(nums, index);
+    }
+}
+
+void HeapSort::mysort(std::vector<int>& nums) {
+    heap_size = nums.size();
+    build_max_heap(nums);
+
+    for (int index = heap_size - 1; index > 0; --index) {
+        std::swap(nums[0], nums[index]);
+        heap_size--;
+        max_heapify(nums, 0);
+    }
+}

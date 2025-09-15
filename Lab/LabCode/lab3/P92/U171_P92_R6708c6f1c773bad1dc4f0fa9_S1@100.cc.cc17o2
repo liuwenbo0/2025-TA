@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int main()
+{
+ int n;
+ int k;
+ cin>>n>>k;
+ vector<int> nums(n);
+ for(int i=0;i<n;i++)
+ {
+ cin>>nums[i];
+}
+ int MAX=0;
+for(int i=0;i<k-1;i++)
+ {
+ MAX=max(max(nums[i],nums[i+1]),MAX);
+ }
+ cout<<MAX<<" ";
+for(int i=1;i<=n-k;i++)
+{
+if(nums[i-1]!=MAX)
+ {
+ MAX=max(MAX,nums[i+k-1]);
+ cout<<MAX<<" ";
+}if(nums[i-1]==MAX)
+ {
+ MAX=0;
+ for(int j=i;j<i+k-1;j++)
+{
+ MAX=max(max(nums[j],nums[j+1]),MAX);
+ }
+ cout<<MAX<<" ";
+ }
+}
+
+ return 0;
+
+}

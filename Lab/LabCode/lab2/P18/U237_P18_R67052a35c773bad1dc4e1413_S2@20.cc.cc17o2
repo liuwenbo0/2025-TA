@@ -1,0 +1,58 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    int c=0;
+    int id;
+    int book[10000],a[10000];
+    for(int i=1;i<=n;i++){
+        if(i==1){
+            c++;
+            a[c]=i;
+            id=0;
+        }else if(i==2){
+            c++;
+            a[c]=i;
+            id=1;
+        }else{
+            c++;
+            int s,l=-1,r=100000;
+            if((i+1)%2==0){
+                s=i+1;
+            }else{
+                s=i+2;
+            }
+            for(int j=s;j<=2*i-1;j+=2){
+                if(book[j-i]>book[j/2]){
+                    l=max(l,book[j/2]+1);
+                    
+                        //cout<<"&&&"<<j/2<<" "<<book[j/2]<<'\n';
+                }else{
+                    r=min(r,book[j/2]);
+
+                     //cout<<"+++"<<j/2<<" "<<book[j/2]<<'\n';
+                }
+            }
+            if(l!=-1){
+                for(int j=c;j>=l;j--){
+                    a[j+1]=a[j];
+                    book[a[j+1]]++;
+                }
+                a[l]=i;
+                id=l;
+            }else{
+                for(int j=c;j>=r;j--){
+                    a[j+1]=a[j];
+                    book[a[j+1]]++;
+                }
+                a[r]=i;
+                id=r;
+            }
+            // cout<<s<<" "<<id<<"\n";
+        }
+        book[i]=id;
+    }
+    for(int i=1;i<=c;i++){
+        ans.push_back(a[i]);
+    }
+    return ans;
+}

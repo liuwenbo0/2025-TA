@@ -1,0 +1,95 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+struct Node
+{
+      int val;
+      Node *left;
+      Node *right;
+      Node(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+Node *build(const vector<int> &nodes, int index)
+{
+      if (index >= nodes.size() || nodes[index] == -1) return NULL;
+      Node *root = new Node(nodes[index]);
+      root->left = build(nodes, 2 * index + 1);
+      root->right = build(nodes, 2 * index + 2);
+      return root;
+}
+
+int treeHeight(Node *root)
+{
+      if (!root) return 0;
+      return max(treeHeight(root->left), treeHeight(root->right)) + 1;
+}
+
+int maxPathSum(Node *root, int &maxSum)
+{
+      if (!root) return 0;
+      if (!root->left && !root->right) return root->val;
+      int left = maxPathSum(root->left, maxSum);
+      int right = maxPathSum(root->right, maxSum);
+      int sum = max(left, right);
+      maxSum = max(sum, sum + root->val);
+      return  maxSum;
+}
+
+void collectNonLeafGreaterThanChildren(Node* root, vector<int>& result) {
+    if (!root || (!root->left && !root->right)) return; // 空节点或叶子节点返回
+
+   // 情况一：只有左子节点
+    if (root->left && !root->right) {
+        if (root->val > root->left->val) {
+            result.push_back(root->val); // 将符合条件的节点值添加到结果数组中
+        }
+    }
+    // 情况二：只有右子节点
+    else if (!root->left && root->right) {
+        if (root->val > root->right->val) {
+            result.push_back(root->val);
+        }
+    }
+    // 情况三：有左右子节点
+    else if (root->left && root->right) {
+        if (root->val > root->left->val && root->val > root->right->val) {
+            result.push_back(root->val);
+        }
+    }
+    // 递归处理左子树和右子树
+    collectNonLeafGreaterThanChildren(root->left, result);
+    collectNonLeafGreaterThanChildren(root->right, result);
+}
+
+
+int main()
+{
+      vector<int> nodes;
+      int temp;
+      while (cin >> temp)
+    {
+            nodes.push_back(temp);
+         
+    }
+      Node *root = build(nodes, 0);
+
+      int h = treeHeight(root);
+      int maxSum = INT_MIN;
+      maxPathSum(root, maxSum);
+      vector<int> result; // 存储符合条件的节点值
+
+    collectNonLeafGreaterThanChildren(root, result);
+    // 计算结果数组的和
+    int sum = 0;
+    for (int val : result) {
+        sum += val;
+    }
+      cout << h << endl;
+      cout << maxSum << endl;
+      cout << sum << endl;
+
+       return 0;
+}

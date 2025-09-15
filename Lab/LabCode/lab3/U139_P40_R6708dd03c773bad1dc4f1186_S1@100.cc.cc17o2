@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+// 计算将所有高度调整为相等所需的最小切割次数
+int minCutsToEqualHeight(int n, int q, std::vector<int>& heights) {
+    // 创建一个无序映射，键为高度，值为达到该高度所需的切割次数列表
+    std::unordered_map<int, std::vector<int>> heightMap;
+
+    // 遍历每个初始高度
+    for (int i = 0; i < n; ++i) {
+        int currentHeight = heights[i];
+        int cuts = 0;
+        // 计算每个高度通过不断除以 2 达到当前高度所需的切割次数，并存储在映射中
+        while (currentHeight > 0) {
+            heightMap[currentHeight].push_back(cuts);
+            currentHeight /= 2;
+            cuts++;
+        }
+    }
+
+    int minCuts = INT_MAX;
+
+    // 遍历映射中的每个高度及其对应的切割次数列表
+    for (const auto& pair : heightMap) {
+        const auto& cutList = pair.second;
+        // 如果该高度的切割次数列表长度大于或等于所需的数量 q
+        if (cutList.size() >= static_cast<size_t>(q)) {
+            // 复制切割次数列表并进行排序
+            auto sortedCuts = cutList;
+            std::sort(sortedCuts.begin(), sortedCuts.end());
+            int totalCuts = 0;
+            // 计算前 q 个切割次数的总和
+            for (int i = 0; i < q; ++i) {
+                totalCuts += sortedCuts[i];
+            }
+            // 更新最小切割次数
+            minCuts = std::min(minCuts, totalCuts);
+        }
+    }
+
+    // 如果最小切割次数仍为 INT_MAX，则返回 0，否则返回最小切割次数
+    return (minCuts == INT_MAX)? 0 : minCuts;
+}
+
+int main() {
+    int n, q;
+    std::cin >> n >> q;
+    std::vector<int> heights(n);
+
+    // 输入每个元素的高度
+    for (int i = 0; i < n; ++i) {
+        std::cin >> heights[i];
+    }
+
+    // 计算并输出最小切割次数
+    std::cout << minCutsToEqualHeight(n, q, heights) << std::endl;
+
+    return 0;
+}

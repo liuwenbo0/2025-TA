@@ -1,0 +1,23 @@
+#include "Solution.h"
+#include <unordered_map>
+unordered_map<int, vector<int>> check;
+vector<int> Solution::perfect_permutation(int n) 
+// 函数用于生成一个长度为n的完美排列
+{
+ vector<int> ans,left,right;
+    if(n > 1)  // 如果n大于1，递归地生成两个子排列
+    {
+    left=perfect_permutation((n+1)/2);// 生成左半部分的完美排列
+    right=perfect_permutation(n/2);// 生成右半部分的完美排列
+    for(int a:left)// 遍历左半部分的排列，将其元素乘以2并减1，然后添加到答案数组中
+    {
+    ans.push_back(a*2-1);
+    }
+    for(int b:right)  // 遍历右半部分的排列，将其元素乘以2，然后添加到答案数组中
+    {
+    ans.push_back(b*2);
+    }
+    }
+    else ans.push_back(1); // 如果n为1，直接将1添加到答案数组中
+    return ans;
+}

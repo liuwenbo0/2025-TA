@@ -1,0 +1,10 @@
+#include <vector>
+#include <algorithm> 
+#include"SqList.h"
+
+typedef std::vector<int> SqList;
+
+void insert(SqList& list, int num) {
+    auto it = std::lower_bound(list.begin(), list.end(), num);
+    list.insert(it, num);
+}

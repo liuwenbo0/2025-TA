@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <climits>
+#include <unordered_map>
+
+int findMinCuts(int n, int q, std::vector<int> heights) {
+    std::unordered_map<int, int> heightCount;
+    for (int height : heights) {
+        heightCount[height]++;
+    }
+
+    int minCuts = INT_MAX;
+    for (const auto& pair : heightCount) {
+        int targetHeight = pair.first;
+        int cuts = 0;
+        for (const auto& otherPair : heightCount) {
+            if (otherPair.first!= targetHeight) {
+                int otherHeight = otherPair.first;
+                while (otherHeight > targetHeight) {
+                    otherHeight /= 2;
+                    cuts++;
+                }
+            }
+        }
+        int sameHeightCount = heightCount[targetHeight];
+        for (const auto& otherPair : heightCount) {
+            if (otherPair.first!= targetHeight && otherPair.first > targetHeight) {
+                sameHeightCount += otherPair.second;
+            }
+        }
+        if (sameHeightCount >= q) {
+            minCuts = std::min(minCuts, cuts);
+        }
+    }
+    return minCuts == INT_MAX? -1 : minCuts;
+}
+
+int main() {
+    int n, q;
+    std::cin >> n >> q;
+    std::vector<int> heights(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> heights[i];
+    }
+    int result = findMinCuts(n, q, heights);
+    std::cout << result << std::endl;
+    return 0;
+}

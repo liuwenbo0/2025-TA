@@ -1,0 +1,61 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    // 如果链表为空或只有两个元素
+    if (list == list->next->next) {
+        return;
+    }
+
+    node *head = list->next; // 真实头节点
+    node *tail = list->prior; // 真实尾节点
+    list->next = nullptr; // 清空虚拟头节点的连接
+    list->prior = nullptr; // 清空虚拟尾节点的连接
+    head->prior = nullptr; // 清空真实头节点的前驱
+    tail->next = nullptr; // 清空真实尾节点的后继
+
+    // 分离奇数项和偶数项
+    node *oddHead = head, *evenHead = head->next;
+    node *lastEven = head->next;
+    node *currentOddNode = oddHead, *currentEvenNode = evenHead;
+
+    while (currentEvenNode != nullptr && currentEvenNode->next != nullptr) {
+        currentOddNode->next = currentEvenNode->next; // 连接奇数节点
+        currentOddNode->next->prior = currentOddNode; // 设置前驱
+        currentOddNode = currentOddNode->next;
+
+        if (currentOddNode->next != nullptr) {
+            currentEvenNode->next = currentOddNode->next; // 连接偶数节点
+            currentEvenNode->next->prior = currentEvenNode; // 设置前驱
+            currentEvenNode = currentEvenNode->next;
+        } else {
+            currentEvenNode->next = nullptr; // 处理最后一个偶数节点
+            break;
+        }
+    }
+    currentOddNode->next = nullptr; // 确保奇数链表结束
+
+    // 反转偶数项链表
+    node *prevNode = nullptr;
+    node *currNode = evenHead;
+    node *nextNode = nullptr;
+
+    while (currNode != nullptr) {
+        nextNode = currNode->next; // 暂存下一节点
+        currNode->next = prevNode; // 反转指向
+        currNode->prior = nextNode; // 设置反转后的前驱
+        prevNode = currNode; // 移动到下一个
+        currNode = nextNode; // 移动到下一节点
+    }
+    evenHead = prevNode; // 更新偶数链表头
+    if (evenHead) evenHead->prior = currNode; // 确保偶数链表的前驱指针
+
+    // 合并奇数链表和逆序后的偶数链表
+    currentOddNode->next = evenHead; // 连接奇数和偶数链表
+    if (evenHead) evenHead->prior = currentOddNode; // 设置偶数链表的前驱
+
+    // 确保正确连接尾部
+    lastEven->next = list; 
+    list->prior = lastEven; 
+    oddHead->prior = list; 
+    list->next = oddHead; 
+}

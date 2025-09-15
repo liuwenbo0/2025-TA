@@ -1,0 +1,47 @@
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int height(int a[], int n)
+{
+    return (int)(log2(n) + 1);
+}
+
+int max_tree(int a[], int i, int n)//n为总数，i为当前位置
+{
+    if (i >= n || a[i] == -1)
+        return 0;
+    int leftmax = max_tree(a, 2 * i + 1, n);
+    int rightmax = max_tree(a, 2 * i + 2, n);
+    return a[i] + max(leftmax, rightmax);
+}
+int findnode(int a[], int n)
+{
+    int sum = 0;
+    for (int i = 0; 2 * i + 2 < pow(2, (int)(log2(n) + 1)); i++)
+    {
+        if ((a[2 * i + 1] != -1 || a[2 * i + 2] != -1) && a[i] > max(a[2 * i + 1], a[2 * i + 2]))
+            sum += a[i];
+    }
+    return sum;
+}
+
+int main()
+{
+    using namespace std;
+    int a[10000000] = { 0 };
+    int count = 0;
+    int i = 0;
+    while (cin >> a[count])
+        count++;//i和count都是总数
+    i = count;
+    int h = height(a, i);
+    for (int n = i; n < pow(2, h)-1; n++)
+    {
+        a[n] = -1;
+    }
+    cout << height(a, i) << endl;
+    cout << max_tree(a, 0, i) << endl;
+    cout << findnode(a, i)<<endl;
+}

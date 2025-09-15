@@ -1,0 +1,36 @@
+#include"Linklist.h"
+
+void changeList(Linklist &list){
+    //在此处添加代码
+    if(list->next==list||list->next->next==list){
+        return;
+    }
+    Linklist head=list;
+    Linklist tail=head->prior;
+    tail->next=head;  //循环
+    Linklist p1=head->next;  //第一个元素,head为空
+    Linklist p2=tail;  //末尾元素
+    while(p1->next!=tail&&p1!=tail){
+        p1->next=p1->next->next;
+        p1=p1->next;
+    }
+    //prior都没改
+    if(p1->next==tail){
+        while(p2->prior!=head->next){
+            p2->next=p2->prior->prior;
+            p2=p2->next;
+        }
+        tail=p2;
+    }
+    if(p1==tail){
+        p2=p2->prior;
+        p1->next=p2;
+        while(p2->prior!=head->next){
+            p2->next=p2->prior->prior;
+            p2=p2->next;
+        }
+        tail=p2;
+    }
+    head->prior=tail;
+
+}

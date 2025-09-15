@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class QuickSort {
+public:
+    void mysort(std::vector<int>& nums);
+private:
+    void sort(std::vector<int>& nums, int low, int high);
+    int pa(std::vector<int>& nums, int low, int high);
+    int mid(std::vector<int>& nums, int low, int high);
+    void isort(std::vector<int>& nums, int low, int high);
+};
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    if (!nums.empty()) {
+        sort(nums, 0, nums.size() - 1);
+    }
+}
+
+void QuickSort::sort(std::vector<int>& nums, int low, int high) {
+    if (high - low < 10) {
+        isort(nums, low, high);
+        return;
+    }
+
+    int x = mid(nums, low, high);
+    std::swap(nums[x], nums[high]);
+
+    int y = pa(nums, low, high);
+    sort(nums, low, y - 1);
+    sort(nums, y + 1, high);
+}
+
+int QuickSort::pa(std::vector<int>& nums, int low, int high) {
+    int s = nums[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; ++j) {
+        if (nums[j] <= s) {
+            i++;
+            std::swap(nums[i], nums[j]);
+        }
+    }
+    std::swap(nums[i + 1], nums[high]);
+    return i + 1;
+}
+
+int QuickSort::mid(std::vector<int>& nums, int low, int high) {
+    int mid = low + (high - low) / 2;
+    if (nums[low] > nums[mid]) std::swap(nums[low], nums[mid]);
+    if (nums[low] > nums[high]) std::swap(nums[low], nums[high]);
+    if (nums[mid] > nums[high]) std::swap(nums[mid], nums[high]);
+    return mid;
+}
+
+void QuickSort::isort(std::vector<int>& nums, int low, int high) {
+    for (int i = low + 1; i <= high; ++i) {
+        int t = nums[i];
+        int j = i - 1;
+        while (j >= low && nums[j] > t) {
+            nums[j + 1] = nums[j];
+            j--;
+        }
+        nums[j + 1] = t;
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+    QuickSort sorter;
+    sorter.mysort(nums);
+    for (int num : nums) {
+        printf("%d ",num);
+    }
+    std::cout << std::endl;
+    return 0;
+}

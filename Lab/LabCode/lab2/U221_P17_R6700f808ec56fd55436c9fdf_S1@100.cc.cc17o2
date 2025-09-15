@@ -1,0 +1,58 @@
+#include "Solution.h"
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+  // 如此构造一个二维数组（ nxn 矩阵）
+  // ans[i][j]表示矩阵的第i行第j列
+  vector<vector<int> > ans; // 声明一个二维数组ans
+    
+  for(int i=0; i<n; i++) {
+    ans.push_back(vector<int>(n, 0));
+  } // 初始化二维数组ans的大小为n*n，每个元素的值为0
+
+  // 请在这里完成你的代码
+
+  // 初始化第一列
+  for (int i = 0; i < n; ++i) {
+    ans[i][0] = i + 1;
+  }
+
+  // 分治策略生成日程表
+  for (int size = 1; size < n; size *= 2) {
+    for (int top = 0; top < n; top += 2 * size) {
+      for (int left = 0; left < n; left += 2 * size) {
+        int m = size;
+
+        // 复制左上角的 m × m 矩阵到右上角
+        for (int i = 0; i < m; ++i) {
+          for (int j = 0; j < m; ++j) {
+            ans[top + i][left + m + j] = ans[top + i][left + j] + m;
+          }
+        }
+
+        // 复制左上角的 m × m 矩阵到左下角
+        for (int i = 0; i < m; ++i) {
+          for (int j = 0; j < m; ++j) {
+            ans[top + m + i][left + j] = ans[top + i][left + j] + m;
+          }
+        }
+
+        // 交换左上角和右上角的 m × m 矩阵到右下角
+        for (int i = 0; i < m; ++i) {
+          for (int j = 0; j < m; ++j) {
+            ans[top + m + i][left + m + j] = ans[top + i][left + j];
+          }
+        }
+      }
+    }
+  }
+
+  // 确保对阵合理性
+  for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (i != j) {
+        ans[j][i] = ans[i][j];
+      }
+    }
+  }
+
+  return ans;
+}

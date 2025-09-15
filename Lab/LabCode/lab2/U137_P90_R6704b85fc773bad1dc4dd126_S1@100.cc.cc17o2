@@ -1,0 +1,45 @@
+#include <iostream>  
+using namespace std;  
+  
+int calculateTreeHeight(int arr[], int rootNode, int arrSize) {  
+    int leftSubtreeHeight, rightSubtreeHeight;  
+    if (arr[rootNode] == -1 || rootNode >= arrSize) return 0;  
+    else {  
+        leftSubtreeHeight = calculateTreeHeight(arr, 2 * rootNode + 1, arrSize);  
+        rightSubtreeHeight = calculateTreeHeight(arr, 2 * rootNode + 2, arrSize);  
+        return (leftSubtreeHeight >= rightSubtreeHeight) ? leftSubtreeHeight + 1 : rightSubtreeHeight + 1;  
+    }  
+}  
+  
+int findMaxSum(int arr[], int rootNode, int arrSize) {  
+    int leftChildSum = 0, rightChildSum = 0;  
+    if (arr[rootNode] == -1 || rootNode >= arrSize) return 0;  
+    else {  
+        leftChildSum += findMaxSum(arr, 2 * rootNode + 1, arrSize);  
+        rightChildSum += findMaxSum(arr, 2 * rootNode + 2, arrSize);  
+        return (rightChildSum >= leftChildSum) ? rightChildSum + arr[rootNode] : leftChildSum + arr[rootNode];  
+    }  
+}  
+  
+
+int computeOptimalValue(int arr[], int rootNode, int arrSize) {  
+    if (arr[rootNode] == -1 || rootNode >= arrSize) return 0;  
+    else if (arr[2 * rootNode + 1] == -1 && arr[2 * rootNode + 2] == -1) return 0;  
+    else if ((2 * rootNode + 1) >= arrSize && (2 * rootNode + 2) >= arrSize) return 0;  
+    else if (arr[rootNode] > arr[2 * rootNode + 1] && arr[rootNode] > arr[2 * rootNode + 2])  
+        return arr[rootNode] + computeOptimalValue(arr, 2 * rootNode + 1, arrSize) + computeOptimalValue(arr, 2 * rootNode + 2, arrSize);  
+    else   
+        return computeOptimalValue(arr, 2 * rootNode + 1, arrSize) + computeOptimalValue(arr, 2 * rootNode + 2, arrSize);  
+}  
+  
+int main() {  
+    int inputValue, currentIndex = 0;  
+    int treeDataArray[10000000];  
+    while (cin >> inputValue) {  
+        treeDataArray[currentIndex++] = inputValue;  
+    }  
+    cout << calculateTreeHeight(treeDataArray, 0, currentIndex) << endl;  
+    cout << findMaxSum(treeDataArray, 0, currentIndex) << endl;  
+    cout << computeOptimalValue(treeDataArray, 0, currentIndex);  
+    return 0;  
+}

@@ -1,0 +1,44 @@
+#include "Solution.h"
+
+vector<int> Solution::perfect_permutation(int n) {
+      vector<int> ans(n, 0);
+   int count = 0;
+   int o = n;
+   while(n!=0){
+   	n = n/2;
+   	count++;
+   }
+   long z =1;
+   for(int i = 1;i<=count;i++)
+   		z = z*2;
+	vector<int> fg(z,0);
+	long m =z;
+	fg[0] = 1;
+	for(long p = 1;p<=z/2;p = p*2){
+		m = m/2;
+		for(long i = p;i<=2*p;i++ ){
+			if(i == 0){
+				fg[i] = 1;
+				
+			}
+			else{
+			
+				fg[i] = fg[i-p]+m;
+				
+		}
+		}
+		
+	}
+	
+	int j = 0;
+	for(long i = 0 ;i<=z-1;i++){
+		if(fg[i] <= o){
+			ans[j]=fg[i];
+			j++;
+			
+		}
+		if(j>=o)
+			break;
+	}
+
+    return ans;}

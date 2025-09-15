@@ -1,0 +1,30 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    long long m=0, k=0, s=0;
+    cin >> m >> k >> s;
+    long long count = 0; 
+    long long position = 0; 
+    vector<long long> q; 
+    q.reserve(10000); 
+    q.push_back(m); 
+    while (!q.empty()) {
+        long long energy = q.back();
+        q.pop_back(); 
+        if (energy > 1) {
+            long long a = energy / 2;
+            long long b = energy % 2;
+            q.push_back(a); 
+            q.push_back(b); 
+            q.push_back(a); 
+        } else {
+            position++;
+            if (energy == 1 && position >= k && position <= s) {
+                count++;
+            }
+        }
+    }
+    cout << count << endl;
+    return 0;
+}

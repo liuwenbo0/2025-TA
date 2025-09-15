@@ -1,0 +1,39 @@
+//初中写的，代码风格和现在有所差异
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int n,k,q[1000001]={0},p[1000001]={0},a[1000001]={0};
+void maxn(){
+	int head=1,tail=0;
+	for(int i=1;i<=n;++i){
+		while(tail>=head && q[tail]<=a[i]) tail--;
+		q[++tail]=a[i];
+		p[tail]=i;
+		while(p[head]<=i-k) head++;
+		if(i>=k) printf("%d ",q[head]);
+	}
+	printf("\n");
+	return ;
+}
+void minn(){
+	int head=1,tail=0;
+	for(int i=1;i<=n;++i){
+		while(tail>=head && q[tail]>=a[i]) tail--;
+		q[++tail]=a[i];
+		p[tail]=i;
+		while(p[head]<=i-k) head++;
+		if(i>=k) printf("%d ",q[head]);
+	}
+	printf("\n");
+	return ;
+}
+int main(){
+	scanf("%d%d",&n,&k);
+	for(int i=1;i<=n;++i){
+		scanf("%d",&a[i]);
+	}
+	//minn();
+	maxn();
+	return 0;
+}

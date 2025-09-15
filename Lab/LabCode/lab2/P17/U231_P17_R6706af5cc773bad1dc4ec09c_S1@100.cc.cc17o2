@@ -1,0 +1,54 @@
+#include "Solution.h"
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    if (n <= 0) return {}; 
+    vector<vector<int>> a(n + 1, vector<int>(n + 1, 0));
+    int shu = 1; 
+    while (shu <= n) {
+         int temp = shu; 
+         for (int i = temp + 1;(i <= 2 * temp)&&(i <= n);i++) {
+            for (int j = 1; j <= temp; j++) {
+               a[i][j] = a[i - temp][j] + temp; // 更新值
+            }
+        }
+
+       
+         for (int p = 1; p <= temp; p++) {
+            for (int q = temp + 1; q <= 2 * temp && q <= n; q++) {
+             a[p][q] = a[q][p]; // 左下元素对应
+            }
+        }
+
+        for (int i = temp + 1; i <= 2 * temp && i <= n; i++) {
+            for (int j = temp + 1; j <= 2 * temp && j <= n; j++) {
+                a[i][j] = a[i - temp][j - temp]; 
+          }
+        }
+
+         shu =shu* 2; // 每轮选手数量翻倍
+     }
+for (int i = 1; i <= n; i++) { // 根据 n 打印有效部分
+        for (int j = 1; j <= n; j++) {
+           a[i][j]+=1;
+        }
+   }
+
+     vector<vector<int>> result;
+    for (int row = 1; row <= n; ++row) {
+        vector<int> current_row;
+        for (int col = 1; col <= n; ++col) {
+           if (a[row][col] != 0) {
+                current_row.push_back(a[row][col]);
+            }
+}
+        if (!current_row.empty()) {
+            result.push_back(current_row);
+        }
+    }
+
+    return result;
+   
+}

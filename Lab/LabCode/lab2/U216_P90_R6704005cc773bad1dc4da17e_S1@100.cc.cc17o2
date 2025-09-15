@@ -1,0 +1,81 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+// 计算高度
+int treeHeight(const vector<int>& nodeValues) {
+    int h = 0;
+    // 通过逻辑运算符完成循环
+    while (h < nodeValues.size() && (int)pow(2, h) <= nodeValues.size()) {
+        h++;
+    }
+    return h;
+}
+
+// 递归计算最大路径和
+int maxResourceValue(const vector<int>& nodeValues, int currentNodeIndex) {
+    // 如果当前节点是越界或无效的，则函数返回0
+    if (currentNodeIndex >= nodeValues.size() || nodeValues[currentNodeIndex] == -1) {
+        return 0;
+    }
+    // 如果只有一个节点，则返回这个节点的值
+    if (nodeValues.size() == 1) {
+        return nodeValues[0];
+    }
+    // 递归计算左右子树的最大路径和
+    int leftMaxValue = maxResourceValue(nodeValues, 2 * currentNodeIndex + 1);
+    int rightMaxValue = maxResourceValue(nodeValues, 2 * currentNodeIndex + 2);
+    // 返回当前节点值并且加上较大的子树路径和
+    return nodeValues[currentNodeIndex] + max(leftMaxValue, rightMaxValue);
+}
+
+// 递归计算特殊区域的节点值之和
+int specialAreaSum(const vector<int>& nodeValues, int currentNodeIndex) {
+    // 如果当前节点越界或无效，则函数返回0
+    if (currentNodeIndex >= nodeValues.size() || nodeValues[currentNodeIndex] == -1) {
+        return 0;
+    }
+    int totalSum = 0;
+    // 计算左右子节点的索引
+    int leftChildIndex = 2 * currentNodeIndex + 1;
+    int rightChildIndex = 2 * currentNodeIndex + 2;
+    // 如果左右子节点索引在范围内，则保存他的值，否则值都默认为-1
+    int leftChildValue = (leftChildIndex < nodeValues.size()) ? nodeValues[leftChildIndex] : -1;
+    int rightChildValue = (rightChildIndex < nodeValues.size()) ? nodeValues[rightChildIndex] : -1;
+
+    // 如果当前节点值大于子节点值，则保存并不断累加子节点的值
+    if (nodeValues[currentNodeIndex] > leftChildValue && nodeValues[currentNodeIndex] > rightChildValue &&  
+        !(leftChildValue == -1 && rightChildValue == -1)) {
+        totalSum += nodeValues[currentNodeIndex];
+    }
+  
+    // 通过递归计算左右子树的特殊区域和
+    totalSum += specialAreaSum(nodeValues, leftChildIndex);
+    totalSum += specialAreaSum(nodeValues, rightChildIndex);
+  
+    return totalSum;
+}
+
+int main() {
+    vector<int> treeNodeValues;
+    int inputValue;
+
+    // 读取输入直到最后一个值
+    while (cin >> inputValue) {
+        treeNodeValues.push_back(inputValue);
+    }
+
+    // 计算二叉树的高度、最大路径和和特殊区域的和
+    int height = treeHeight(treeNodeValues);
+    int maxValue = maxResourceValue(treeNodeValues, 0);
+    int specialSum = specialAreaSum(treeNodeValues, 0);
+
+    // 输出结果
+    cout << height << endl;
+    cout << maxValue << endl;
+    cout << specialSum << endl;
+
+    return 0;
+}

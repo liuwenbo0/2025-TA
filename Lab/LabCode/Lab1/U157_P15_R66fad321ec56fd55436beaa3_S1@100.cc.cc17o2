@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int InsertionSort(vector<int> &arr){
+    int i, j, key, n=arr.size(), l1=0;
+    for(j=1; j<n; j++){
+    	key=arr[j];
+    	i=j-1;
+    	while(i>=0 && ++l1 && arr[i]>key){
+    		arr[i+1]=arr[i];
+    		i-=1;
+		}
+		arr[i+1]=key;
+	}
+    return l1;
+}
+
+int MergeSort(vector<int> &arr, int left, int right)
+{
+    int l2=0;
+    if(left<right){
+		l2+=MergeSort(arr, left, (left+right)/2);
+		l2+=MergeSort(arr, (left+right)/2+1, right);
+		int n1=(right+left)/2-left+1, n2=right-(left+right)/2;
+	    vector <int> L(n1+1), R(n2+1);
+	    for(int i=0; i<n1; i++){
+		    L[i]=arr[left+i];
+	    }
+	    for(int i=0; i<n2; i++){
+		    R[i]=arr[(left+right)/2+i+1];
+	    }
+	    L[n1]=R[n2]=2147483647;
+	    int i=0, j=0;
+	    for(int k=left; k<=right; k++){
+		    if(L[i]<=R[j]){
+			    arr[k]=L[i];
+			    i+=1;
+		    }
+		    else {
+			    arr[k]=R[j];
+			    j+=1;
+		    }
+            l2++;
+	    }
+	}
+    return l2;
+}
+
+int main (){
+    int n;
+    cin >> n;
+    vector<int> arr (n);
+    for(int i=0; i<n; i++){
+        cin >> arr[i];
+    }
+    int n1=0, n2=0;
+    n1=InsertionSort(arr);
+    /*for(int i=0; i<n; i++){
+        cout << arr[i] << " " ;
+    }*/
+    //cout << '\n';
+    n2=MergeSort(arr, 0, n-1);
+    /*for(int i=0; i<n; i++){
+        cout << arr[i] << " " ;
+    }*/
+    cout << n2 << " " << n1;
+    return 0;
+}

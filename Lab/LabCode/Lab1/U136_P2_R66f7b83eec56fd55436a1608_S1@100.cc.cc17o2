@@ -1,0 +1,38 @@
+#include "MyStack.h"
+
+        // 判断栈空, 若为空栈,则Empty()返回true；否则返回false
+bool MyStack::Empty() {
+    return top == -1;//请在这里完成你的代码
+}
+
+        // 判断栈满，若栈满，则Full()为true；否则为false
+bool MyStack::Full() {
+    return top == MAXLENG - 1;//请在这里完成你的代码
+    }
+
+bool MyStack::Push(ElementType e) {
+    if(MyStack::Full()) return 0;
+    else{
+        top = top + 1;
+        elem[top] = e;
+        return 1;
+    }//请在这里完成你的代码
+    }
+
+bool MyStack::Gettop(ElementType &e) {
+    if(MyStack::Empty()) return 0;
+    else{
+        e = elem[top];
+        return 1;
+    }//请在这里完成你的代码
+}
+
+bool MyStack::Pop(ElementType &e) {
+    if(MyStack::Empty()) return 0;
+    else{
+        e = elem[top];
+        elem[top] = -1;
+        top = top - 1;
+        return 1;
+    }//请在这里完成你的代码
+}

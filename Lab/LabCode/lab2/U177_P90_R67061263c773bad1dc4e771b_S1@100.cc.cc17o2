@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int maxn=2e6+5;
+int a[maxn],b[maxn];
+int cnt=0,t;
+int x,h;
+int dfs(int per_t,int N){
+    if(per_t>N) return 0;
+    b[per_t]=a[per_t]+max(dfs(per_t*2+1,N),dfs(per_t*2+2,N));
+    if(b[per_t]<0) return 0;
+    return b[per_t];
+}
+int main(){
+    while(cin>>a[cnt]){
+        ++cnt;
+    }
+    t=cnt;
+    while(t){
+        t=t/2;
+        ++h;
+    }
+    int flag=1;
+    for(int i=cnt/2;i<cnt;++i){
+        if(a[i]!=-1){
+            flag=0;
+        }    
+    }
+    h-=flag;
+    cout<<h<<endl;
+
+    cout<<dfs(0,cnt-1)<<endl;
+    t=1;
+    while(--h){
+        t*=2;
+    }
+    for(int j=0;j<=t*2-1;++j){
+        if(a[j]==0) a[j]=-1;
+    }
+    t--;
+    for(int s=0;s<t;++s){
+        if(a[s*2+1]!=-1 || a[s*2+2]!=-1){
+            if(a[s]>max(a[s*2+1],a[s*2+2])){
+            x+=a[s];
+            }
+        }
+    }
+  
+    cout<<x<<endl;
+    return 0;
+}

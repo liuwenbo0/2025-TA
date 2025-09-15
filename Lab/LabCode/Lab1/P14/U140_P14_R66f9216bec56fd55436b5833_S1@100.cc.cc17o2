@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <limits>
+using namespace std;
+long long reverseorder(vector<int>& vec,int left,int right){
+    int mid=(left+right)/2;
+    long long sum=0;
+    if(left<right){
+        sum+=reverseorder(vec,left,mid);
+        sum+=reverseorder(vec,mid+1,right);
+        int n1=mid-left+1;
+        int n2=right-mid;
+    vector<int>L(n1+1);
+    vector<int>R(n2+1);
+    for(int i=0;i<n1;i++){
+        L[i]=vec[left+i];
+    }
+    L[n1]=2147483647;
+    for(int j=0;j<n2;j++){
+        R[j]=vec[mid+1+j];
+    }
+    R[n2]=2147483647;
+    for(int k=left,i=0,j=0;k<right+1;k++){
+        if(L[i]<=R[j]){
+            vec[k]=L[i];
+            i++;
+        }
+        else{
+            vec[k]=R[j];
+            j++;
+            sum+=(n1-i);
+        }
+    }
+    }
+    return sum;
+}
+int main() {
+    int n=0;
+    cin>>n;
+    vector<int>vec(n);
+    for(int i=0;i<n;i++){
+        cin>>vec[i];
+    }
+    int left=0,right=vec.size()-1;
+    long long number=0;
+    number=reverseorder(vec,left,right);
+    cout<<number<<endl;
+}

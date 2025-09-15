@@ -1,0 +1,42 @@
+#include "Linklist.h"
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list) {
+        // 链表为空或只有一个节点，不需要变换
+        return;
+    }
+
+    // 使用快慢指针找到链表的中间节点
+    node *slow = list->next; // 从第一个元素开始
+    node *fast = list->next; // 从第一个元素开始
+
+    while (fast != list && fast->next != list) {
+        slow = slow->next; // 慢指针每次走一步
+        fast = fast->next->next; // 快指针每次走两步
+    }
+
+    // slow 现在指向中间节点，分割链表
+    node *firstHalfEnd = slow->prior; // 前半部分的尾节点
+    node *secondHalfStart = slow; // 后半部分的头节点
+
+    // 断开链表
+    firstHalfEnd->next = list; // 将前半部分的尾部指向头部
+    list->prior = firstHalfEnd; // 头部的前驱是前半部分的尾部
+
+    // 将后半部分的尾部指向前半部分的尾部
+    secondHalfStart->prior = list->prior; // 后半部分的头部的前驱指向原链表的尾部
+    list->prior->next = secondHalfStart; // 原链表的尾部指向后半部分的头部
+
+    // 重新连接后半部分
+    node *current = secondHalfStart;
+    while (current->next != list) {
+        current = current->next; // 继续遍历后半部分
+    }
+    
+    // current 现在是后半部分的尾节点
+    current->next = firstHalfEnd->next; // 连接后半部分的尾部到前半部分的头部
+    firstHalfEnd->next->prior = current; // 更新前半部分的头部的前驱为后半部分的尾部
+
+    // 重新连接前半部分的头部
+    secondHalfStart->prior = current; // 更新后半部分头部的前驱
+    current->next->prior = secondHalfStart; // 更新前半部分头部的前驱
+}

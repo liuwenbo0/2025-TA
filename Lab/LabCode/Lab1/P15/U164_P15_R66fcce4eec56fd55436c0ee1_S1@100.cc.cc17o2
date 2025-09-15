@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+using namespace std;
+
+int s_sum = 0;
+int i_sum = 0;
+
+void insertionsort(vector<int>& nums) {
+    for (int i=1;i<nums.size();++i) {
+        int temp=nums[i];
+        int j=i-1;
+        while (j>=0) {
+            i_sum++;
+            if (nums[j]>temp) {
+                nums[j+1]=nums[j];
+                j--;
+            } else{
+                break;
+            }
+        }
+        nums[j+1]=temp;
+    }
+}
+void mergesort(vector<int>& nums, int left, int right) {
+    if (left>=right) {
+        return;
+    }
+    int mid=left+(right-left)/2;
+    mergesort(nums,left,mid);
+    mergesort(nums,mid+1,right);
+    vector<int> temp(right-left+1);
+    int i=left,j=mid+1,k=0;
+    while (i<=mid&&j<=right){
+        s_sum++;
+        if(nums[i]<=nums[j]) { 
+            temp[k++]=nums[i++];
+        } else {
+            temp[k++]=nums[j++];
+        }
+    }
+    while (i<=mid) {
+        temp[k++]=nums[i++];
+    }
+    while (j<=right) {
+        temp[k++]=nums[j++];
+    }
+    for (int i=0;i<temp.size();++i) {
+        nums[left+i]=temp[i];
+    }
+}
+int main(){
+    vector<int> nums_1;
+    vector<int> nums_2;
+    int N;
+    cin >>N;
+    for (int i=0;i<N;i++) {
+        int temp;
+        cin >> temp;
+        nums_1.push_back(temp);
+        nums_2.push_back(temp);
+    }
+    insertionsort(nums_1);
+    mergesort(nums_2,0,N-1);
+    cout << s_sum << " " << i_sum<<endl;
+    return 0;
+}

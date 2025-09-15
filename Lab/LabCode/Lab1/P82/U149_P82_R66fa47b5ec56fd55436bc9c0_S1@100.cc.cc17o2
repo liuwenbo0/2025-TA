@@ -1,0 +1,77 @@
+#include "Linklist.h"
+
+// 修改链表，使得奇数位置的节点保持不变，偶数位置的节点反转
+void changeList(Linklist &headNode) {
+    // 如果链表为空或只有一个节点，则无需修改
+    if (!headNode || headNode->next == headNode) return;
+
+    // 初始化奇数和偶数位置节点的链表头和尾指针
+    Linklist oddStart = nullptr, oddEnd = nullptr;
+    Linklist evenStart = nullptr, evenEnd = nullptr;
+
+    // 当前节点用于遍历链表
+    Linklist currentNode = headNode->next;
+    // 用于记录节点在链表中的位置
+    int position = 0;
+
+    // 遍历链表，分离奇数和偶数位置的节点
+    while (currentNode != headNode) {
+        // 创建一个新的节点，用于存储当前节点的值
+        Linklist tempNode = new node();
+        tempNode->num = currentNode->num;
+        tempNode->next = nullptr;
+        tempNode->prior = nullptr;
+
+        // 如果当前位置是奇数，则将节点添加到奇数链表
+        if (position % 2 == 0) {
+            if (!oddStart) {
+                oddStart = oddEnd = tempNode; // 初始化奇数链表
+            } else {
+                oddEnd->next = tempNode; // 连接到奇数链表尾部
+                tempNode->prior = oddEnd;
+                oddEnd = tempNode; // 更新奇数链表尾部
+            }
+        } else {
+            // 如果当前位置是偶数，则将节点添加到偶数链表
+            if (!evenStart) {
+                evenStart = evenEnd = tempNode; // 初始化偶数链表
+            } else {
+                evenEnd->next = tempNode; // 连接到偶数链表尾部
+                tempNode->prior = evenEnd;
+                evenEnd = tempNode; // 更新偶数链表尾部
+            }
+        }
+        currentNode = currentNode->next; // 移动到下一个节点
+        position++; // 更新位置
+    }
+
+    // 反转偶数链表
+    Linklist originalEvenStart = evenStart;
+    if (evenStart) {
+        Linklist beforeNode = nullptr;
+        Linklist traverseNode = evenStart;
+        while (traverseNode) {
+            Linklist nextNode = traverseNode->next;
+            traverseNode->next = beforeNode;
+            traverseNode->prior = nextNode;
+            beforeNode = traverseNode;
+            traverseNode = nextNode;
+        }
+        evenStart = beforeNode; // 更新偶数链表头为反转后的新头部
+        evenEnd = originalEvenStart; // 更新偶数链表尾为反转后的新尾部
+    }
+
+    // 连接奇数链表和反转后的偶数链表
+    if (oddStart) {
+        headNode->next = oddStart; // 将头节点的下一个节点指向奇数链表
+        oddEnd->next = evenStart; // 将奇数链表的尾部指向偶数链表的头部
+        if (evenStart) {
+            evenStart->prior = oddEnd; // 偶数链表头部的前一个节点指向奇数链表的尾部
+            evenEnd->next = headNode; // 偶数链表尾部的下一个节点指向头节点
+            headNode->prior = evenEnd; // 头节点的前一个节点指向偶数链表的尾部
+        } else {
+            oddEnd->next = headNode; // 如果没有偶数链表，奇数链表尾部直接指向头节点
+            headNode->prior = oddEnd;
+        }
+    }
+}

@@ -1,0 +1,64 @@
+#include<iostream>
+using namespace std;
+
+void MergeSort(int nums[], int left, int right,int Mcomparison)
+{
+    if(left<right){
+        int mid=left+(right-left)/2;
+        MergeSort(nums,left,mid,Mcomparison);
+        MergeSort(nums,mid+1,right,Mcomparison);
+        int n1=mid-left,n2=right-mid-1,i,j,k;
+        int L[n1+1],R[n2+1];
+        for(i=0;i<=n1;i++){
+            L[i]=nums[i+left];
+        }
+        for(j=0;j<=n2;j++){
+            R[j]=nums[j+mid+1];
+        }
+        for(i=0,j=0,k=left;i<=n1&&j<=n2;k++){
+            Mcomparison++;
+            if(L[i]>R[j]){
+                nums[k]=R[j];
+                j++;
+            }
+            else{
+                nums[k]=L[i];
+                i++;
+            }
+        }
+        while(i<=n1){
+            nums[k++]=L[i++];
+        }
+        while(j<=n2){
+            nums[k++]=R[j++];
+        }
+    }
+}
+
+void InsertionSort(int nums[],int N,int Icomparison) {
+    int i,j,n=N,x;
+    for(i=0;i<n-1;i++){
+        for(j=i+1;j<n;j++){
+            if(nums[i]>nums[j]){
+                x=nums[i];
+                nums[i]=nums[j];
+                nums[j]=x;
+                Icomparison++;
+            }
+        }
+    }
+}
+
+int main(){
+    int N;
+    cin>>N;
+    int arr[N];
+    for(int i=0;i<N;i++){
+        cin >> arr[i];
+    }
+    int Mcomparison=0,Icomparison=0;
+    MergeSort(arr,0,N,Mcomparison);
+    InsertionSort(arr,N,Icomparison);
+    cout<< Mcomparison << " " << Icomparison << endl;
+    return 0;
+}

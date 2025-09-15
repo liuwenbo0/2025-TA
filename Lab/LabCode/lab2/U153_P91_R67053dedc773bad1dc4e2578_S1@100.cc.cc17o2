@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+// 注释已修改
+std::vector<long long> generatePath(long long initialValue) {
+    std::vector<long long> path;
+    while (initialValue > 1) {
+        path.push_back(initialValue);
+        initialValue /= 2;
+    }
+    path.push_back(initialValue);
+    return path;
+}
+
+long long locateValue(long long currentValue, long long start, long long end, long long targetStart, long long targetEnd) {
+    if (start != targetStart || end != targetEnd) {
+        long long midPoint = (start + end) / 2;
+        long long remainder = currentValue % 2;
+        if (targetStart == targetEnd && targetStart == midPoint) {
+            return remainder;
+        }
+        if (targetEnd < midPoint) {
+            return locateValue(currentValue / 2, start, midPoint - 1, targetStart, targetEnd);
+        } else if (targetStart > midPoint) {
+            return locateValue(currentValue / 2, midPoint + 1, end, targetStart, targetEnd);
+        } else if (targetEnd == midPoint) {
+            return locateValue(currentValue / 2, start, midPoint - 1, targetStart, targetEnd - 1) + remainder;
+        } else if (targetStart == midPoint) {
+            return locateValue(currentValue / 2, midPoint + 1, end, targetStart + 1, targetEnd) + remainder;
+        } else {
+            return locateValue(currentValue / 2, start, midPoint - 1, targetStart, midPoint - 1) +
+                   locateValue(currentValue / 2, midPoint + 1, end, midPoint + 1, targetEnd) + remainder;
+        }
+    } else {
+        return currentValue;
+    }
+}
+
+int main() {
+    long long initialValue, startIndex, endIndex;
+    std::cin >> initialValue >> startIndex >> endIndex;
+    if (initialValue >= std::pow(10, 2)) {
+        long long boundary = std::pow(2, std::floor(std::log2(initialValue)) + 1) - 1;
+        std::cout << locateValue(initialValue, 1, boundary, startIndex, endIndex);
+        return 0;
+    } else {
+        std::vector<long long> pathTrace = generatePath(initialValue);
+
+        long long pathIndex = 0;
+        long long bitPosition = 0;
+
+        for (long long idx = pathTrace.size() - 1; idx >= 0; idx--) {
+            if (pathTrace[idx] <= 1) {
+                pathIndex = pathIndex << bitPosition++;
+                pathIndex |= pathTrace[idx];
+            } else {
+                long long currentIndex = pathIndex;
+                int currentBitPos = bitPosition;
+
+                pathIndex = pathIndex << 1;
+                pathIndex |= (pathTrace[idx] % 2);
+                bitPosition++;
+
+                pathIndex = pathIndex << currentBitPos;
+                pathIndex |= currentIndex;
+                bitPosition += currentBitPos;
+            }
+        }
+        long long finalResult = 0;
+        for (int idx = startIndex - 1; idx < endIndex; idx++) {
+            finalResult |= ((pathIndex >> (bitPosition - 1 - idx)) & 1) << (endIndex - 1 - idx);
+        }
+
+        int onesCount = 0;
+        for (int idx = endIndex - startIndex; idx >= 0; idx--) {
+            if ((finalResult >> idx) & 1) {
+                onesCount++;
+            }
+        }
+        std::cout << onesCount;
+        return 0;
+    }
+}

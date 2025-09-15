@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <cstdio>
+using namespace std;
+
+struct TreeNode {
+    int value;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int val) : value(val), left(nullptr), right(nullptr) {}
+};
+
+TreeNode* buildTree(const vector<int>& nums, int index) {
+    if (index >= static_cast<int>(nums.size()) || nums[index] == -1) return nullptr;
+    TreeNode* root = new TreeNode(nums[index]);
+    root->left = buildTree(nums, 2 * index + 1);
+    root->right = buildTree(nums, 2 * index + 2);
+    return root;
+}
+
+int Height(TreeNode* root) {
+    if (!root) return 0;
+    return 1+max(Height(root->left), Height(root->right));
+}
+
+long long MAX_count(TreeNode* root) {
+    if (!root) return 0;
+    if (!root->left && !root->right) return root->value;
+    long long leftMax = MAX_count(root->left);
+    long long rightMax = MAX_count(root->right);
+    long long sum = max(leftMax, rightMax);
+    return max(sum + root->value, sum);
+}
+
+long long SPECIAL_count(TreeNode* root) {
+    if (!root) return 0; 
+    if (!root->left && !root->right) return 0; 
+    bool flag = true;
+    if (root->left) {
+        if (root->value <= root->left->value) {
+            flag = false;
+        }
+    }
+    if (root->right) {
+        if (root->value <= root->right->value) {
+            flag = false;
+        }
+    }
+    long long sum = 0;
+    if (flag) {
+        sum = root->value;
+    }
+    sum += SPECIAL_count(root->left); 
+    sum += SPECIAL_count(root->right);
+    return sum;
+}
+
+int main() {
+    vector<int> nums;
+    int temp;
+    while (scanf("%d", &temp) != EOF) {
+        nums.push_back(temp);
+    }
+    TreeNode* root = buildTree(nums, 0);
+    cout << Height(root) << endl;
+    cout << MAX_count(root) << endl;
+    cout << SPECIAL_count(root) << endl;
+    return 0;
+}

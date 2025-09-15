@@ -1,0 +1,18 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    int t[10000],q=1;
+    t[1]=1;
+    while(q<=n)
+    {
+        for(int i=q+1;i<=q<<1;++i) t[i]=t[i-q]<<1;
+        for(int i=1;i<=q;++i) t[i]=t[i+q]-1;
+        q<<=1;
+    }
+    for(int i=1;i<=q;++i)
+     {
+        if(t[i]<=n)
+      ans.push_back(t[i]);
+     }
+    return ans;
+}

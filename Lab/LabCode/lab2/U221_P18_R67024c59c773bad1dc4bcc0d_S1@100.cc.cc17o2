@@ -1,0 +1,13 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+    if(n == 1)  return {1};
+    vector<int> odd = perfect_permutation((n+1)/2);
+    vector<int> even = perfect_permutation(n/2);
+    for(int i : odd)
+    	ans.push_back(i*2-1);
+    for(int i : even)
+    	ans.push_back(i*2);
+    return ans;
+}

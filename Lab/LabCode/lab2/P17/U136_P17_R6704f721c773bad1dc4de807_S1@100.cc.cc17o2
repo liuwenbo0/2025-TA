@@ -1,0 +1,43 @@
+#include "Solution.h"  
+#include <vector>  
+void constructSchedule(vector<vector<int>>& scheduleMatrix, int totalTeams, int currentIndex) {  
+    if (totalTeams == 2) {  
+        scheduleMatrix[currentIndex][currentIndex] = currentIndex + 1;  
+        scheduleMatrix[currentIndex][currentIndex + 1] = currentIndex + 2;  
+        scheduleMatrix[currentIndex + 1][currentIndex] = currentIndex + 2;  
+        scheduleMatrix[currentIndex + 1][currentIndex + 1] = currentIndex + 1;  
+        return;  
+    }  
+    int halfTeams = totalTeams / 2;  
+    int i = 0;  
+    while (i < 2) {  
+        if (i == 0) {  
+            constructSchedule(scheduleMatrix, halfTeams, currentIndex);  
+        } else {  
+            constructSchedule(scheduleMatrix, halfTeams, currentIndex + halfTeams);  
+        }  
+        i++;  
+    }  
+    int row = 0, col = 0;  
+    while (row < halfTeams) {  
+        while (col < halfTeams) {  
+            scheduleMatrix[currentIndex + row][currentIndex + halfTeams + col] = scheduleMatrix[currentIndex + row][currentIndex + col] + halfTeams;  
+            scheduleMatrix[currentIndex + halfTeams + row][currentIndex + col] = scheduleMatrix[currentIndex + row][currentIndex + col] + halfTeams;  
+            scheduleMatrix[currentIndex + halfTeams + row][currentIndex + halfTeams + col] = scheduleMatrix[currentIndex + row][currentIndex + col];  
+            col++;  
+        }  
+        col = 0; 
+        row++;  
+    }  
+}  
+  
+vector<vector<int>> Solution::round_robin_schedule(int n) {  
+    vector<vector<int>> resultMatrix(n, vector<int>(n, 0));  
+    int i = 0;  
+    while (i < n) {  
+        resultMatrix[i][0] = i + 1;  
+        i++;  
+    }  
+    constructSchedule(resultMatrix, n, 0);  
+    return resultMatrix;  
+}

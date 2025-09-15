@@ -1,0 +1,53 @@
+#include"Linklist.h"
+#include <stack>
+#include <vector>
+
+void changeList(Linklist &list){ 
+    stack<node*> s;  
+    node *current = list->next, *taill = current;
+    int i = 0, i2 = 0;
+    for(;current != list;current = current->next, i++, i2++) {  
+        s.push(current);  
+        taill = current;
+        current = current->next;  
+        i2++;
+        if (current == list) break;
+    }  
+    if(i2%2){
+        i++;
+    }
+    int j = 0;
+    vector<double> vec(i2,1);
+    for(node* h = list -> next;j<i;j++){
+        vec[j] = h -> num;
+        for(int k= 0; (h!=nullptr)&(k<=1); k++){
+            h = h ->next;
+        }
+    }
+
+    node* e;
+    if(i2%2){
+        e = taill -> prior;
+    }else{
+        e = taill -> next;
+    }
+
+    for(;j<i2;j++){
+        vec[j] = e -> num;
+        for(int k= 0; (e!=nullptr)&(k<=1); k++){
+            e = e -> prior;
+        }
+        if(e==list){
+            break;
+        }
+    }
+
+    node* p = list -> next;
+    for(int k = 0;k<i2;k++){
+        p -> num = vec[k];
+        p = p -> next;
+    }
+
+  
+    
+}

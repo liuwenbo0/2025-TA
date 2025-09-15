@@ -1,0 +1,36 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+vector<int> winmax(vector<int>& a, int k) {
+    vector<int> window;  
+    vector<int> result;  
+    for (int i = 0; i < a.size(); i++) {
+        if (!window.empty() && window[0] <= i - k) {
+            window.erase(window.begin());  
+        }
+        while (!window.empty() && a[window.back()] <= a[i]) {
+            window.pop_back(); 
+        }
+        window.push_back(i);
+        if (i >= k - 1) {
+            result.push_back(a[window[0]]); 
+        }
+    }
+    return result;
+}
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    vector<int> result = winmax(a, k);
+    for (int i = 0; i < result.size(); i++) {
+        if (i != 0) cout << " ";  
+        cout << result[i];
+    }
+    cout << endl;
+
+    return 0;
+}

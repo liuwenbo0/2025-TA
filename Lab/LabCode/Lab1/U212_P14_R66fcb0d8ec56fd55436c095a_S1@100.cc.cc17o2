@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+long long merge_and_count(vector<int>&q , int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    vector<int> L(n1), R(n2);
+    
+    
+    for (int i = 0; i < n1; i++) {
+        L[i] = q[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        R[j] = q[mid + 1 + j];
+    }
+
+    int i = 0, j = 0, k = left;
+    long long count = 0; 
+    
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            q[k++] = L[i++];
+        } else {
+            
+            q[k++] = R[j++];
+            count += (n1 - i); 
+        }
+    }
+
+   
+    while (i < n1) {
+        q[k++] = L[i++];
+    }
+    while (j < n2) {
+        q[k++] = R[j++];
+    }
+
+    return count;
+}
+
+long long mcount(vector<int>& p, int left, int right) {
+    long long count = 0;
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        count += mcount(p, left, mid);
+        count += mcount(p, mid + 1, right);
+        count += merge_and_count(p, left, mid, right);
+    }
+    return count;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> b(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+    }
+
+    long long result = mcount(b, 0, n - 1);
+    cout << result << endl;
+
+    return 0;
+}

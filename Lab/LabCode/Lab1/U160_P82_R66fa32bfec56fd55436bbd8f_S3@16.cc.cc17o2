@@ -1,0 +1,79 @@
+#include <iostream>
+
+using namespace std;
+
+struct Node {
+    int value;
+    Node *previous, *next;
+};
+
+using CircularDoublyLinkedList = Node*;
+
+void rearrangeList(CircularDoublyLinkedList &list) {
+    if (list == nullptr || list->next == list || list->next->next == list) {
+        return; // 空链表或只有一个或两个节点的链表不需要变换
+    }
+
+    Node *start = list;
+    Node *firstNode = list->next; // 第一个节点
+    Node *secondNode = list->next->next; // 第二个节点
+    Node *end = secondNode; // 最后一个节点
+
+    // 将链表分为两部分：奇数索引和偶数索引的节点
+    while (secondNode != start) {
+        firstNode->next = secondNode->next;
+        secondNode->next->previous = firstNode;
+        Node *tempNode = secondNode->previous;
+        secondNode->previous = secondNode->next;
+        secondNode->next = secondNode->previous->next;
+        secondNode->previous->next->previous = secondNode;
+        secondNode = tempNode;
+    }
+
+    // 将两部分链表交叉连接
+    Node *oddListHead = start->next; // 奇数索引的头节点
+    Node *evenListHead = start->next->next; // 偶数索引的头节点
+    while (evenListHead != start) {
+        Node *tempNode = evenListHead->next;
+        evenListHead->next = oddListHead->next;
+        oddListHead->next->previous = evenListHead;
+        oddListHead->next = evenListHead;
+        evenListHead->previous = oddListHead;
+        oddListHead = evenListHead->next;
+        evenListHead = tempNode;
+    }
+
+    // 更新链表的尾节点
+    start->previous = end->previous;
+    end->previous->next = start;
+}
+
+int main() {
+    int numberOfElements;
+    CircularDoublyLinkedList headNode, tailNode, currentNode;
+    headNode = tailNode = new Node();
+    headNode->previous = headNode->next = headNode; // 初始化循环结构
+    cin >> numberOfElements;
+
+    for (int i = 0; i < numberOfElements; i++) {
+        currentNode = new Node();
+        cin >> currentNode->value;
+        tailNode->next = currentNode;
+        currentNode->previous = tailNode;
+        tailNode = currentNode;
+    }
+
+    headNode->previous = tailNode;
+    tailNode->next = headNode;
+    
+    rearrangeList(headNode);
+    
+    currentNode = headNode->next;
+    while (currentNode != headNode->previous) {
+        cout << currentNode->value << " ";
+        currentNode = currentNode->next;
+    }
+    cout << currentNode->value; // 打印最后一个元素
+
+    return 0;
+}

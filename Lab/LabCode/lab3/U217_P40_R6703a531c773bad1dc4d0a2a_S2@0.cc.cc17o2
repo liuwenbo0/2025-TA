@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    // 统计每个高度的灌木丛段数
+    unordered_map<int, int> height_count;
+    for (int height : heights) {
+        height_count[height]++;
+    }
+
+    // 找到当前最高频高度
+    int max_count = 0;
+    int most_frequent_height = 0;
+    for (auto &pair : height_count) {
+        if (pair.second > max_count) {
+            max_count = pair.second;
+            most_frequent_height = pair.first;
+        }
+    }
+
+    // 计算修剪次数
+    int total_trims = 0;
+    for (int height : heights) {
+        if (height != most_frequent_height) {
+            int trims = 0;
+            while (height > most_frequent_height) {
+                height = height / 2;
+                trims++;
+            }
+            if (height == most_frequent_height) {
+                total_trims += trims;
+            }
+        }
+    }
+
+    // 确保至少有 q 段高度相同
+    if (max_count < q) {
+        int additional_trims = q - max_count;
+        total_trims += additional_trims;
+    }
+
+    cout << total_trims << endl;
+
+    return 0;
+}

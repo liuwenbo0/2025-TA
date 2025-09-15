@@ -1,0 +1,28 @@
+#include"Linklist.h"
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list || list->next->next == list) {
+        return; // 链表为空或只有一个或两个节点，直接返回
+    }
+
+    node* slow = list->next;
+    node* fast = list->next;
+
+    while (fast != list && fast->next != list) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    node* firstHalf = list->next;
+    node* secondHalf = slow->next;
+    slow->next = list;
+    secondHalf->prior = slow;
+
+    node* current = secondHalf;
+    while (current->next != list) {
+        current = current->next;
+    }
+    current->next = firstHalf;
+    firstHalf->prior = current;
+
+    list->next = secondHalf;
+}

@@ -1,0 +1,16 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    Linklist odd = list->next, even = list->next->next;
+    while (even != list) {
+        odd->next = even->next;
+        even->next->prior = odd;
+        even->next = odd->next;
+        odd->next->prior = even;
+        odd->next = even;
+        even->prior = odd;
+        odd = odd->next;
+        if (odd->next == list) break;
+        even = even->next;
+    }
+    //在此处添加代码
+}

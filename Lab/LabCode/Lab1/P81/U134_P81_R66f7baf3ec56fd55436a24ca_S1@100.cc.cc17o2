@@ -1,0 +1,9 @@
+#include "SqList.h"
+void insert(SqList& list, int num) {
+    list.push_back(num); 
+    int i = list.size() - 1; 
+    while (i > 0 && list[i] < list[i - 1]) {
+        std::swap(list[i], list[i - 1]); 
+        i--; 
+    }
+}

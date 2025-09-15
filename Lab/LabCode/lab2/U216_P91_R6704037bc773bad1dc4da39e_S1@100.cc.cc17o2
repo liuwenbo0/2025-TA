@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+//计算晶体树的总长度
+long long crystalLength(long long energy) {
+    if (energy <= 1) return 1;
+    return 2 * crystalLength(energy / 2) + 1;
+}
+
+// 记录每个值为“1”的个数
+long long countRangeOness(long long energy, long long left, long long right, long long rangeStart, long long rangeEnd) {
+    if (energy == 0) return 0;
+    if (energy == 1) 
+{
+        return (rangeStart <= left && rangeEnd >= left) ? 1 : 0;
+    }
+
+    long long midPoint = left + (right - left) / 2;
+    long long count = 0;
+
+    // 确定当前处理的数据范围是否与左子树有重叠部分，如果有的话对左子树进行处理或计算使其不重叠。
+
+
+    if (rangeEnd >= left && rangeStart < midPoint) 
+{
+        count += countRangeOness(energy / 2, left, midPoint - 1, rangeStart, min(rangeEnd, midPoint - 1));
+    }
+
+    // 检查中间值应不应该也记入总数
+    if (energy % 2 == 1 && rangeStart <= midPoint && rangeEnd >= midPoint) {
+        count += 1;
+    }
+
+    // 确定当前处理的数据范围是否与左子树有重叠部分，如果有的话对左子树进行处理或计算使其不重叠。
+    if (rangeStart <= right && rangeEnd > midPoint) {
+        count += countRangeOness(energy / 2, midPoint + 1, right, max(rangeStart, midPoint + 1), rangeEnd);
+    }
+
+    return count;
+}
+
+int main() {
+    long long energy, queryStart, queryEnd;
+    
+    cin >> energy >> queryStart >> queryEnd;
+
+    long long totalSize = crystalLength(energy);
+
+    long long queryResult = countRangeOness(energy, 1, totalSize, queryStart, queryEnd);
+
+    cout << queryResult << endl;
+
+    return 0;
+}

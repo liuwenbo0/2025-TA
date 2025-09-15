@@ -1,0 +1,28 @@
+#include "Solution.h"
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+        // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    for (int i = 0; i < n; i++) { 
+            ans[0][i] = i + 1;
+        }
+    int i=0;
+    int a,b,c;
+    int k=static_cast<int>(log2(n));
+    int m=0;
+    while(i<k){
+		m=pow(2,i);
+		for(a=0;a<m;a++)
+			for(b=0;b<m;b++)
+				for(c=0;c<n;c=c+pow(2,i+1))
+				{
+				ans[m+b][c+a]=ans[b][c+m+a];
+				ans[m+b][c+m+a]=ans[b][c+a];
+				}
+		i++;
+	}
+    
+        return ans;
+    }

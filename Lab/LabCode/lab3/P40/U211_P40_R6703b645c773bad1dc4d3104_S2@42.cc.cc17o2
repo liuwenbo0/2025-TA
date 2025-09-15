@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int minTrims(int n, int q, vector<int>& heights) {
+    unordered_map<int, vector<int>> trimC;
+    unordered_map<int, int> count;
+    for (int h : heights) {
+        count[h]++;
+    }
+    for (const auto& pair : count) {
+        int Height = pair.first;
+        int Trims = 0;
+        for (int i = 0; i < pair.second; ++i) {
+            trimC[Height].push_back(Trims);
+        }
+        while (Height > 0) {
+            Height /= 2;
+            Trims++;
+            trimC[Height].push_back(Trims);
+        }
+    }
+    int minTrims = INT_MAX;
+    for (const auto& pair : trimC) {
+        if (pair.second.size() >= q) {
+            vector<int> trims = pair.second;
+            sort(trims.begin(), trims.end());
+            int totalTrims = 0;
+            for (int i = 0; i < q; ++i) {
+                totalTrims += trims[i];
+            }
+            minTrims = min(minTrims, totalTrims);
+        }
+    }
+
+    return minTrims == INT_MAX ? 0 : minTrims;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+    cout << minTrims(n, q, heights) << endl;
+
+    return 0;
+}

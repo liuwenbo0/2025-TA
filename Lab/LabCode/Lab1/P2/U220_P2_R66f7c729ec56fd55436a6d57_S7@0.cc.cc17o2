@@ -1,0 +1,69 @@
+#include "MyStack.h"
+#include <iostream>
+#include <vector>
+
+// 判断栈空, 若为空栈,则Empty()返回true；否则返回false
+bool MyStack::Empty() {
+    if (s.empty()) {
+        std::cout << "栈为空" << std::endl;
+    } else {
+        std::cout << "栈不为空" << std::endl;
+    }
+
+    return 0;
+}
+
+
+// 判断栈满，若栈满，则Full()为true；否则为false
+bool MyStack::Full() {
+
+if(S.top==-1)//栈空
+return true;
+else
+return false;
+
+}
+
+// 元素e进栈，若栈满，则无法成功插入，插入成功返回true，否则返回false
+// @param
+// e: 将要入栈的元素
+bool MyStack::Push(ElementType e) {
+  //插入元素e为新的栈顶元素
+
+	//栈满
+	if (S->top == MAXSIZE - 1) {
+		return false;
+	}
+	//栈顶指针增加1
+	S->top++;
+	//将新插入元素赋值给栈顶空间
+	S->data[S->top] = e;
+	return true;
+
+}
+
+// 栈的顶元素拷贝到e，若栈为空，则无法拷贝，返回false，成功拷贝则返回true
+// @param
+// e: 指向存放栈顶元素地址的指针
+bool MyStack::Gettop(ElementType &e) {
+ if (S.top == 0) {
+        return false; // 栈为空，返回错误
+    } else {
+        e = S.elem[S.top - 1]; // 拷贝栈顶元素到e
+        return true; // 成功拷贝，返回真
+    }
+
+}
+
+// 删除栈s的顶元素，并将删除的元素赋给e带出，若栈空，则无法成功删除，删除成功返回true，否则返回false
+// @param
+// e: 指向存放出栈元素地址的指针
+bool MyStack::Pop(ElementType &e) {
+     if (s->top == -1) {
+        
+        return FALSE;
+    }
+    e = s->data[s->top];
+    s->top--;
+    return TRUE;
+}

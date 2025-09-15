@@ -1,0 +1,50 @@
+#include "Solution.h"
+#include <vector>
+#include <numeric>
+
+std::vector<int> Solution::perfect_permutation(int size) {
+    std::vector<int> result(size);
+    std::vector<int> original(size);
+
+    if (static_cast<std::vector<int>::size_type>(size) != result.size()) {
+        // Handle the error case here, if necessary
+    }
+
+    iota(result.begin(), result.end(), 1);
+    std::vector<std::pair<int, int>> segments;
+    segments.push_back({ 0, size - 1 });
+
+    while (!segments.empty()) {
+        auto [left, right] = segments.back();
+        segments.pop_back();
+
+        if (left + 1 >= right)
+            continue;
+
+        int index = left;
+        while (index <= right) {
+            original[index] = result[index];
+            index++;
+        }
+
+        int indexResult = left;
+        int indexOriginal = left;
+        while (indexOriginal <= right) {
+            result[indexResult] = original[indexOriginal];
+            indexResult++;
+            indexOriginal += 2;
+        }
+
+        indexOriginal = left + 1;
+        while (indexOriginal <= right) {
+            result[indexResult] = original[indexOriginal];
+            indexResult++;
+            indexOriginal += 2;
+        }
+
+        segments.push_back({ left, (left + right) / 2 });
+        segments.push_back({ (left + right) / 2 + 1, right });
+    }
+
+    return result;
+}

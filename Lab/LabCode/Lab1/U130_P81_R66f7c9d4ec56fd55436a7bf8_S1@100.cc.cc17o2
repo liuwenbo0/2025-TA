@@ -1,0 +1,9 @@
+#include"SqList.h"
+void insert(SqList& list, int num) {
+    auto it = list.begin();
+    while (it != list.end() && *it < num) {
+        ++it;
+    }
+    // 在找到的位置插入num，若it等于end()，则num插入表尾
+    list.insert(it, num);
+}

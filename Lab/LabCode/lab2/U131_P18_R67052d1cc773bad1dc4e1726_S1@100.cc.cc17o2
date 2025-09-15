@@ -1,0 +1,26 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> result(n, 0);
+    if (n == 1) {
+        result[0] = 1;
+        return result;
+    } else {
+        vector<int> half_result = perfect_permutation(n / 2);
+        
+        if (n % 2 == 0) {
+            for (int i = 0; i < n / 2; i++) {
+                result[i] = half_result[i] * 2 - 1;
+                result[i + n / 2] = half_result[i] * 2;
+            }
+        } else {
+            vector<int> half_result2 = perfect_permutation(n / 2 + 1);
+            for (int i = 0; i < n / 2 + 1; i++) {
+                result[i] = half_result2[i] * 2 - 1;
+            }
+            for (int i = 0; i < n / 2; i++) {
+                result[i + n / 2 + 1] = half_result[i] * 2;
+            }
+        }   
+    }
+    return result;
+}

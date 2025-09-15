@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+  
+using namespace std;  
+
+vector<long long> pre_pow(50);
+
+int main() {  
+    for (int i = 0; i < 50; ++i) {
+        pre_pow[i] = pow(2, i);
+    }
+
+    long long m, k, s;  
+    cin >> m >> k >> s;  
+
+    vector<int> bins;
+
+    long long temp_m = m;
+    while (temp_m) {
+        bins.emplace_back(temp_m % 2);
+        temp_m >>= 1;
+    }
+    reverse(bins.begin(), bins.end());
+
+    // for (const auto &x : bins) {
+    //     cout << x;
+    // }
+
+    int size = bins.size(), cnt = 0;
+    for (long long i = k; i <= s; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if ((i - pre_pow[j]) % pre_pow[j+1] == 0) {
+                cnt += bins[j];
+                break;
+            }
+        }
+    }
+
+    cout << cnt << endl;
+
+    return 0;  
+}

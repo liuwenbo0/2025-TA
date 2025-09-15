@@ -1,0 +1,42 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    Linklist start = list;
+    Linklist end = start;
+    int count = 0;
+    while (end->next!= start) {
+        end = end->next;
+        count++;
+    }
+
+    bool isEvenCount = (count % 2 == 0);
+    Linklist curr = start->next;
+    if (isEvenCount) {
+        while (curr->next!= end) {
+            curr->next = curr->next->next;
+            curr = curr->next;
+        }
+        Linklist upperNode = end;
+        start->prior = (start->next->next)->prior;
+        while (upperNode->prior!= start->next) {
+            upperNode->next = upperNode->prior->prior;
+            upperNode = upperNode->next;
+        }
+    } else {
+        while (curr->next!= start) {
+            curr->next = curr->next->next;
+            curr = curr->next;
+        }
+        Linklist upperNode = end;
+        start->prior = (start->next->next)->prior;
+        while (upperNode->prior!= start->next) {
+            if (upperNode == end) {
+                upperNode->next = upperNode->prior;
+                upperNode = upperNode->next;
+            } else {
+                upperNode->next = upperNode->prior->prior;
+                upperNode = upperNode->next;
+            }
+        }
+    }
+}

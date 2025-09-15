@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int findMinimumPrunes(int totalFences, int requiredHeights, vector<int>& fenceHeights) {
+    unordered_map<int, int> heightFrequency;
+
+    for (int height : fenceHeights) {
+        ++heightFrequency[height];
+    }
+
+    unordered_map<int, vector<pair<int, int>>> heightPruneMap;
+
+    for (const auto& [height, frequency] : heightFrequency) {
+        int currentHeight = height;
+        int prunesNeeded = 0;
+
+        while (currentHeight > 0) {
+            heightPruneMap[currentHeight].emplace_back(prunesNeeded, frequency);
+            currentHeight /= 2;
+            prunesNeeded++;
+        }
+    }
+
+    int minimumPrunes = INT_MAX;
+
+    for (const auto& [achievableHeight, prunesList] : heightPruneMap) {
+        sort(prunesList.begin(), prunesList.end());
+
+        int totalFencesAchieved = 0;
+        int currentPrunes = 0;
+
+        for (const auto& [prunesNeeded, frequency] : prunesList) {
+            if (totalFencesAchieved >= requiredHeights) {
+                break;
+            }
+
+            totalFencesAchieved += frequency;
+            currentPrunes += prunesNeeded;
+        }
+
+        if (totalFencesAchieved >= requiredHeights) {
+            minimumPrunes = min(minimumPrunes, currentPrunes);
+        }
+    }
+
+    return minimumPrunes == INT_MAX ? 0 : minimumPrunes;
+}
+
+int main() {
+    int totalFences, requiredHeights;
+    cin >> totalFences >> requiredHeights;
+    vector<int> fenceHeights(totalFences);
+
+    for (int i = 0; i < totalFences; ++i) {
+        cin >> fenceHeights[i];
+    }
+
+    int result = findMinimumPrunes(totalFences, requiredHeights, fenceHeights);
+    cout << result << endl;
+
+    return 0;
+}

@@ -1,0 +1,41 @@
+#include"Linklist.h"
+void changeList(Linklist& list) {
+    Linklist head = list;
+    list = list->next;
+    if(list->next == list->prior)
+    {
+        list = head;
+        return;
+    }
+    while (1)
+    {
+        if (list->next == head)
+        {
+            list->next = list->prior;
+            list = list->next;
+            break;
+        }
+        if (list->next->next == head)
+        {
+            list = list->next;
+            break;
+        }
+        list->next = list->next->next;
+        /*list->next->prior = list;*/
+        list = list->next;
+
+    }
+    while (1)
+    {
+        if (list->prior == head->next)
+        {
+            list->next = head->next;
+            head->prior = list;
+            break;
+        }
+        list->next = list->prior->prior;
+        list = list->next;
+    }
+
+    list = head;
+}

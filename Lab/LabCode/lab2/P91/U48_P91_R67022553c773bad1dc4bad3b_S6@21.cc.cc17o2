@@ -1,0 +1,51 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+int count_stable_crystals(long long m, int k, int s) {
+    queue<long long> crystals; // 用队列模拟分裂过程
+    vector<int> stable_crystals; // 存储最终的稳定晶体
+
+    crystals.push(m); // 初始化队列
+    while (!crystals.empty()) {
+        long long current = crystals.front();
+        crystals.pop();
+
+        if (current == 1) {
+            stable_crystals.push_back(1);
+        } else if (current > 1) {
+            long long half = current / 2;
+            long long remainder = current % 2;
+
+            // 分裂产生新的晶体
+            crystals.push(half); // floor(x / 2)
+            stable_crystals.push_back(remainder); // x mod 2
+            crystals.push(half); // floor(x / 2)
+        }
+    }
+
+    // 统计在范围 [k-1, s-1] 的 1 的数量 (注意 k 和 s 是 1-indexed)
+    int count_of_ones = 0;
+    for (int i = k - 1; i < s && i < stable_crystals.size(); i++) {
+        if (stable_crystals[i] == 1) {
+            count_of_ones++;
+        }
+    }
+
+    return count_of_ones; // 返回值为 1 的数量
+}
+
+int main() {
+    long long m;
+    int k, s;
+    // 输入变量
+    cin >> m >> k >> s;
+    
+    // 调用函数并输出结果
+    int result = count_stable_crystals(m, k, s);
+    cout << result << endl;
+
+    return 0;
+}

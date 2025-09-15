@@ -1,0 +1,52 @@
+#include "QuickSort.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+using namespace std;
+void printvec(vector<int> &nums)
+{
+    int n = nums.size();
+    for (int i = 0; i < n; ++i) 
+    {
+        cout << nums[i] << ' ';
+    }
+    cout << endl;
+}
+int QuickSort::partition(std::vector<int>& nums, int p, int q) 
+{
+    int x = 578765 % (q - p + 1);
+    swap(nums[p], nums[p + x]);
+    int a = nums[q]; // 选择最右侧的元素作为基准
+    int i = p - 1; // i 指向比基准小的最后一个元素
+    int j = p;
+    while (j < q) 
+    {
+        // 遍历子数组，如果元素小于或等于基准，增加 i 并交换
+        if (nums[j] <= a) 
+        {
+            i++;
+            swap(nums[i], nums[j]);
+        }
+        j++;
+    }
+    // 交换基准元素到它最终的位置
+    swap(nums[i + 1], nums[q]);
+    return i + 1; // 返回基准元素的索引
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r) 
+    { // 如果区间有效
+        int b = partition(nums, l, r); // 获取基准索引
+        quick_sort(nums, l, b - 1); // 递归排序左子数组
+        quick_sort(nums, b + 1, r); // 递归排序右子数组
+    }
+}
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    if (nums.size() == 0) 
+        return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

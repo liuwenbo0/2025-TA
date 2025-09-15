@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+void dcs_count(vector<int> &a,int left,int right,long long *p){
+    int r;
+    if(left<right){
+        r=(left+right)/2;
+        dcs_count(a,left,r,p);
+        dcs_count(a,r+1,right,p);
+        vector<int> e(r-left+2),f(right-r+1);
+        int i,j,k;
+        for(i=0;i<r-left+1;i++){
+            e[i]=a[left+i];
+        }
+        e[i]=2147483647;
+        for(j=0;j<right-r;j++){
+            f[j]=a[r+1+j];
+        }
+        f[j]=2147483647;
+        i=0;
+        j=0;
+        for(k=left;k<=right;k++){
+            if(e[i]<=f[j]){
+                a[k]=e[i];
+                i++;
+            }
+            else{
+                a[k]=f[j];
+                j++;
+                *p=(*p)+(long long)(r-left+1-i);
+            }
+        }
+    }
+}
+int main(){
+    int n,i;
+    long long b=0;
+    cin>>n;
+    vector<int> a(n);
+    for(i=0;i<n;i++){
+        cin>>a[i];
+    }
+    dcs_count(a,0,n-1,&b);
+    cout<<b<<endl;
+    return 0;
+}

@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+// Function to determine the depth of the binary tree
+int determineDepth(int tree[], int node, int limit) {
+    int leftDepth, rightDepth;
+    if (tree[node] == -1 || node >= limit) return 0;
+    else {
+        leftDepth = determineDepth(tree, 2 * node + 1, limit);
+        rightDepth = determineDepth(tree, 2 * node + 2, limit);
+        return 1 + max(leftDepth, rightDepth);
+    }
+}
+
+// Function to compute the maximum accumulation in the binary tree
+int maxAccumulation(int tree[], int node, int limit) {
+    int leftAccumulation = 0, rightAccumulation = 0;
+    if (tree[node] == -1 || node >= limit) return 0;
+    else {
+        leftAccumulation = maxAccumulation(tree, 2 * node + 1, limit);
+        rightAccumulation = maxAccumulation(tree, 2 * node + 2, limit);
+        return max(rightAccumulation, leftAccumulation) + tree[node];
+    }
+}
+
+// Function to evaluate the best score based on specific criteria
+int bestScore(int tree[], int node, int limit) {
+    if (tree[node] == -1 || node >= limit) return 0;
+    else if (tree[2 * node + 1] == -1 && tree[2 * node + 2] == -1) return 0;
+    else if ((2 * node + 1) >= limit && (2 * node + 2) >= limit) return 0;
+    else if (tree[node] > tree[2 * node + 1] && tree[node] > tree[2 * node + 2])
+        return tree[node] + bestScore(tree, 2 * node + 1, limit) + bestScore(tree, 2 * node + 2, limit);
+    else 
+        return bestScore(tree, 2 * node + 1, limit) + bestScore(tree, 2 * node + 2, limit);
+}
+
+int main() {
+    int element, position = 0;
+    int binaryTree[10000000];
+    while (cin >> element) {
+        binaryTree[position++] = element;
+    }
+    cout << determineDepth(binaryTree, 0, position) << endl;
+    cout << maxAccumulation(binaryTree, 0, position) << endl;
+    cout << bestScore(binaryTree, 0, position);
+    return 0;
+}

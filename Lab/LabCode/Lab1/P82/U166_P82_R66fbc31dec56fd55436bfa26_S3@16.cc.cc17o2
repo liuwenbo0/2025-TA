@@ -1,0 +1,20 @@
+#include"Linklist.h"
+void changeList(Linklist &head){
+     if (!head || head->next == head || head->next->next == head) {
+        return;
+    }
+
+    Linklist odd = head->next;
+    Linklist even = head->next->next;
+    Linklist evenHead = even;
+
+    while (even && even->next) {
+        odd->next = even->next;
+        odd = odd->next;
+        even->next = even->next->next;
+        even = even->next;
+    }
+    
+    odd->next = evenHead;
+    evenHead->prior = odd;
+}

@@ -1,0 +1,63 @@
+#include "Solution.h"
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    if (n <= 0) return {};  // 确保 n 是正整数
+
+    // 创建一个 (n + 1)x(n + 1) 的矩阵以方便从 1 开始索引
+    vector<vector<int>> a(n + 1, vector<int>(n + 1, 0));
+
+    int m = 1;  // 当前选手数，从 1 开始
+    while (m <= n) {
+        int temp = m;  // 保存当前的选手数
+
+        // 左下部分
+        for (int i = temp + 1; i <= 2 * temp && i <= n; i++) {
+            for (int j = 1; j <= temp; j++) {
+                a[i][j] = a[i - temp][j] + temp;  // 更新值
+            }
+        }
+
+        // 右上部分
+        for (int i = 1; i <= temp; i++) {
+            for (int j = temp + 1; j <= 2 * temp && j <= n; j++) {
+                a[i][j] = a[j][i];  // 左下元素对应
+            }
+        }
+
+        // 右下部分
+        for (int i = temp + 1; i <= 2 * temp && i <= n; i++) {
+            for (int j = temp + 1; j <= 2 * temp && j <= n; j++) {
+                a[i][j] = a[i - temp][j - temp];  // 与左上相对应
+            }
+        }
+
+        m *= 2;  // 每轮选手数量翻倍
+    }
+
+    // 打印结果
+    for (int i = 1; i <= n; i++) {  // 根据 n 打印有效部分
+        for (int j = 1; j <= n; j++) {
+            a[i][j]+=1;
+        }
+    }
+
+    // 返回有效的部分，去掉未使用的行和列
+    vector<vector<int>> result;
+    for (int row = 1; row <= n; ++row) {
+        vector<int> current_row;
+        for (int col = 1; col <= n; ++col) {
+            if (a[row][col] != 0) {
+                current_row.push_back(a[row][col]);
+            }
+        }
+        if (!current_row.empty()) {
+            result.push_back(current_row);
+        }
+    }
+
+    return result;
+}

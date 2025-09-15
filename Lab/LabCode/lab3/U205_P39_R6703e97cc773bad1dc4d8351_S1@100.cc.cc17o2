@@ -1,0 +1,23 @@
+#include "ThreeWayQuickSort.h"
+
+void myswap(int &x,int &y) {(x==y) || (x^=y^=x^=y);}
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    if(p>=q) return ;
+    myswap(nums[p],nums[rand()%(q-p+1)+p]);
+    int key=nums[p];
+    int i=p,j=p,k=q;
+    while(i<=k)
+    {
+    	if(nums[i]<key) myswap(nums[i++],nums[j++]);
+    	else if(nums[i]>key) myswap(nums[i],nums[k--]);
+    	else i++;
+	}
+	three_way_quick_sort(nums,p,j);
+	three_way_quick_sort(nums,k+1,q);
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

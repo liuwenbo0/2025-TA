@@ -1,0 +1,6 @@
+#include "Linklist.h"
+
+void changeList(Linklist& list) {
+    if (list.head == nullptr || list.head->next == list.head) {
+        return; 
+    }

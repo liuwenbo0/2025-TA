@@ -1,0 +1,46 @@
+#include <iostream>  
+#include <vector>  
+#include <unordered_map>  
+#include <algorithm>  
+#include <climits>  
+  
+using namespace std;  
+  
+int minTrimmingOperations(int n, int q, const vector<int>& heights) {  
+    unordered_map<int, int> maxTrimByHeight; 
+    unordered_map<int, int> heightFrequency;
+  
+    for (int h : heights) {  
+        int currentTrim = 0;  
+        int currentHeight = h;  
+        while (currentHeight > 0) {  
+            maxTrimByHeight[currentHeight] = max(maxTrimByHeight[currentHeight], currentTrim);   
+            heightFrequency[currentHeight]++;   
+            currentHeight /= 2;  
+            currentTrim++;  
+        }  
+    }  
+  
+    int minOperations = INT_MAX;  
+    for (const auto& entry : maxTrimByHeight) {  
+        if (heightFrequency[entry.first] >= q) {  
+            minOperations = min(minOperations, entry.second);  
+        }  
+    }  
+  
+    return minOperations;  
+}  
+  
+int main() {  
+    int n, q;  
+    cin >> n >> q;  
+    vector<int> heights(n);  
+    for (int i = 0; i < n; ++i) {  
+        cin >> heights[i];  
+    }  
+  
+    int result = minTrimmingOperations(n, q, heights);  
+    cout << result << endl;  
+  
+    return 0;  
+}

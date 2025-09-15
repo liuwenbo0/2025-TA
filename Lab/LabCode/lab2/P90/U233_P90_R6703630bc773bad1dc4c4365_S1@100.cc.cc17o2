@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+
+using namespace std;
+
+int shugao(const vector<int> &shu){
+    int height = 0;
+    while(pow(2, height) <= shu.size()){
+        height++;
+    }
+    return height;
+}
+//计算树高
+
+int ziyuan_max(const vector<int> &shu, int index){
+    if(index >= shu.size() || shu[index] == -1) return 0;
+    else if(shu.size() == 1) return shu[0];
+    else{
+        int left_max = ziyuan_max(shu, 2 * index + 1);;
+        int right_max = ziyuan_max(shu, 2 * index + 2);;
+        return shu[index] + max(left_max, right_max);
+    }
+}
+//寻找资源最大值的函数
+
+int ziyuan_special(const vector<int> &shu, int index){
+    if(index >= shu.size() || shu[index] == -1) return 0;
+    else{
+        int sum = 0;
+        int left_index = 2 * index + 1;  
+        //左子节点索引
+        int right_index = 2 * index + 2; 
+        //右子节点索引
+        int left_shu = (left_index < shu.size()) ? shu[left_index] : -1; 
+        //左子节点值
+        int right_shu = (right_index < shu.size()) ? shu[right_index] : -1; 
+        //右子节点值
+        if ((shu[index] > left_shu) && (shu[index] > right_shu) && !(left_shu ==-1 && right_shu ==-1)){
+            sum += shu[index];
+        }
+        //递归计算左右子树的特殊区域值之和
+        sum += ziyuan_special(shu, left_index);
+        sum += ziyuan_special(shu, right_index);
+        return sum;
+    }
+}
+//计算特殊区域结点和
+
+int main(){
+    vector<int> shu(0);
+    int input = 0;
+    //定义临时保存输入的变量
+    while(cin >> input){
+        shu.push_back(input);
+    }
+    //为数组赋值
+    int gaodu = shugao(shu);
+    //计算树高 
+    int maxziyuan = ziyuan_max(shu, 0);
+    //寻找最大资源值
+    int special = ziyuan_special(shu, 0);
+    //寻找特殊区域结点和
+    cout << gaodu << endl;
+    cout << maxziyuan << endl;
+    cout << special << endl;
+    //输出树高、资源最大值和特殊区域结点和
+    return 0 ;
+}

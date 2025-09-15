@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int Resource(vector<int> &tree, int i) {
+    int size = tree.size();
+    if (i >= size || tree[i] == -1) return 0;
+    int total = max(Resource(tree, 2 * i + 1), Resource(tree, 2 * i + 2)) + tree[i];
+    return total;
+}
+
+int main(void) {
+    
+    vector<int> tree; 
+    int Leaf, totalNodes, height = 0; 
+    long long specialSum = 0; 
+    while (cin >> Leaf) tree.push_back(Leaf);
+    if (tree[0] == -1) {
+        cout << 0 << endl << 0 << endl << 0;
+        return 0;
+    }
+
+    totalNodes = tree.size();
+    Leaf = 0;
+    if (totalNodes) {
+        Leaf = 1;
+        while (Leaf <= totalNodes) {
+            Leaf *= 2;
+            height++;
+        }
+    }
+
+    bool Left = false, Right = false;
+    for (int i = 0; i < totalNodes; ++i) {
+        if (i * 2 + 1 < totalNodes && tree[i * 2 + 1] != -1) Left = true;
+        if (i * 2 + 2 < totalNodes && tree[i * 2 + 2] != -1) Right = true;
+        if (Left || Right) {
+            if (Left && Right && tree[i] > tree[i * 2 + 1] && tree[i] > tree[i * 2 + 2]) {
+                specialSum += tree[i]; 
+            } else if (Left && tree[i] > tree[i * 2 + 1] && !Right) {
+                specialSum += tree[i]; 
+            } else if (Right && tree[i] > tree[i * 2 + 2] && !Left) {
+                specialSum += tree[i]; 
+            }
+        }
+     
+        Left = false; 
+        Right = false; 
+    }
+    cout << height << endl; 
+    cout << Resource(tree, 0) << endl;   
+    cout << specialSum << endl; 
+
+    return 0; 
+}

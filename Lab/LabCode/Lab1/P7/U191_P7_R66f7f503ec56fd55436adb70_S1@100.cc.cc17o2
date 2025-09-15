@@ -1,0 +1,36 @@
+#include "MergeSort.h"
+void Merge(std::vector<int>& nums, int left, int mid, int right) {  
+    int n1 = mid - left + 1;  
+    int n2 = right - mid, k = left;  
+    vector<int> num1(n1), num2(n2);  
+    for (int i = 0; i < n1; ++i) {  
+        num1[i] = nums[left + i];  
+    }  
+    for (int j = 0; j < n2; ++j) {  
+        num2[j] = nums[mid + 1 + j];  
+    }
+    int i = 0, j = 0;   
+    while(i < n1 && j < n2) {
+        if(num1[i] <= num2[j]){nums[k] = num1[i]; ++i;}
+        else {nums[k] = num2[j]; ++j;}
+        ++k;
+    }
+    while(i < n1) {
+        nums[k] = num1[i];
+        ++k, ++i;
+    }
+    while(j < n2) {
+        nums[k] = num2[j];
+        ++k, ++j;
+    }
+}
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    //请在这里完成你的代码
+    if(left < right){
+        int mid = (left + right) / 2;
+        merge_sort_aux(nums, left, mid);
+        merge_sort_aux(nums, mid + 1, right);
+        Merge(nums, left, mid, right);
+    }
+}

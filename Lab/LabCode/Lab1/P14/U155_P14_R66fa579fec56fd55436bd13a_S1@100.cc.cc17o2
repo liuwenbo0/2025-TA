@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+long long s = 0;
+void mergeAndCount(vector<int>& nums, int left, int x, int right) {
+    int n1 = x - left + 1;
+    int n2 = right - x;
+    vector<int> L(n1);
+    vector<int> R(n2);
+    for (int i = 0; i < n1; i++)
+        L[i] = nums[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = nums[x + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            nums[k++] = L[i++];
+        } else {
+            nums[k++] = R[j++];
+            s += (n1 - i); 
+        }
+    }
+    while (i < n1) {
+        nums[k++] = L[i++];
+    }
+    while (j < n2) {
+        nums[k++] = R[j++];
+    }
+}
+void merge(vector<int>& nums, int left, int right) {
+    if (left < right) {
+        int x = left + (right - left) / 2;
+
+        merge(nums, left, x);
+        merge(nums, x + 1, right);
+        mergeAndCount(nums, left, x, right);
+    }
+}
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    merge(nums, 0, n - 1);
+
+    cout << s << endl;
+
+    return 0;
+}

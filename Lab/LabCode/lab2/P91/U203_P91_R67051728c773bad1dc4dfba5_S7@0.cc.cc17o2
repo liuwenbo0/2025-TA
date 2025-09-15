@@ -1,0 +1,30 @@
+#include <iostream>  
+#include <bitset>  
+  
+using namespace std;  
+  
+int countOnesInRange(unsigned long long m, int k, int s) {  
+    // Convert m to binary representation using bitset  
+    bitset<65> bs(m); // Using 65 bits to handle up to 10^14  
+      
+    // Adjust k and s to 0-based index  
+    --k; --s;  
+      
+    // Check if the range is valid  
+    if (k < 0 || s >= 65 || k > s) {  
+        return 0; // Should not happen due to input constraints, but just in case  
+    }  
+      
+    // Count the number of 1s in the specified range  
+    return bs.count() - bs.to_string().substr(0, k).count('1') - (bs.count() - bs.to_string().substr(0, s + 1).count('1'));  
+}  
+  
+int main() {  
+    unsigned long long m;  
+    int k, s;  
+    cin >> m >> k >> s;  
+      
+    cout << countOnesInRange(m, k, s) << endl;  
+      
+    return 0;  
+}

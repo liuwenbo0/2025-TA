@@ -1,0 +1,55 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+// 递归函数，用于计算从索引b开始的最大子段和
+int r(vector<int> &t, int b) {
+    int n = t.size(); // 获取数组大小
+    if (b >= n || t[b] == -1) return 0; // 如果索引超出范围或值为-1，返回0
+    int c = max(r(t, 2 * b + 1), r(t, 2 + b * 2)) + t[b]; // 计算子段和，取左右子树的最大值加当前节点值
+    return c; // 返回计算结果
+}
+
+// 辅助函数，用于比较两个整数并返回最大值
+int max(int a, int b) {
+    if (a > b) return a; // 如果a大于b，返回a
+    else return b; // 否则返回b
+}
+
+int main() {
+    vector<int> t; // 定义整数向量t
+    int l, tot, high = 0, s = 0, i; // 定义变量l（用于存储临时值），tot（总数），high（高度），s（某个特定和），i（循环变量）
+    while (cin >> l) { // 读取输入直到文件结束
+        t.push_back(l); // 将读取的值添加到向量t中
+    }
+    if (t[0] == -1) { // 如果第一个元素是-1，输出0，并结束程序
+        cout << 0 << endl << 0 << endl << 0;
+        return 0;
+    }
+    l = 0; // 初始化l为0
+    tot = t.size(); // 获取向量t的大小
+    if (tot) { // 如果向量t不为空
+        l = 1; // 初始化l为1
+        while (l <= tot) { // 循环直到l大于tot
+            ++high; // 高度加1
+            l *= 2; // l值翻倍
+        }
+    }
+    bool left = false, right = false; // 初始化左右标志为false
+    for (i = 0; i < tot; ++i) 
+    { // 遍历向量t
+        if (2 * i + 1 < tot && t[2 * i + 1] != -1) left = true; // 如果左子节点存在且值不为-1，设置left为true
+        if (2 * i + 2 < tot && t[2 * i + 2] != -1) right = true; // 如果右子节点存在且值不为-1，设置right为true
+        if (right || left) 
+        { // 如果左右子节点任一存在
+        if (left && right && t[i] > t[2 * i + 1] && t[i] > t[2 * i + 2]) s += t[i]; // 如果当前节点值大于左右子节点值，累加到s
+        else if (left && t[i] > t[2 * i + 1] && !right) s += t[i]; // 如果只有左子节点存在且当前节点值大于左子节点值，累加到s
+        else if (right && t[i] > t[2 * i + 2] && !left) s += t[i]; // 如果只有右子节点存在且当前节点值大于右子节点值，累加到s
+        }
+        left = false, right = false; // 重置左右标志为false
+    }
+    cout << high << endl; // 输出高度
+    cout << r(t, 0) << endl; // 输出最大子段和
+    cout << s << endl; // 输出特定和s
+    return 0;
+}

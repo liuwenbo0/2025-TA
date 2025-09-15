@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include<cmath>
+using namespace std;
+
+int ziyuan(vector<int> &A,int o){
+    int lsum,rsum;
+    if(A[2*o+1]<=0&&A[2*o+2]<=0){
+        return A[o];
+    }
+    else if(A[2*o+1]>0&&A[2*o+2]>0){
+        lsum=ziyuan(A,2*o+1);
+        rsum=ziyuan(A,2*o+2);
+        if(lsum>rsum) return A[o]+lsum;
+        else   return A[o]+rsum;       
+    }
+    else if(A[2*o+1]>0&&A[2*o+2]<=0){
+        lsum=ziyuan(A,2*o+1);
+        return A[o]+lsum;
+    }
+    else if(A[2*o+1]<=0&&A[2*o+2]>0){
+        rsum=ziyuan(A,2*o+2);
+        return A[o]+rsum;
+    }
+    else return 0;
+}
+// int te(vector<int> &A,int o){
+//     int sum;
+//     if(A[2*o+1]<=0&&A[2*o+2]<=0){
+//         return 0;
+//     }
+//     else if(A[2*o+1]<A[o]&&A[2*o+2]<A[o]){
+//         int he=A[o];
+//         // sum+=A[o]
+//         if(A[2*o+1]>0&&A[2*o+2]<=0){
+//             sum=te(A,2*o+1)+he;
+//             return sum;
+//         }
+//         else if(A[2*o+1]<=0&&A[2*o+2]>0){
+//             sum=te(A,2*o+2)+he;
+//             return sum;
+//         }
+//         else if(A[2*o+1]>0&&A[2*o+2]>0){
+//             sum=te(A,2*o+1)+te(A,2*o+2)+he;
+//             return sum;
+//         }
+//     }
+//     else{
+//          return te(A,2*o+1)+te(A,2*o+2);
+//     }
+//     return 0;
+// }
+int main(){
+    int n=pow(2,21),k,i=0,h=0,j;
+    vector<int> shu(n,-1);
+    while(cin>>k){
+        shu[i]=k;
+        i++;
+    }
+    j=i;
+    while(i>0){
+        i=i/2;
+        h++;
+    }
+    
+    cout<<h<<endl;
+    int max=ziyuan(shu,0);
+    cout<<max<<endl;
+    // int sp;
+    // sp=te(shu,0);
+    int t=0,sp=0;
+    while(t<j){
+        if(shu[t]>shu[2*t+1]&&shu[t]>shu[2*t+2]&&(shu[2*t+1]>0||shu[2*t+2]>0)){
+            sp+=shu[t];
+        }
+        t++;
+    }
+    cout<<sp<<endl;
+}

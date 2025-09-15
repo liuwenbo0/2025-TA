@@ -1,0 +1,32 @@
+#include "Solution.h"
+#include <cmath>
+void reverse(vector<int> &A,int i,int n){
+  int p;
+  for(int j=0;j<n/i;j++){
+    for(int a=0;a<i/2;a++){
+      p=A[a+j*i];
+      A[a+j*i]=A[(j+1)*i-1-a];
+      A[(j+1)*i-1-a]=p;
+    }
+  }
+}
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int> > ans;
+    vector<int> str(n),rule(1,1);
+    int h=0;
+    for(int i=0;i<n;i++) str[i]=i+1;
+    ans.push_back(str);
+    for(int i=0; i<n-1; i++) {
+      if(i==pow(2,h)){
+        h++;
+        rule[i-1]++;
+        rule.insert(rule.end(),rule.begin(),rule.end());
+        rule[i-1]--;
+      }
+      reverse(str,pow(2,rule[i]),n);
+//      for(int j=0;j<n;j++)cout<<str[j]<<" ";
+//      cout<<endl;
+      ans.push_back(str);
+    }
+    return ans;
+  }

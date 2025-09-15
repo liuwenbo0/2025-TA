@@ -1,0 +1,41 @@
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+int high=1,sumr=0,n=0;
+long long sum=0;
+const int N=4050000;
+int num[N];
+void max_resource(int now,int max){
+	if(num[now]==-1||now>n){
+		sumr=sumr>max?sumr:max;
+		return;	
+	}
+	int l=now*2,r=l+1;
+	max_resource(l,max+num[now]);
+	max_resource(r,max+num[now]);
+}
+void sum_special(int now){
+	if(num[now]==-1||now>n) return;
+	int l=now*2,r=l+1;
+	if((num[l]!=-1 && l<=n) || (num[r]!=-1 && r<=n))
+		if((num[now]>num[l]||num[l]==-1)  && (num[now]>num[r]||num[r]==-1)) sum+=1ll*num[now];
+	sum_special(l);
+	sum_special(r);	
+}
+void height(int m){
+	int j=2;
+	while(j<m+1){
+	j*=2;
+	high++;	
+	}
+}
+
+int main(){
+    int wri=0;
+    while(scanf("%d",&wri)!=EOF) {num[++n]=wri;}
+	height(n);
+	sum_special(1);
+	max_resource(1,0);
+    printf("%d\n%d\n%lld",high,sumr,sum);    
+}

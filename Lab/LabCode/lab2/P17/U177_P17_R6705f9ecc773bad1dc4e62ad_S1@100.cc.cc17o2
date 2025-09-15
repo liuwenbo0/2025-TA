@@ -1,0 +1,39 @@
+#include "Solution.h"
+using namespace std;
+
+// 定义一个函数，用于生成循环赛日程表
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 构造一个二维数组（ nxn 矩阵）
+    vector<vector<int>> schedule;
+    for (int t = 0; t < n; t++) {
+        schedule.push_back(vector<int>(n, 0));
+    }
+
+    // 处理只有两个队伍的特殊情况
+    if (n==2) {
+        schedule[0][0] = 1;
+        schedule[0][1] = 2;
+        schedule[1][0] = 2;
+        schedule[1][1] = 1;
+        return schedule;
+    }
+    
+    // 递归处理更多队伍的情况
+    else {
+        // 通过递归调用生成较小规模的日程表
+        vector<vector<int>> sSchedule = round_robin_schedule(n/2);
+
+        for (int sRI=0; sRI<n/2; sRI++) {
+            for (int sCI=0; sCI<n/2; sCI++) {
+                int currentValue = sSchedule[sRI][sCI];
+                
+                schedule[sRI][sCI] = currentValue;
+                schedule[sRI+n/2][sCI] = currentValue+n/2;
+                schedule[sRI][sCI+n/2] = currentValue+n/2;
+                schedule[sRI+n/2][sCI+n/2] = currentValue;
+            }
+        }
+    }
+
+    return schedule;
+}

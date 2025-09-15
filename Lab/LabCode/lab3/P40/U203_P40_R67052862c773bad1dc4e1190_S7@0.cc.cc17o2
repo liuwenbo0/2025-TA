@@ -1,0 +1,47 @@
+#include <iostream>  
+#include <vector>  
+#include <unordered_map>  
+#include <algorithm>  
+#include <cmath>  
+  
+using namespace std;  
+  
+int main() {  
+    int n, q;  
+    cin >> n >> q;  
+    vector<int> heights(n);  
+    for (int i = 0; i < n; ++i) {  
+        cin >> heights[i];  
+    }  
+  
+    // 用于记录每个高度及其对应的修剪次数  
+    unordered_map<int, int> freq;  
+  
+    // 遍历每个灌木丛段的高度，计算其所有可能的修剪结果  
+    for (int h : heights) {  
+        int curr_height = h;  
+        int cuts = 0;  
+        while (curr_height > 0) {  
+            freq[curr_height]++;  
+            curr_height /= 2;  
+            cuts++;  
+        }  
+    }  
+  
+    // 找到出现次数大于等于 q 的最小修剪次数  
+    int min_cuts = INT_MAX;  
+    for (auto& p : freq) {  
+        if (p.second >= q) {  
+            min_cuts = min(min_cuts, p.first == heights[0] ? 0 : log2(heights[0] / p.first) + (heights[0] % p.first != 0));  
+        }  
+    }  
+  
+    // 注意：由于我们是从原始高度不断减半得到 p.first，所以实际的修剪次数是 log2(原始高度 / p.first)  
+    // 如果原始高度不是 p.first 的2的整数次幂，则需要额外的一次修剪来达到 p.first（向下取整）  
+    // 但由于我们是从每个高度开始减半，所以直接计算 log2 就可以（因为我们在预处理时已经考虑了所有可能的减半结果）  
+    // 这里 min_cuts 初始化为 INT_MAX，确保找到最小的修剪次数  
+  
+    cout << min_cuts << endl;  
+  
+    return 0;  
+}

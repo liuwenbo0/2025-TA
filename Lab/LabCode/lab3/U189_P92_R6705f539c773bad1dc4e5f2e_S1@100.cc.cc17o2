@@ -1,0 +1,49 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <iostream>
+#include <vector>
+#include <deque>
+
+using namespace std;
+
+vector<int> maxSlidingWindow(const vector<int>& nums, int k) {
+    vector<int> result;
+    deque<int> dq;
+
+    for (int i = 0; i < nums.size(); ++i) {
+        if (!dq.empty() && dq.front() < i - k + 1) {
+            dq.pop_front();
+        }
+
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {
+            dq.pop_back();
+        }
+        dq.push_back(i);
+
+        if (i >= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    vector<int> nums;
+    int k = 3;
+    int length=0;
+    cin >> length;
+    cin >> k;
+    nums.resize(length);
+    for (int i = 0; i < length; i++)
+    {
+        cin >> nums[i];
+    }
+    vector<int> result = maxSlidingWindow(nums, k);
+
+    for (int val : result) {
+        cout << val << " ";
+    }
+    cout << endl;
+
+    return 0;
+}

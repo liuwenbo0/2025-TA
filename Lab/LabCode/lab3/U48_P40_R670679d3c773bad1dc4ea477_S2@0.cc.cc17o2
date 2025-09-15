@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <limits>
+
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+    
+    // 统计每个高度出现的次数
+    map<int, int> heightCount;
+    for (int height : heights) {
+        heightCount[height]++;
+    }
+    
+    int minOperations = numeric_limits<int>::max();
+    
+    // 对于每个高度，计算需要的最小修剪次数
+    for (auto& entry : heightCount) {
+        int currentHeight = entry.first;
+        int count = entry.second;
+        
+        if (count >= q) {
+            minOperations = 0;  // 如果已经有 q 段相同的高度，不需要修剪
+            break;
+        }
+        
+        // 计算需要修剪的次数
+        int operations = q - count;
+        minOperations = min(minOperations, operations);
+    }
+    
+    // 如果 minOperations 仍然是 max，说明没有找到满足条件的高度
+    if (minOperations == numeric_limits<int>::max()) {
+        minOperations = -1;  // 表示无法修剪成相同的高度
+    }
+    
+    cout << minOperations << endl;
+    
+    return 0;
+}

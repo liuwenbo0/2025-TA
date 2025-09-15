@@ -1,0 +1,60 @@
+#include "Linklist.h"  
+  
+void changeList(Linklist& list) {   
+    Linklist evenStart = new node();  
+    Linklist oddStart = new node();  
+        
+    Linklist evenEnd = evenStart;  
+    Linklist oddEnd = oddStart;  
+      
+  
+    Linklist current = list->next;  
+    int count = 0;  
+      
+    while (current != list) {  
+        if (count % 2 == 0) {  
+            evenEnd->next = current;  
+            current->prior = evenEnd;  
+            evenEnd = current;  
+        } else {   
+            oddEnd->next = current;  
+            current->prior = oddEnd;  
+            oddEnd = current;  
+        }  
+        current = current->next;  
+        count++;  
+    }  
+      
+    evenEnd->next = nullptr;  
+    oddEnd->next = nullptr;  
+    Linklist reversedOddCurrent = oddStart->next;  
+    Linklist prevOddNode = nullptr;  
+    while (reversedOddCurrent != nullptr) {  
+        Linklist nextOddNode = reversedOddCurrent->next;  
+        reversedOddCurrent->next = prevOddNode;  
+        if (prevOddNode != nullptr) {  
+            prevOddNode->prior = reversedOddCurrent;  
+        }  
+        prevOddNode = reversedOddCurrent;  
+        reversedOddCurrent = nextOddNode;  
+    }  
+    oddStart->next = prevOddNode; 
+      
+
+    evenEnd->next = oddStart->next;  
+    if (oddStart->next != nullptr) {  
+        oddStart->next->prior = evenEnd;  
+    }  
+      
+    Linklist newTail = evenStart->next;  
+    while (newTail != nullptr && newTail->next != nullptr) {  
+        newTail = newTail->next;  
+    }  
+    newTail->next = list;  
+    list->prior = newTail;  
+
+    list->next = evenStart->next;  
+    if (evenStart->next != nullptr) {  
+        evenStart->next->prior = list;  
+    }  
+}

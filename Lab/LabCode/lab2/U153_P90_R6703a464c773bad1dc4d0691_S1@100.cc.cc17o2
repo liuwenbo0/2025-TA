@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// 求解从指定索引开始的二叉树节点值的累积和
+int computeTotal(vector<int> &tree, int idx) {
+    int length = tree.size();
+    // 若索引超出界限或节点值为 -1，则直接返回 0
+    if (idx >= length || tree[idx] == -1) return 0;
+    
+    // 递归地累加左右子树的资源总和，并加上当前节点的值
+    int sum = max(computeTotal(tree, 2 * idx + 1), computeTotal(tree, 2 * idx + 2)) + tree[idx];
+    return sum;
+}
+
+int main(void) {
+    // 二叉树节点在数组中的位置关系：左子节点索引为 2*n + 1，右子节点索引为 2*n + 2
+    vector<int> tree; // 存储二叉树节点值的数组
+    int leafValue, nodeCount, treeDepth = 0; // 当前节点值，节点总数，树的深度
+    long long uniqueSum = 0; // 特定节点的和
+
+    // 从标准输入读取节点值，直到输入终止
+    while (cin >> leafValue) tree.push_back(leafValue);
+
+    // 若树的根节点值为 -1，则输出 0
+    if (tree[0] == -1) {
+        cout << 0 << endl << 0 << endl << 0;
+        return 0;
+    }
+
+    nodeCount = tree.size();
+    leafValue = 0;
+
+    // 计算二叉树的深度
+    if (nodeCount) {
+        leafValue = 1;
+        while (leafValue <= nodeCount) {
+            leafValue *= 2;
+            treeDepth++;
+        }
+    }
+
+    bool existsLeft = false, existsRight = false; // 标记左右子节点是否存在
+    for (int i = 0; i < nodeCount; ++i) {
+        // 检查是否存在左子节点
+        if (i * 2 + 1 < nodeCount && tree[i * 2 + 1] != -1) existsLeft = true;
+        // 检查是否存在右子节点
+        if (i * 2 + 2 < nodeCount && tree[i * 2 + 2] != -1) existsRight = true;
+
+        // 如果节点至少有一个子节点
+        if (existsLeft || existsRight) {
+            // 判断当前节点是否为特定节点
+            if (existsLeft && existsRight && tree[i] > tree[i * 2 + 1] && tree[i] > tree[i * 2 + 2]) {
+                uniqueSum += tree[i]; // 节点值大于其左右子节点，累加到特定节点和中
+            } else if (existsLeft && tree[i] > tree[i * 2 + 1] && !existsRight) {
+                uniqueSum += tree[i]; // 节点值大于左子节点，且无右子节点，累加到特定节点和中
+            } else if (existsRight && tree[i] > tree[i * 2 + 2] && !existsLeft) {
+                uniqueSum += tree[i]; // 节点值大于右子节点，且无左子节点，累加到特定节点和中
+            }
+        }
+        // 重置左右子节点存在标记
+        existsLeft = false; 
+        existsRight = false; 
+    }
+
+    // 输出二叉树的深度
+    cout << treeDepth << endl; 
+    // 输出所有资源的总和
+    cout << computeTotal(tree, 0) << endl; 
+    // 输出特定节点的和
+    cout << uniqueSum << endl; 
+
+    return 0; // 结束程序
+}

@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+#include <cstdio>
+using namespace std;
+long long nums = 0;
+void mergesort(vector<int>& arr, int left, int right)
+{
+    if (left >= right) return;
+    int mid = left + (right - left)/2;
+    mergesort(arr, left, mid);
+    mergesort(arr, mid + 1, right);
+    
+    vector<int> merged(right-left+1);
+    int n1 = left, n2 = mid + 1, point = 0;
+    while (n1<=mid && n2<=right)
+    {
+        if (arr[n1] <= arr[n2]) 
+        merged[point++] = arr[n1++];
+        else
+        {
+            merged[point++] = arr[n2++];
+            nums += (mid - n1 + 1);
+        }
+    }
+    while (n1<=mid)
+    merged[point++] = arr[n1++];
+    while (n2 <= right)
+    merged[point++] = arr[n2++];
+    for (int i = 0;i<merged.size();i++)
+    arr[left+i] = merged[i];
+}
+int main()
+{
+    vector<int> vec;
+    int size; cin >> size;
+    for (int i = 0;i < size;i++)
+    {
+        int value;
+        cin >> value;
+        vec.push_back(value);
+    }
+    mergesort(vec,0,size-1);
+    cout << nums << endl;
+    return 0;
+}

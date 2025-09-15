@@ -1,0 +1,50 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+const int MAXN=2000000;
+int a[MAXN],b[MAXN];
+int cnt=0,n;
+int ans=0,h=0;
+int dfs(int aver,int N) {
+    if(aver>N) return 0;
+    b[aver]=a[aver]+max(dfs(aver*2+1,N),dfs(aver*2+2,N));
+    return b[aver];
+}
+int main(){
+    while(cin>>a[cnt]){
+        cnt++;
+    }
+    n=cnt;
+    for(h=0;n>=1;++h){
+        n/=2;
+    }
+    bool allLeavesEmpty=true;
+    for(int i=cnt/2;i<cnt;++i){
+        if (a[i]!=-1){
+            allLeavesEmpty=false;
+            break;
+        }
+    }
+    if(allLeavesEmpty){
+        --h;
+    }
+    cout<<h<<endl;
+    cout<<dfs(0,cnt-1)<<endl;
+    for(int i=0;i<cnt;++i){
+        if(a[i]==0) {
+        	a[i]=-1;
+        }
+    }
+    ans=0;
+    for(int i=0;i<cnt-1;++i){
+        int left=(i*2+1<cnt)?a[i*2+1]:-1;
+        int right=(i*2+2<cnt)?a[i*2+2]:-1;
+        if(left!=-1||right!=-1){
+            if(a[i]>max(left,right)){
+                ans+=a[i];
+            }
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
+}

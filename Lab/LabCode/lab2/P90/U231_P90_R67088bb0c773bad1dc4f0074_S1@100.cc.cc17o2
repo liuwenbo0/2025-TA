@@ -1,0 +1,126 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm> // 为了使用 std::max
+
+using namespace std;
+
+class Treen {
+public:
+    Treen* left;
+    Treen* right;
+    int value;
+    Treen(int v) : left(nullptr), right(nullptr),value(v) {}
+};
+
+// 构建树的方法
+Treen* buildTree(const vector<int>& levelOrder) {
+    if ((levelOrder.empty()) || (levelOrder[0] == -1)) return nullptr;
+
+    Treen* gen = new Treen(levelOrder[0]);
+    queue<Treen*> q;
+    q.push(gen);
+    size_t index = 1;
+
+    while ((!q.empty() )&& (index < levelOrder.size())) {
+        Treen* current = q.front();
+        q.pop();
+
+        // 处理左子节点
+        if (index < levelOrder.size() ) {
+            current->left = new Treen(levelOrder[index]);
+            q.push(current->left);
+        }
+        index++;
+
+        // 处理右子节点
+        if (index < levelOrder.size() ) {
+            current->right = new Treen(levelOrder[index]);
+            q.push(current->right);
+        }
+        index++;
+    }
+
+    return gen;
+}
+
+// 遍历树并将值为-1的节点变成nullptr
+void removeNegativeOne(Treen*& n) {
+    if (!n) return;
+
+    if (n->value == -1) {
+        delete n;
+        n = nullptr;
+    } else {
+        removeNegativeOne(n->left);
+        removeNegativeOne(n->right);
+    }
+}
+
+// 计算树的高度
+int treeHeight(Treen* n) {
+    if (!n) return 0;
+    int leftHeight = treeHeight(n->left);
+    int rightHeight = treeHeight(n->right);
+    return max(leftHeight, rightHeight) + 1;
+}
+
+// 寻找最大路径和（注意：这里的实现可能不是真正的“最大路径和”，而是从根到叶子节点的最大路径值）
+int maxResourcePath(Treen* n) {
+    if (!n) return 0;
+    if (!n->left && !n->right) {
+        return n->value;
+    }
+
+    int leftValue = maxResourcePath(n->left);
+    int rightValue = maxResourcePath(n->right);
+
+    return n->value + max(leftValue, rightValue);
+}
+
+// 计算特殊区域和（这里定义特殊区域为非叶子节点，且其值大于所有子节点的值）
+int specialRegionsSum(Treen* n) {
+    if (!n) return 0;
+    int total = 0;
+
+    bool isNonLeaf = (n->left != nullptr || n->right != nullptr);
+
+    if (isNonLeaf) {
+        bool isGreaterThanChildren = true;
+        if (n->left) isGreaterThanChildren &= (n->value > n->left->value);
+        if (n->right) isGreaterThanChildren &= (n->value > n->right->value);
+
+        if (isGreaterThanChildren) {
+            total += n->value;
+        }
+    }
+
+    // 递归计算左子树和右子树的特殊区域和
+    total += specialRegionsSum(n->left);
+    total += specialRegionsSum(n->right);
+
+    return total;
+}
+
+int main() {
+    vector<int> levelOrder;
+    int v;
+    while (cin >> v) {
+        levelOrder.push_back(v);
+    }
+
+    Treen* gen = buildTree(levelOrder);
+
+    // 先调用 removeNegativeOne 来把-1的节点变成nullptr
+    removeNegativeOne(gen);
+
+    int height = treeHeight(gen);
+    int maxPathResource = maxResourcePath(gen);
+    int specialRegionSum = specialRegionsSum(gen);
+
+    cout << height << endl;           // 树的高度
+    cout << maxPathResource << endl;  // 最大路径和（注意这里的定义）
+    cout << specialRegionSum << endl; // 特殊区域和
+
+    return 0;
+}

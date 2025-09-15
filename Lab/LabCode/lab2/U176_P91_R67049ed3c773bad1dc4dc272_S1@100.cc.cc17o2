@@ -1,0 +1,82 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+//我红温了
+std::vector<long long> NodeType(long long m) {
+    std::vector<long long> ret;
+    while (m > 1)
+    {
+        ret.push_back(m);
+        m/=2;
+    }
+    ret.push_back(m);
+    return ret;
+}
+long long Find(long long m,long long left,long long right,long long k,long long s){
+    if(left!=k||right!=s){
+        long long mid=(left+right)/2;
+        long long q=m%2;
+        if(k == s && k == mid){
+            return q;
+        }
+        if(s < mid){
+            return Find(m/2,left,mid-1,k,s);
+        }else if(k > mid){
+            return Find(m/2,mid+1,right,k,s);
+        }else if(s == mid){
+            return Find(m/2,left,mid-1,k,s-1)+q;
+        }else if(k == mid){
+            return Find(m/2,mid+1,right,k+1,s)+q;
+        }else{
+            return Find(m/2,left,mid-1,k,mid-1)+Find(m/2,mid+1,right,mid+1,s)+q;
+        }
+    }
+    else return m;
+}
+int main(){
+    long long m,k,s;
+    std::cin>>m>>k>>s;
+    if(m >= std::pow(10,2)){
+        long long l=std::pow(2,std::floor(std::log2(m))+1)-1;
+        std::cout<<Find(m,1,l,k,s);
+        return 0;
+    }else{
+    std::vector<long long> ans;
+    std::vector<long long> Nodes = NodeType(m);
+
+    long long dic = 0;
+    long long bitPos = 0;
+
+    for (long long i = Nodes.size() - 1; i >= 0; i--) {
+        if (Nodes[i] <= 1) {
+            dic = dic << bitPos++;
+            dic |=  Nodes[i];
+        } else {
+            long long currentDic = dic;
+            int currentBitPos = bitPos;
+
+            dic = dic << 1;
+            dic |= (Nodes[i] % 2);
+            bitPos++;
+
+            dic = dic << currentBitPos;
+            dic |= (currentDic);
+            bitPos += currentBitPos;
+        }
+    }
+    long long result = 0;
+    for (int i = k - 1; i < s; i++) {
+        result |= ((dic >> (bitPos - 1 - i)) & 1) << (s - 1 - i);
+    }
+
+    int countOnes = 0;
+    for (int i = s - k; i >= 0; i--) {
+        if ((result >> i) & 1) {
+            countOnes++;
+        }
+    }
+    std::cout <<countOnes;
+    return 0;
+    }
+}

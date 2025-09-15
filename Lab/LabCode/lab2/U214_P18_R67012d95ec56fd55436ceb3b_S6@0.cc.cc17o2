@@ -1,0 +1,13 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    // 请在这里完成你的代码
+    int left=1,right=n,index=0;
+    while(left<=right){
+        if(index%2==0){
+            ans[index++]=left++;
+        }
+        else ans[index++]=right--;
+    }
+    return ans;
+}

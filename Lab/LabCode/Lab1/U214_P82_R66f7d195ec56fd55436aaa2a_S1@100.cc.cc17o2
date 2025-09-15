@@ -1,0 +1,30 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    int i=1,flag=1,n;
+    Linklist head1=list->next,tail=list->prior,tail1,tail2,tail3,a=list;
+    for(i=0;a->next!=list;i++) a=a->next;
+    n=i;
+    for(i=1;i<n;i++){
+        if(i%2!=0) {
+            head1=head1->next;
+        }
+        else{
+            tail2=head1;
+            head1->prior->next=head1->next;
+            head1=head1->next;
+            tail->next=tail2;
+            tail2->prior=tail;
+            if(flag==1){
+                tail2->next=list->next;
+                tail1=tail2;
+                list->prior=tail1;
+                flag++;
+            }
+            else{
+                tail2->next=tail3;
+                tail3->prior=tail2;
+            }
+            tail3=tail2;
+        }
+    }
+}

@@ -1,0 +1,29 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+long long getLen(long long n){
+	if(n<=1) return 1;
+	else return getLen(n/2)*2+1;
+}
+
+long long getAns(long long m,long long k,long long s,long long a,long long b){
+	if(k>b||s<a) return 0;
+	if(m==1) return 1;
+	if(m==0) return 0;
+	long long sum=0;
+	long long mid = (a+b)>>1;
+	sum+=getAns(m/2,k,s,a,mid-1);
+	sum+=getAns(m%2,k,s,mid,mid);
+	sum+=getAns(m/2,k,s,mid+1,b);
+	return sum;
+}
+
+
+int main() {
+	long long m;
+    long long k, s,len;
+    cin>>m>>k>>s;
+    len = getLen(m);
+	cout<<getAns(m,k,s,1,len);
+    return 0;
+}

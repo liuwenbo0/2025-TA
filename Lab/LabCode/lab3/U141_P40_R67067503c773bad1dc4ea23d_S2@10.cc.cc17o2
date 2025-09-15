@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    
+    int n, q;
+    cin >> n >> q;
+    vector<int> a(n);
+    for(int i = 0; i < n; ++i) cin >> a[i];
+    
+    sort(a.begin(), a.end());
+    
+    vector<int> ops(n, 0);
+    int cur = 1;
+    for(int i = 1; i < n; ++i) {
+        if(a[i] == a[i-1]) {
+            cur++;
+        } else { 
+            ops[i-1] = cur;
+            cur = 1; 
+        }
+    }
+    ops[n-1] = cur;
+
+    partial_sum(ops.begin(), ops.end(), ops.begin());
+
+    cout << (q > 0 && q <= n ? ops[q-1] : 0);
+    
+    return 0;
+}

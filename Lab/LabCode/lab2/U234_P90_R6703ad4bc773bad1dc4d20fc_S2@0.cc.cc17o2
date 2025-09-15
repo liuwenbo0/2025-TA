@@ -1,0 +1,35 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+int tree_height(vector<int> &a)
+{
+    int height=log2(a.size())+1;
+    return height;
+}
+int max_sum(vector<int> &a)
+{
+    int sum,i;
+    for(i=sum=0;i<(int)a.size();i=2*i+2)  sum+=a[i];
+    return sum;
+}
+int special_node_sum(vector<int> &a)
+{
+    int sum,i;
+    for(sum=i=0;i<(int)a.size()/2;i++){
+        if(i==(int)a.size()/2-1){
+            if(2*i+2==(int)a.size()&&a[i]>a[2*i+1])  sum+=a[i];
+        }
+        else if((a[2*i+1]!=-1||a[2*i+2]!=-1)&&(a[i]>a[2*i+1]&&a[i]>a[2*i+2]))  sum+=a[i];
+    }
+    return sum;
+}
+int main(){
+    int a,b,c,x;
+    vector<int> tree;
+    while(cin>>x)  tree.push_back(x);
+    a=tree_height(tree);
+    b=max_sum(tree);
+    c=special_node_sum(tree);
+    cout<<a<<"\n"<<b<<"\n"<<c<<endl;
+}

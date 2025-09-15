@@ -1,0 +1,66 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int MergeSort(vector<int> nums, int left, int right);
+int InsertionSort(vector<int> nums, int len);
+int main(){
+    int n,i,p,q;
+    vector<int> a;
+    cin>>n;
+    for(i=0;i<n;i++)
+    {
+        int k;
+        cin>>k;
+        a.push_back(k);
+    }
+    p=MergeSort(a,0,n-1);
+    q=InsertionSort(a,n);
+    cout<<p<<" "<<q<<endl;
+}
+int MergeSort(vector<int> nums, int left, int right)
+{
+    int mid,x,y,i,j,k;
+    static int l=0;
+    if(left<right){
+        mid=(left+right)/2;
+        MergeSort(nums,left,mid);
+        MergeSort(nums,mid+1,right);
+        x=mid-left+1;
+        y=right-mid;
+        vector<long long> a(x+1),b(y+1);
+        for(i=0;i<x;i++)  a[i]=nums[left+i];
+        for(j=0;j<y;j++)  b[j]=nums[mid+j+1];
+        a[x]=b[y]=100000000;
+        for(i=j=0,k=left;k<=right;k++){
+            if(a[i]<=b[j]){
+                nums[k]=a[i];
+                i+=1;
+                if(b[j]!=100000000)  l++;
+            }
+            else{
+                nums[k]=b[j];
+                j+=1;
+                if(a[i]!=100000000)  l++;
+            }
+        }
+    }
+    return l;
+}
+int InsertionSort(vector<int> nums, int len) 
+{
+    int i,j,k,l;
+    l=0;
+    for(j=1;j<len;j++){
+        k=nums[j];
+        i=j-1;
+        while(i>=0&&nums[i]>k){
+            nums[i+1]=nums[i];
+            if(i==0&&nums[i]>k)  break;
+            i--;
+            l++;
+        }
+        l++;
+        nums[i+1]=k;
+    }
+    return l;
+}

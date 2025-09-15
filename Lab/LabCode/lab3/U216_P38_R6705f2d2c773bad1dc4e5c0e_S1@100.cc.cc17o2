@@ -1,0 +1,42 @@
+#include "QuickSort.h"
+ #include <cstdlib>
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 随机选择元素作为基准值，避免出现超市情况
+   int pivotIndex = p + std::rand() % (q - p + 1);
+    std::swap(nums[pivotIndex], nums[q]); // 将随机选中的基准值交换到末尾
+    int pivot = nums[q];
+    int i = p - 1;
+    
+    // 将小于基准值的元素移动到左边，大于基准值的元素移动到右边
+    for (int j = p; j < q; ++j) {
+        if (nums[j] <= pivot) {
+            i = i + 1;
+            // 将元素的位置进行交换
+            std::swap(nums[i], nums[j]);
+        }
+    }
+    std::swap(nums[i + 1], nums[q]);
+    // 由于给出示例return 0显示超时，所以改为返回索引
+    return i+1;
+    //请在这里完成你的代码
+
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r) {
+        // 确认分区点的位置
+        int pi = partition(nums, l, r);
+        // 通过递归排序左子数组
+        quick_sort(nums, l, pi - 1);
+        // 通过递归排序右子数组
+        quick_sort(nums, pi + 1, r);
+    }
+    //请在这里完成你的代码
+}
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+        return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class QuickSorter {
+public:
+    void sort(std::vector<int>& numbers);
+private:
+    void quickSort(std::vector<int>& numbers, int start, int end);
+    int partition(std::vector<int>& numbers, int start, int end);
+    int findMedianOfThree(std::vector<int>& numbers, int start, int end);
+    void insertionSort(std::vector<int>& numbers, int start, int end);
+};
+
+void QuickSorter::sort(std::vector<int>& numbers) {
+    if (!numbers.empty()) {
+        quickSort(numbers, 0, numbers.size() - 1);
+    }
+}
+
+void QuickSorter::quickSort(std::vector<int>& numbers, int start, int end) {
+    if (end - start < 10) {
+        insertionSort(numbers, start, end);
+        return;
+    }
+
+    int pivotIndex = findMedianOfThree(numbers, start, end);
+    std::swap(numbers[pivotIndex], numbers[end]);
+
+    int partitionIndex = partition(numbers, start, end);
+    quickSort(numbers, start, partitionIndex - 1);
+    quickSort(numbers, partitionIndex + 1, end);
+}
+
+int QuickSorter::partition(std::vector<int>& numbers, int start, int end) {
+    int pivot = numbers[end];
+    int i = start - 1;
+
+    for (int j = start; j < end; ++j) {
+        if (numbers[j] <= pivot) {
+            i++;
+            std::swap(numbers[i], numbers[j]);
+        }
+    }
+    std::swap(numbers[i + 1], numbers[end]);
+    return i + 1;
+}
+
+int QuickSorter::findMedianOfThree(std::vector<int>& numbers, int start, int end) {
+    int mid = start + (end - start) / 2;
+    if (numbers[start] > numbers[mid]) std::swap(numbers[start], numbers[mid]);
+    if (numbers[start] > numbers[end]) std::swap(numbers[start], numbers[end]);
+    if (numbers[mid] > numbers[end]) std::swap(numbers[mid], numbers[end]);
+    return mid;
+}
+
+void QuickSorter::insertionSort(std::vector<int>& numbers, int start, int end) {
+    for (int i = start + 1; i <= end; ++i) {
+        int key = numbers[i];
+        int j = i - 1;
+        while (j >= start && numbers[j] > key) {
+            numbers[j + 1] = numbers[j];
+            j--;
+        }
+        numbers[j + 1] = key;
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> inputNumbers(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> inputNumbers[i];
+    }
+    QuickSorter sorter;
+    sorter.sort(inputNumbers);
+    for (const int& num : inputNumbers) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}

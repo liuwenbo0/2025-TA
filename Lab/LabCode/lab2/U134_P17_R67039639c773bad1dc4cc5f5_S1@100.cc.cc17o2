@@ -1,0 +1,31 @@
+#include "Solution.h"
+#include <vector>
+using namespace std;
+void constructSchedule(vector<vector<int>>& s, int n, int start) {
+    if (n == 2) {
+        s[start][start] = start + 1;
+        s[start][start + 1] = start + 2;
+        s[start + 1][start] = start + 2;
+        s[start + 1][start + 1] = start + 1;
+        return;
+    }
+    int h = n / 2;
+    constructSchedule(s, h, start);
+    constructSchedule(s, h, start + h);
+
+    for (int i = 0; i < h; ++i) {
+        for (int j = 0; j < h; ++j) {
+            s[start + i][start + h + j] = s[start + i][start + j] + h;
+            s[start + h + i][start + j] = s[start + i][start + j] + h;
+            s[start + h + i][start + h + j] = s[start + i][start + j];
+        }
+    }
+}
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int>> ans(n, vector<int>(n, 0));
+    for (int i = 0; i < n; i++) {
+        ans[i][0] = i + 1; 
+    }
+    constructSchedule(ans, n, 0);
+    return ans;
+}

@@ -1,0 +1,16 @@
+#include "Solution.h"
+#include <unordered_map>
+unordered_map<int, vector<int>> check;
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans(n, 0);
+    // 请在这里完成你的代码
+    int i = 0;
+    if(check.find(n) != check.end()) return check[n];
+    if(n - 1) {
+        for (auto x : perfect_permutation((n + 1) / 2)) ans[i++] = 2 * x - 1;
+        for (auto x : perfect_permutation(n / 2))  ans[i++] = 2 * x;
+    }
+    else ans[0] = 1;
+    check[n] = ans;
+    return ans;
+}

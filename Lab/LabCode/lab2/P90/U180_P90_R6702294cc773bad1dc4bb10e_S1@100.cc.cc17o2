@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode* left;
+    struct TreeNode* right;
+} TreeNode;
+
+// 创建树节点
+TreeNode* createNode(int val) {
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->val = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// 根据层序遍历数组构建二叉树
+TreeNode* buildTree(int* levelOrder, int size) {
+    if (size == 0) return NULL;
+
+    TreeNode** nodes = (TreeNode**)malloc(size * sizeof(TreeNode*));
+    for (int i = 0; i < size; i++) {
+        if (levelOrder[i] != -1) {
+            nodes[i] = createNode(levelOrder[i]);
+        } else {
+            nodes[i] = NULL;
+        }
+    }
+
+    for (int i = 0; i < size; i++) {
+        if (nodes[i] != NULL) {
+            if (2 * i + 1 < size) {
+                nodes[i]->left = nodes[2 * i + 1];
+            }
+            if (2 * i + 2 < size) {
+                nodes[i]->right = nodes[2 * i + 2];
+            }
+        }
+    }
+
+    TreeNode* root = nodes[0];
+    free(nodes);
+    return root;
+}
+
+// 计算树的高度
+int treeHeight(TreeNode* node) {
+    if (node == NULL) return 0;
+    int leftHeight = treeHeight(node->left);
+    int rightHeight = treeHeight(node->right);
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+
+// 计算从根到叶子的最大路径和
+int maxPathSum(TreeNode* node) {
+    if (node == NULL) return 0;
+    if (node->left == NULL && node->right == NULL) return node->val;
+    int leftSum = maxPathSum(node->left);
+    int rightSum = maxPathSum(node->right);
+    return node->val + (leftSum > rightSum ? leftSum : rightSum);
+}
+
+// 计算特殊区域的节点值之和
+int specialRegionSum(TreeNode* node) {
+    if (node == NULL) return 0;
+    int total = 0;
+    if ((node->left || node->right) && 
+        (!node->left || node->val > node->left->val) && 
+        (!node->right || node->val > node->right->val)) {
+        total += node->val;
+    }
+    total += specialRegionSum(node->left);
+    total += specialRegionSum(node->right);
+    return total;
+}
+
+// 释放树的内存
+void freeTree(TreeNode* node) {
+    if (node == NULL) return;
+    freeTree(node->left);
+    freeTree(node->right);
+    free(node);
+}
+
+// 主函数
+int main() {
+    // 动态分配内存以支持更大的输入
+    int maxNodes = (1 << 20) + 1; // 2^20 + 1
+    int* levelOrder = (int*)malloc(maxNodes * sizeof(int));
+    int size = 0;
+
+//    printf("请输入层序遍历节点，以空格分隔，以换行结束（使用-1表示空节点）：\n");
+    while (size < maxNodes && scanf("%d", &levelOrder[size]) == 1) {
+        size++;
+    }
+
+    // 构建树
+    TreeNode* root = buildTree(levelOrder, size);
+
+    // 计算结果
+    int height = treeHeight(root);
+    int maxSum = maxPathSum(root);
+    int specialSum = specialRegionSum(root);
+
+    // 输出结果
+    printf("%d\n", height);
+    printf("%d\n", maxSum);
+    printf("%d\n", specialSum);
+
+    // 释放内存
+    freeTree(root);
+    free(levelOrder);
+
+    return 0;
+}

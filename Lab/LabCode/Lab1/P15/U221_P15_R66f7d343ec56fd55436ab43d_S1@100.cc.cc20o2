@@ -1,0 +1,103 @@
+#include <iostream>  
+#include <vector>  
+
+// 归并排序并计算比较次数
+class MergeSort {  
+public:  
+  void merge_sort_aux(std::vector<int>& nums, int left, int right, int& compare_count) {  
+    if (left >= right) {  
+      return;  
+    }  
+
+    // 二分进行递归
+    int mid = left + (right - left) / 2;  
+    merge_sort_aux(nums, left, mid, compare_count);  
+    merge_sort_aux(nums, mid + 1, right, compare_count);  
+
+    int x = mid - left + 1;  
+    int y = right - mid;  
+    std::vector<int> L(x), R(y);  
+    // 存在数组中
+    for (int i = 0; i < x; ++i) {  
+      L[i] = nums[left + i];  
+    }  
+    for (int i = 0; i < y; ++i) {  
+      R[i] = nums[mid + 1 + i];  
+    }  
+
+    int i = 0, j = 0, k = left;  
+    while (i < x && j < y) {  
+      compare_count++;  // 进行比较
+      if (L[i] <= R[j]) {  
+        nums[k] = L[i];  
+        ++i;  
+      } else {  
+        nums[k] = R[j];  
+        ++j;  
+      }  
+      ++k;  
+    }  
+
+    while (i < x) { 
+      nums[k] = L[i];  
+      ++i;  
+      ++k;  
+    }  
+
+    while (j < y) { 
+      nums[k] = R[j];  
+      ++j;  
+      ++k;  
+    }  
+  }  
+
+  void merge_sort(std::vector<int>& nums, int& compare_count) {  
+    int n = nums.size();  
+    merge_sort_aux(nums, 0, n - 1, compare_count);  
+  }  
+};  
+
+// 插入排序并计算比较次数
+class InsertionSort {
+public:
+  void insertion_sort(std::vector<int>& nums, int& compare_count) {
+    for (std::vector<int>::size_type i = 1; i < nums.size(); ++i) {
+      int key = nums[i];
+      std::vector<int>::size_type j = i;
+      while (j > 0) {
+        compare_count++;  // 比较次数+1
+        if (nums[j - 1] > key) {
+          nums[j] = nums[j - 1];
+          --j;
+        } else {
+          break;
+        }
+      }
+      nums[j] = key;
+    }
+  }
+};
+
+int main() {  
+  // 输入数据
+  int N;  
+  std::cin >> N;  
+  std::vector<int> nums(N);  
+  for (int i = 0; i < N; ++i) {  
+    std::cin >> nums[i];  
+  }  
+
+  std::vector<int> nums_for_merge = nums;  
+  std::vector<int> nums_for_insertion = nums;  
+
+  MergeSort merge_sorter;  
+  int merge_compare_count = 0;  
+  merge_sorter.merge_sort(nums_for_merge, merge_compare_count);  
+
+  InsertionSort insertion_sorter;  
+  int insertion_compare_count = 0;
+  insertion_sorter.insertion_sort(nums_for_insertion, insertion_compare_count);  
+
+  std::cout <<merge_compare_count << ' '<<insertion_compare_count << std::endl;   
+  return 0;  
+}

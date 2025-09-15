@@ -1,0 +1,50 @@
+#include "Solution.h"
+#include <algorithm>
+// 函数用于寻找横跨中间点的最大子数组和
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) 
+{
+    // 初始化左半部分的最大和以及右半部分的最大和
+    int s=0,n=0,ls=0,rs=0,i;
+    // 从中间点向左累加数组元素，直到low
+    for (i=mid;i>=low;i--) 
+    {
+        s += A[i];
+        // 更新左半部分的最大和
+        if (s >= ls) 
+        {
+        ls = s;
+        }
+    }
+    // 初始化s为0，从中间点向右累加数组元素，直到high
+    for (i=mid+1;i<=high;i++) 
+    {
+        n+=A[i];
+        // 更新右半部分的最大和
+        if(n>rs) 
+        {
+        rs=n;
+        }
+    }
+    // 返回左右两部分的最大和之和
+    return ls + rs;
+}
+// 函数用于递归地寻找整个数组的最大子数组和
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) 
+{
+    // 如果低指针和高指针相等，说明只有一个元素，直接返回这个元素
+    if (low == high) 
+    {
+    return A[low];
+    }
+    // 计算中间点
+    int mid, lm, rm, mm;
+    mid = low + (high - low) / 2;
+    // 递归地寻找左半部分的最大子数组和
+    lm = find_maximum_subarray(A, low, mid);
+    // 递归地寻找右半部分的最大子数组和
+    rm = find_maximum_subarray(A, mid + 1, high);
+    // 寻找横跨中间点的最大子数组和
+    mm = find_maximum_crossing_subarray(A, low, mid, high);
+    // 返回三者之中的最大值
+    return max(max(lm, rm), mm);
+}

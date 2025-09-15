@@ -1,0 +1,60 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+void merge(vector<int>& arr,int left,int mid,int right,long int& count) {
+    int n1=mid-left+1;
+    int n2=right-mid;
+    vector<int> L(n1),R(n2);
+    for(int i=0;i<n1;i++)
+        L[i]=arr[left+i];
+    for(int j=0;j<n2;j++)
+        R[j]=arr[mid+1+j];
+    int i=0,j=0,k=left;
+    while(i<n1&&j<n2){
+        if(L[i]<=R[j]){
+            arr[k]=L[i];
+            i++;
+        }else{
+            count=count+n1-i;
+            arr[k]=R[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        arr[k]=L[i];
+        i++;
+        k++;
+        //count++;
+    } 
+    while(j<n2){
+        arr[k]=R[j];
+        j++;
+        k++;
+    }
+}
+
+
+void merge_sort(vector<int>& arr, int left, int right,long int& count) {
+    if (left >= right) return;
+    int mid = left + (right - left) / 2;
+    merge_sort(arr, left, mid, count);
+    merge_sort(arr, mid + 1, right, count);
+    merge(arr, left, mid, right, count);
+}
+
+
+
+int main(){
+    int N;
+    cin>>N;
+    vector<int> nums1(N);
+    int i;
+    for(i=0;i<N;i++){
+        cin>>nums1[i];
+    }
+    long int mergecount=0;
+    merge_sort(nums1,0,N-1,mergecount);
+    cout<<mergecount<<endl;
+}

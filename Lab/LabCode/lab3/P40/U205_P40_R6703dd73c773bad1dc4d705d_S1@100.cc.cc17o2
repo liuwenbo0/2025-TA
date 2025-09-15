@@ -1,0 +1,35 @@
+#include<queue>
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+using namespace std;
+priority_queue<int,vector<int>,greater<int> > Q[300010];
+int main()
+{
+	int n,m;scanf("%d%d",&n,&m);
+	int Max=0;
+	for(int i=1;i<=n;i++)
+	{
+		int x;scanf("%d",&x);
+		Max=max(Max,x);
+		int j=0;
+		while(x)
+		{
+			Q[x].push(j);
+			x>>=1;j++;
+		}
+	}
+	int ans=0x7fffffff;
+	for(int i=1;i<=Max;i++) if(Q[i].size()>=m)
+	{
+		int count=0;
+		for(int j=1;j<=m;j++)
+		{
+			count+=Q[i].top();
+			Q[i].pop(); 
+		}
+		ans=min(ans,count);
+	}
+	cout << ans;
+	return 0;
+}

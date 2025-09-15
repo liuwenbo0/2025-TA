@@ -1,0 +1,48 @@
+#include "Solution.h"
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) {
+     int left_sum = -1e9;  // 初始化为一个极小值
+        int sum = 0;
+
+        // 找到左半部分的最大和
+        for (int i = mid; i >= low; i--) {
+            sum += A[i];
+            if (sum > left_sum) {
+                left_sum = sum;
+            }
+        }
+
+        int right_sum = -1e9;  // 初始化为一个极小值
+        sum = 0;
+
+        // 找到右半部分的最大和
+        for (int j = mid + 1; j <= high; j++) {
+            sum += A[j];
+            if (sum > right_sum) {
+                right_sum = sum;
+            }
+        }
+
+        // 返回跨越中点的最大子数组和
+        return left_sum + right_sum;
+    return 0;
+}
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) {
+    // 请在这里完成你的代码
+ if (low == high) {
+            // 只有一个元素的情况
+            return A[low];
+        } else {
+            int mid = (low + high) / 2;
+
+            // 计算左边、右边以及横跨中点的最大子数组和
+            int left_max = find_maximum_subarray(A, low, mid);
+            int right_max = find_maximum_subarray(A, mid + 1, high);
+            int cross_max = find_maximum_crossing_subarray(A, low, mid, high);
+
+            // 返回三个中最大的一个
+            return max(left_max, max(right_max, cross_max));
+        }
+    
+    
+    return 0;
+}

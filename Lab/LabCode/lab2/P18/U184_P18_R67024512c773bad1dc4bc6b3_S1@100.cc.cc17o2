@@ -1,0 +1,37 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans(n);
+    if (n == 1) {
+        ans[0] = 1;
+        return ans;
+    }  
+    if (n == 2) {
+        ans[0] = 1;
+        ans[1] = 2;
+        return ans;
+    }
+    if (n % 2 == 1) {
+        vector<int> left_part = perfect_permutation(n/2 + 1);
+        vector<int> right_part = perfect_permutation(n / 2);
+        for (int i = 0; i < n; i++) {
+            if(i<=n/2){
+                ans[i] = left_part[i] * 2 - 1;
+            }
+            else{
+                ans[i] = right_part[i-n/2-1] * 2;
+            }
+        }
+    }
+    if (n % 2 == 0) {
+        vector<int> current_part = perfect_permutation(n / 2);
+        for (int i = 0; i < n; i++) {
+            if(i<n/2){
+                ans[i] = current_part[i] * 2 - 1;
+            }
+            else{
+                ans[i] = current_part[i-n/2] * 2;
+            }
+        }
+    }
+    return ans;
+}

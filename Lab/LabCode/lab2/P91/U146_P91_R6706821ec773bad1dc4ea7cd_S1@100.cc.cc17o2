@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Counter {
+public:
+    unsigned long long findCount(unsigned long long total, unsigned long long target, unsigned long long limit, unsigned long long low, unsigned long long high) {
+        if (total == 0) return 0;
+        if (total == 1) return (target >= low && target <= limit) ? 1 : 0;
+        if (low == high) return 1;
+
+        unsigned long long midPoint = (low + high) / 2;
+        unsigned long long count = 0;
+
+        if (target < midPoint) {
+            count += findCount(total / 2, target, min(limit, midPoint - 1), low, midPoint - 1);
+        }
+        if (limit > midPoint) {
+            count += findCount(total / 2, max(midPoint + 1, target), limit, midPoint + 1, high);
+        }
+        if (target <= midPoint && limit >= midPoint) {
+            count += total % 2;
+        }
+
+        return count;
+    }
+
+    void execute() {
+        unsigned long long total, target, limit;
+        cin >> total >> target >> limit;
+
+        unsigned long long value = total;
+        unsigned long long depth = 0;
+        while (value > 1) {
+            value /= 2;
+            depth++;
+        }
+
+        unsigned long long totalLength = 2 * pow(2, depth) - 1;
+        cout << findCount(total, target, limit, 1, totalLength) << endl;
+    }
+};
+
+int main() {
+    Counter counterInstance;
+    counterInstance.execute();
+    return 0;
+}

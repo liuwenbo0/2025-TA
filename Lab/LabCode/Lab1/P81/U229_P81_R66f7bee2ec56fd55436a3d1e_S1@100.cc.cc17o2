@@ -1,0 +1,12 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+     int n = list.size();
+    for(int i = 0; i < n; ++i) {
+        if(list[i] >= num) {
+            list.insert(list.begin() + i, num);
+            return;
+        }
+    }
+    // 如果 num 比所有元素都大，那么添加到顺序表的末尾
+    list.push_back(num);
+}

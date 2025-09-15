@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+int foundresource(vector<int> &a, int n, int l, int i){
+    if (i >= n || a[i] == -1) return 0; 
+    int leftsum = foundresource(a, n, l + 1, 2 * i + 1);
+    int rightsum = foundresource(a, n, l + 1, 2 * i + 2);
+    if(leftsum > rightsum) return (a[i] + leftsum);
+    else return (a[i] +  rightsum);     
+}
+int findsum(vector<int> &a, int n, int l){
+    int sum = 0;
+    for(int i = 1; i < l; i++){
+        int x1 = pow(2, i-1) - 1;
+        int x2 = pow(2, i) - 2;
+        for(int j = x1; j <= x2; j++){
+            int c = 2*j + 1;
+            if(a[c] != -1 && a[c+1] != -1){
+                if(a[j] > a[c] && a[j] > a[c+1]&& a[j] != -1) sum += a[j];
+            }
+            else if(a[c] != -1 && a[c+1] == -1){
+                if(a[j] > a[c]) sum += a[j];
+            }
+            else if(a[c] == -1 && a[c+1] != -1){
+                if(a[j] > a[c+1]) sum+= a[j];
+            }
+        }   
+    }
+    return sum;
+}
+int main(){
+    int m;
+    int n=0;
+    vector<int> a;
+    while(cin>>m){
+        a.push_back(m);
+        n++;
+    }
+    int l=ceil(log(n+1)/log(2));
+   if (pow(2, l) - 1 != n) {
+        int x = pow(2, l) - n - 1;
+        for (int i = 0; i < x; i++) {
+            a.push_back(-1);
+        }
+        n += x;
+    }
+    cout<<l<<endl;
+    cout<<foundresource(a, n, 1, 0)<<endl;
+    cout<<findsum(a, n, l)<<endl;
+}

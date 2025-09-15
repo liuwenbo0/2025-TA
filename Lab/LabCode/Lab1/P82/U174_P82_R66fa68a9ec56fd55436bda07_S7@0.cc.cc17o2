@@ -1,0 +1,45 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    if (list.head == nullptr || list.head->next == list.head) {
+        return;
+    }
+
+    Node* tail = list.head;
+    // Find the end of the list to get the tail pointer
+    while (tail->next != list.head) {
+        tail = tail->next;
+    }
+
+    Node* odd = list.head;
+    Node* even = list.head->next;
+    Node* evenHead = even;
+
+    // Reorder the list
+    while (even != tail) {
+        Node* nextOdd = odd->next;
+        Node* nextEven = even->next;
+
+        // Move odd pointer
+        odd->next = even;
+        even->prior = odd;
+
+        // Move even pointer
+        even->next = nextOdd;
+        if (nextOdd != tail) {
+            nextOdd->prior = even;
+        }
+
+        odd = nextOdd;
+        even = nextEven;
+    }
+
+    // Connect the last even node to the head
+    if (evenHead != tail) {
+        evenHead->next = list.head;
+        list.head->prior = evenHead;
+    }
+
+    // Update the head pointer
+    list.head = list.head->next;
+}

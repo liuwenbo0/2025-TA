@@ -1,0 +1,49 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    node *tail=list->next,*point,*p1,*p2,*p3,*head=list;
+    int n=0;
+    while(tail!=list){
+        tail=tail->next;
+        n++;
+    }
+    tail=tail->prior;
+    point=tail;
+    p1=tail;
+    p2=tail;
+    if(n%2){
+        for(int i=2;i<=n;i++){
+        point=point->prior;
+        if(!(i%2)&&i!=n){
+            p3=point->prior;
+            point->next=head;
+            head->prior=point;
+            p1->next=point;
+            point->prior=p1;
+            p3->next=p2;
+            p2->prior=p3;
+            p1=p1->next;
+            point=p3;
+            i++;
+        }  
+        p2=p2->prior;
+        }   
+    }
+    else{
+       for(int i=1;i<=n;i++){
+        point=point->prior;
+        if(!(i%2)&&i!=n){
+            p3=point->prior;
+            point->next=head;
+            head->prior=point;
+            p1->next=point;
+            point->prior=p1;
+            p3->next=p2;
+            p2->prior=p3;
+            p1=p1->next;
+            point=p3;
+            i++;
+        }  
+        p2=p2->prior;
+        }  
+    }
+}

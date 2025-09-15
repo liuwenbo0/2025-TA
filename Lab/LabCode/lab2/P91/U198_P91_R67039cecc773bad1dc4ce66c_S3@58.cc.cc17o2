@@ -1,0 +1,31 @@
+# include<iostream>
+# include<cmath>
+using namespace std;
+
+static long long int cnt=0, now_place=0;
+
+void diverge(long long int crystal, long long int begin,long long int end, bool is_right)
+{
+	if ((crystal == 1 || crystal==0))
+	{
+		now_place++;
+        if(now_place>=begin && now_place<=end && crystal) {begin++; cnt++;}
+    }
+	else
+	{   
+        diverge((long long int)(crystal / 2), begin,end, false);
+        diverge((long long int)(crystal % 2), begin, end, false);
+		diverge((long long int)(crystal / 2), begin, end, true);
+    }		    
+}
+
+int main()
+{
+	long long int origin;
+	long long int begin;
+	long long int end;
+	cin >> origin >> begin >> end;
+	diverge(origin, begin, end, false);
+	cout << cnt;
+	return 0;
+}

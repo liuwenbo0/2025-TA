@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+bool has_odd_ones(ll m, ll i) {
+    return __builtin_popcountll(m / i) % 2 == 1;
+}
+
+ll query(ll m, ll k, ll s) {
+    ll total_ones = 0;
+    for (ll i = k; i <= s; i *= 2) {
+        for(ll j = max(i, m / (s * 2) + 1); j <= min(m / i, s); j++) {
+            if (has_odd_ones(m, j)) {
+                total_ones++;
+            }
+        }
+    }
+    return total_ones;
+}
+
+int main() {
+    ll m , k ,s ;
+    cin >> m >> k >> s;
+    cout << query(m, k, s) << endl;
+    return 0;
+}

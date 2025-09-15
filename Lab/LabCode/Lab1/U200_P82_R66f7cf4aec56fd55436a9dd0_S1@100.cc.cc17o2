@@ -1,0 +1,20 @@
+#include"Linklist.h"
+#include<vector>
+void changeList(Linklist &list){
+    Linklist st=list,now=list->next;
+    vector<int> a;
+    while(now!=st) {a.push_back(now->num);now=now->next;}
+    int size=a.size();
+    now=list->next;
+    int i;
+	for(i=0;i<size;i+=2)
+    {
+        now->num=a[i];
+        now=now->next;
+    }
+    for(i=size-1-(size%2);i>=0;i-=2)
+    {
+        now->num=a[i];
+        now=now->next;
+    }
+}

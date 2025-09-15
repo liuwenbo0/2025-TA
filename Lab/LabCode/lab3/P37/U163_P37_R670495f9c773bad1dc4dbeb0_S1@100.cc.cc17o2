@@ -1,0 +1,55 @@
+#include "HeapSort.h"
+#include <vector>
+using namespace std;
+int source(int pres){
+    return pres/2;
+}
+int left(int pres){
+    return pres*2;
+}
+int right(int pres){
+    return pres*2+1;
+}
+void HeapSort::max_heapify(std::vector<int>& nums, int i) {
+    // 请在这里完成你的代码
+    int p=i,ch;
+    int l=left(i),r=right(i);
+    if(l<(int)nums.size())
+    nums[i]>nums[l]?p=i:p=l;
+    if(r<(int)nums.size())
+    nums[p]>nums[r]?p:p=r;
+    if(p!=i){ch=nums[p];
+    nums[p]=nums[i];
+    nums[i]=ch;
+    HeapSort::max_heapify(nums,p);
+    }
+
+}
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+    // 请在这里完成你的代码
+    for(int i=nums.size()/2;i>0;i--)
+    HeapSort::max_heapify(nums,i);
+}
+void HeapSort::mysort(std::vector<int>& nums) {
+    length = nums.size();
+    nums.insert(nums.begin(), 0); // 在开头插入一个元素，使得待排序元素下标从 1 开始
+    // 请在这里完成你的代码
+    vector<int> list(length-1,0);
+    int p=0,max=0;
+    build_max_heap(nums);
+    max=nums[1];
+
+    for(int i=nums.size()-1;i>0;i--){
+       
+        p=nums[1];
+        list[i-1]=p;
+        nums[1]=nums[i];
+        nums[i]=p;
+        
+        nums.erase(nums.end());
+        max_heapify(nums,1);
+    }
+    nums.erase(nums.begin()); 
+    nums.insert(nums.begin(),list.begin(),list.end());
+    nums[nums.size()]=max;
+}

@@ -1,0 +1,27 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    if (!list || !list->next || list->next == list) return;
+
+    Linklist tail = list->prior;
+    Linklist current = list;
+    Linklist next_node;
+
+    do {
+        // 保存下一个节点
+        next_node = current->next;
+
+        // 调整当前节点的next和prior指针
+        current->next = current->prior;
+        current->prior = next_node;
+
+        // 移动到下一个节点
+        current = next_node;
+    } while (current != tail);
+
+    // 处理头尾节点的连接
+    list->next = list->prior;
+    list->prior = tail->prior;
+    tail->prior->next = list;
+    tail->next = tail->prior;
+}

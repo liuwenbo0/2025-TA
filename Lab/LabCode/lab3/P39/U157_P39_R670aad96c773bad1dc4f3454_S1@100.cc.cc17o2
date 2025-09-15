@@ -1,0 +1,38 @@
+#include "ThreeWayQuickSort.h"
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    if(p<q){
+        int ran;
+        ran=p+rand()% (q-p+1);
+        int x=nums[ran], t;
+        t=nums[ran];
+        nums[ran]=nums[p];
+        nums[p]=t;
+        int lt=p+1, gt=q;
+        for(int i=p+1; i<=gt; i++){
+            if(nums[i]<x){
+                t=nums[i];
+                nums[i]=nums[lt];
+                nums[lt]=t;
+                lt=lt+1;
+            }
+            else if(nums[i]>x){
+                t=nums[i];
+                nums[i]=nums[gt];
+                nums[gt]=t;
+                gt=gt-1;
+                i--;
+            }
+        }
+        t=nums[p];
+        nums[p]=nums[lt-1];
+        nums[lt-1]=t;
+        three_way_quick_sort(nums, p, lt-1);
+        three_way_quick_sort(nums, gt+1, q);
+    }
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

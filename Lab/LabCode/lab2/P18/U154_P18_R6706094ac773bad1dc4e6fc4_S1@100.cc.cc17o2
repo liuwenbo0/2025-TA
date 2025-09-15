@@ -1,0 +1,22 @@
+#include "Solution.h"
+#include <vector>
+using namespace std;
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;  
+    vector<int> seq = {1};  
+
+    while (int(seq.size()) <= n) {
+        int currentSize = seq.size();  
+        for (int i = 0; i < currentSize; ++i) {
+            seq.push_back(seq[i] * 2);   
+            seq[i] = seq[i] * 2 - 1;     
+        }
+    }
+    for (int num : seq) {
+        if (num <= n) {
+            ans.push_back(num);  
+        }
+    }
+    return ans;  
+}

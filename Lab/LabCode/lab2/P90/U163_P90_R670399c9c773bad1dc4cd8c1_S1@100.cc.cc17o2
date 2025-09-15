@@ -1,0 +1,53 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cmath>
+#include <functional>
+using namespace std;
+int source(int pres){
+    return pres/2;
+}
+int left(int pres){
+    return pres*2;
+}
+int right(int pres){
+    return pres*2+1;
+}
+
+int routesum(int pres,vector<int> &A,int num){
+    if(pres>num || A[pres-1]==-1)return 0;//possible mistake
+    else{
+        int ls=routesum(left(pres),A,num);
+        int rs=routesum(right(pres),A,num);
+        if(ls>rs) return ls+A[pres-1];
+        else return rs+A[pres-1];
+    }
+}
+int spesum(int num,vector<int> A){
+    int sum=0;
+    A.insert(A.begin(), 0);
+
+    for(int i=1;i<=num/2;i++) {
+        if(A[i]>A[left(i)] && A[i]>A[right(i)] && !(A[left(i)]==-1 && A[right(i)]==-1)) sum+=A[i];
+
+    }
+    // if(A[i]>A[left(i+1)] && A[i]>A[right(i+1)] && !(A[left(i+1)]==-1 && A[right(i+1)]==-1)) sum+=A[i];
+    // if(A[0]>A[1] && A[0]>A[2] && !(A[1]==-1 && A[2]==-1)) sum+=A[0];
+    return sum;
+}
+int main(){
+    int p,h=0,num=0;
+    vector<int> tree(0);
+    while(cin>>p){
+        tree.push_back(p);
+        num++;
+        if(num==pow(2,h)) h++;
+    }
+    cout<<h<<endl;
+    int sum=routesum(1,tree,num);
+    int spe=spesum(num,tree);
+
+    cout<<sum<<endl;
+    cout<<spe<<endl;
+}

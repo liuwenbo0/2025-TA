@@ -1,0 +1,32 @@
+#include "QuickSort.h"
+
+#include <cstdlib>
+#include <ctime>
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    int random_index = p + rand() % (q - p + 1);
+    std::swap(nums[random_index], nums[q]);
+    int jzz = nums[q]; // 选择最后一个元素作为基准值
+    int i = p - 1; // 小于基准值的元素的最后一个位置
+    for (int j = p; j < q; j++) {
+        if (nums[j] < jzz) {
+            i++;
+            std::swap(nums[i], nums[j]);
+        }
+    }
+    std::swap(nums[i + 1], nums[q]); // 将基准值放到正确的位置
+    return i + 1; // 返回基准值的位置
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r) {
+        int pi = partition(nums, l, r);
+        quick_sort(nums, l, pi - 1); // 对左子数组进行排序
+        quick_sort(nums, pi + 1, r); // 对右子数组进行排序
+    }
+}
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    
+     srand(static_cast<unsigned>(time(0)));
+    quick_sort(nums, 0, nums.size() - 1);
+}

@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <queue>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int found_min(vector<int>& heights, int q) {
+    unordered_map<int, vector<int>>each_height_nums; 
+  //用数组储存
+    
+    for (int h : heights) {
+        int random=h;
+        int cut_nums=0;
+
+        while(random > 0) {
+            each_height_nums[random].push_back(cut_nums);
+            //储存的是每棵树剪到对应高度所需的修剪次数，用数组存
+            random /= 2;
+            cut_nums++;
+        }
+        }
+
+    int  mincuts= INT_MAX;
+    for (const auto& entry : each_height_nums) {
+        const auto& height_nums = entry.second;
+        int length = height_nums.size();
+        
+        if (length >= q) {
+            // 能剪出q个相同的
+            vector<int> nums(height_nums);//clone一个height_nums
+            sort(nums.begin(), nums.end());
+            
+            int total = 0;
+            for (int i = 0; i < q; ++i) {
+                total += nums[i];
+            }
+            
+            mincuts = min(mincuts, total);
+        }
+    }
+        return mincuts;
+}
+
+
+int main() {
+    int n, q;
+    cin >> n>>q; 
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+    cin >> q; 
+    int result = found_min(heights, q);
+    
+    cout  << result << endl;
+    return 0;
+}

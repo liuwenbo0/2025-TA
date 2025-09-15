@@ -1,0 +1,44 @@
+#include "MyStack.h"
+
+bool MyStack::Empty() {
+    // 栈顶指针为-1表示栈空
+    return top == -1;
+}
+
+bool MyStack::Full() {
+    // 栈顶指针等于数组长度减1表示栈满
+    return top == MAXLENG - 1;
+}
+
+bool MyStack::Push(ElementType e) {
+    // 判断栈是否已满
+    if (Full()) {
+        return false;
+    }
+    // 入栈操作
+    top++;
+    elem[top] = e;
+    return true;
+}
+
+bool MyStack::Gettop(ElementType &e) {
+    // 判断栈是否为空
+    if (Empty()) {
+        return false;
+    }
+    // 将栈顶元素赋值给e
+    e = elem[top];
+    return true;
+}
+
+bool MyStack::Pop(ElementType &e) {
+    // 判断栈是否为空
+    if (Empty()) {
+        return false;
+    }
+    // 获取栈顶元素
+    e = elem[top];
+    // 出栈操作
+    top--;
+    return true;
+}

@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int n,count=0;
+
+void mergesort(vector<int> &nums,int left,int right){
+    if(left<right){
+        int mid=(left+right)/2;
+        mergesort(nums,left,mid);
+        mergesort(nums,mid+1,right);
+        int i=left,p=left,j=mid+1;
+        vector<int> tempt(n);
+        while(i<=mid&&j<=right){
+            if(nums[i]<=nums[j]){
+                tempt[p++]=nums[i++];
+            }
+            else{
+                tempt[p++]=nums[j++];
+                count+=mid-i+1;
+            }
+        }
+        while(i<=mid){
+            tempt[p++]=nums[i++];
+        }
+        while(j<=right){
+            tempt[p++]=nums[j++];
+        }
+        p=i=left;
+        while(p<=right){
+            nums[i++]=tempt[p++];
+        }
+    }
+
+}
+
+int main(){
+    cin>>n;
+    vector<int> nums(n);
+    for(int i=0;i<n;i++){
+        cin>>nums[i];
+    }
+    mergesort(nums,0,n-1);
+    cout<<count<<endl;
+    
+}

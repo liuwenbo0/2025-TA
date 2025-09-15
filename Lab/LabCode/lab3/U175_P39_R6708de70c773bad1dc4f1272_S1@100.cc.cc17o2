@@ -1,0 +1,38 @@
+#include "ThreeWayQuickSort.h"
+    std::pair<int, int> Partition3ways(std::vector<int>&nums, int p, int q){
+        swap(nums[p], nums[rand() % (q - p + 1) + p]);
+        int v = nums[p];
+        int lt = p;
+        int gt = q + 1;
+        int i = p + 1;
+        while (i < gt) {
+            if (nums[i] == v) {
+                ++i;
+                continue;
+            } else if (nums[i] < v) {
+                swap(nums[i], nums[lt + 1]);
+                ++lt;
+                ++i;
+                continue;
+            } else {
+                swap(nums[i], nums[gt - 1]);
+                --gt;
+                continue;;
+            }
+        }
+        swap(nums[p], nums[lt]);
+        return {lt - 1, gt};
+    } 
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+        if(p>=q){
+            return;
+        }
+        auto m = Partition3ways(nums, p, q);
+        three_way_quick_sort(nums, p, m.first);
+        three_way_quick_sort(nums, m.second, q);
+        }
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

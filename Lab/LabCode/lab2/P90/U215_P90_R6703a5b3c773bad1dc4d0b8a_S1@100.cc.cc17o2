@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+int getLeftChild(int index) {
+    return 2 * index + 1;
+}
+
+int getRightChild(int index) {
+    return 2 * index + 2;
+}
+
+int computeTreeHeight(int tree[], int currentNode, int totalNodes) {
+    if (currentNode >= totalNodes || tree[currentNode] == -1) {
+        return 0;
+    }
+    
+    int leftSubtreeHeight = computeTreeHeight(tree, getLeftChild(currentNode), totalNodes);
+    int rightSubtreeHeight = computeTreeHeight(tree, getRightChild(currentNode), totalNodes);
+
+    return max(leftSubtreeHeight, rightSubtreeHeight) + 1;
+}
+
+int findMaxPathSum(int tree[], int currentNode, int totalNodes) {
+    if (currentNode >= totalNodes || tree[currentNode] == -1) {
+        return 0;
+    }
+
+    int leftPathSum = findMaxPathSum(tree, getLeftChild(currentNode), totalNodes);
+    int rightPathSum = findMaxPathSum(tree, getRightChild(currentNode), totalNodes);
+
+    return max(leftPathSum, rightPathSum) + tree[currentNode];
+}
+
+int customTreeFunction(int tree[], int currentNode, int totalNodes) {
+    if (currentNode >= totalNodes || tree[currentNode] == -1) {
+        return 0;
+    }
+
+    bool hasLeftChild = getLeftChild(currentNode) < totalNodes && tree[getLeftChild(currentNode)] != -1;
+    bool hasRightChild = getRightChild(currentNode) < totalNodes && tree[getRightChild(currentNode)] != -1;
+
+    if (!hasLeftChild && !hasRightChild) return 0;
+
+    if (tree[currentNode] > (hasLeftChild ? tree[getLeftChild(currentNode)] : -1) && 
+        tree[currentNode] > (hasRightChild ? tree[getRightChild(currentNode)] : -1)) {
+        return tree[currentNode] + customTreeFunction(tree, getLeftChild(currentNode), totalNodes) + 
+               customTreeFunction(tree, getRightChild(currentNode), totalNodes);
+    }
+
+    return customTreeFunction(tree, getLeftChild(currentNode), totalNodes) + 
+           customTreeFunction(tree, getRightChild(currentNode), totalNodes);
+}
+
+int main() {
+    int value, nodeCount = 0;
+    int binaryTree[10000000];  
+
+    while (cin >> value) {
+        binaryTree[nodeCount++] = value;
+    }
+
+    cout << computeTreeHeight(binaryTree, 0, nodeCount) << endl;
+
+    cout << findMaxPathSum(binaryTree, 0, nodeCount) << endl;
+
+    cout << customTreeFunction(binaryTree, 0, nodeCount) << endl;
+
+    return 0;
+}

@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <limits>
+#include <cmath>
+
+using namespace std;
+
+// 计算树的高度
+int treeHeight(int nodeCount) {
+	if (nodeCount==0) return 0;
+	else return static_cast<int>(log2(nodeCount)) + 1 ;
+}
+
+// 计算最大路径和
+int maxPathSum(const vector<int>& tree, int index) {
+    if (index >= tree.size() || tree[index] == -1) {
+        return 0;
+    }
+    int leftSum = maxPathSum(tree, 2 * index + 1);
+    int rightSum = maxPathSum(tree, 2 * index + 2);
+    return tree[index] + max(leftSum, rightSum);
+}
+
+// 计算特殊区域和
+int specialRegionSum(const vector<int>& tree, int index) {
+    if (index >= tree.size() || tree[index] == -1) {
+        return 0;
+    }
+
+    int total = 0;
+
+    // 检查是否有子节点
+    bool hasLeftChild = 2 * index + 1 < tree.size() && tree[2 * index + 1] != -1;
+    bool hasRightChild = 2 * index + 2 < tree.size() && tree[2 * index + 2] != -1;
+
+    if (hasLeftChild || hasRightChild) { 
+        bool allChildrenLess = true;
+
+        if (hasLeftChild && tree[2 * index + 1] >= tree[index]) {
+            allChildrenLess = false;
+        }
+        if (hasRightChild && tree[2 * index + 2] >= tree[index]) {
+            allChildrenLess = false;
+        }
+
+        if (allChildrenLess) {
+            total += tree[index];
+        }
+    }
+    total += specialRegionSum(tree, 2 * index + 1);
+    total += specialRegionSum(tree, 2 * index + 2);
+
+    return total;
+}
+
+int main() {
+    vector<int> tree;
+    int value;
+    while (cin >> value) {
+        tree.push_back(value);
+        if (cin.peek() == '\n') {
+            break; 
+        }
+    }
+
+    int height = treeHeight(tree.size()); 
+    int maxSum = maxPathSum(tree, 0);
+    int specialSum = specialRegionSum(tree, 0);
+
+    cout << height << endl;
+    cout << maxSum << endl;
+    cout << specialSum << endl;
+
+    return 0;
+}

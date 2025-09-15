@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <climits>
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+
+TreeNode* createNode(int val) {
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->val = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+
+TreeNode* buildTree(int* arr, int n) {
+    if (n == 0 || arr[0] == -1) return NULL;
+
+    TreeNode* root = createNode(arr[0]);
+    TreeNode** queue = (TreeNode**)malloc(n * sizeof(TreeNode*));
+    int front = 0, rear = 0;
+    queue[rear++] = root;
+
+    for (int i = 1; i < n; i++) {
+        TreeNode* curr = queue[front++];
+
+        if (arr[i] != -1) {
+            curr->left = createNode(arr[i]);
+            queue[rear++] = curr->left;
+        }
+
+        i++;
+        if (i < n && arr[i] != -1) {
+            curr->right = createNode(arr[i]);
+            queue[rear++] = curr->right;
+        }
+    }
+
+    free(queue);
+    return root;
+}
+
+
+int treeHeight(TreeNode* root) {
+    if (root == NULL) return 0;
+    return 1 + (treeHeight(root->left) > treeHeight(root->right) ? treeHeight(root->left) : treeHeight(root->right));
+}
+
+int maxPathSum(TreeNode* root, int* maxSum) {
+    if (root == NULL) return 0;
+
+    int leftSum = maxPathSum(root->left, maxSum);
+    int rightSum = maxPathSum(root->right, maxSum);
+
+    int currSum = root->val;
+    if (leftSum > 0) currSum += leftSum;
+    if (rightSum > 0) currSum += rightSum;
+
+    *maxSum = (*maxSum > currSum) ? *maxSum : currSum;
+
+    return root->val + (leftSum > rightSum ? leftSum : rightSum);
+}
+
+
+int specialAreaSum(TreeNode* root, int* sum) {
+    if (root == NULL) return 0;
+
+    int leftVal = (root->left ? root->left->val : -1);
+    int rightVal = (root->right ? root->right->val : -1);
+
+    if (root->val > leftVal && root->val > rightVal && root->val != -1) {
+        *sum += root->val;
+    }
+
+    specialAreaSum(root->left, sum);
+    specialAreaSum(root->right, sum);
+
+    return 0;
+}
+
+int main() {
+    int n;
+   
+    scanf("%d", &n);
+
+    int* arr = (int*)malloc(n * sizeof(int));
+   
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    TreeNode* root = buildTree(arr, n);
+    free(arr);
+
+    int height = treeHeight(root);
+    int maxSum = INT_MIN;
+    maxPathSum(root, &maxSum);
+    int specialSum = 0;
+    specialAreaSum(root, &specialSum);
+
+    printf("%d\n", height);
+    printf("%d\n", maxSum);
+    printf("%d\n", specialSum);
+
+   
+  return 0;
+}

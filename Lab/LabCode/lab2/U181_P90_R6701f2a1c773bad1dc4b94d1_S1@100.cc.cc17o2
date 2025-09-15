@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+#include <algorithm>
+
+using namespace std;
+
+// 定义树节点结构
+struct TreeNode {
+    int value;      
+    TreeNode *left;  
+    TreeNode *right;    
+    TreeNode(int val) : value(val) , left(), right() {}   
+};
+
+// 从层序遍历构建树
+TreeNode* buildTree(const vector<int>& nodes, int index) {
+    if (index>= nodes.size()|| nodes[index] == -1) return NULL;  //判断是否为空
+    TreeNode* root = new TreeNode(nodes[index]);
+    root->left = buildTree(nodes, 2*index + 1);
+    root->right = buildTree(nodes, 2*index + 2);
+    return root;
+}
+
+// 计算树的高度
+int getHeight(TreeNode* root) {
+    if (!root) return 0;
+    return max(getHeight(root->left),getHeight(root->right)) + 1;
+}
+
+// 找到资源最丰富的路径
+int maxResourcePath(TreeNode* root, int & maxSum) {
+    if (!root) 
+        return 0;
+    if (!root->left && !root->right) 
+        return root->value;   // 叶子节点返回其值
+    int leftsum = maxResourcePath(root->left, maxSum);
+    int rightsum = maxResourcePath(root->right, maxSum);
+    int sum = max(leftsum, rightsum);
+    maxSum = max(maxSum, sum+root->value);
+    return sum + root->value;
+}
+
+// 特殊区域探查
+void findSpecialNodes(TreeNode* root, int& sum) {
+    if (!root)return;
+    if (!root->left && !root->right) return;
+
+    bool isSpecial = true;
+    if(root->left){
+        findSpecialNodes(root->left,sum);
+        if(root->value <= root->left->value)
+        isSpecial = false;
+    }
+    
+     if(root->right){
+        findSpecialNodes(root->right,sum);
+        if(root->value <= root->right->value)
+        isSpecial = false;
+    }
+    if(isSpecial){
+        sum += root->value;
+    }
+    
+}
+
+int main() {
+    vector<int> nodes;
+    int value;    
+    int Sum = INT_MIN;
+    while (cin >> value) {
+        nodes.push_back(value);
+        //if (cin.peek() == '\n') break; 
+    }
+
+    TreeNode* root = buildTree(nodes, 0);
+    int height = getHeight(root);
+    int maxSum = maxResourcePath(root,Sum);
+    int sum = 0;
+    findSpecialNodes(root, sum);
+    cout << height << endl;
+    cout << maxSum << endl;
+    cout << sum << endl;
+    return 0;
+}

@@ -1,0 +1,50 @@
+#include<iostream>
+
+using namespace std;
+
+struct ListNode {
+    int value;
+    ListNode *prev, *next;
+};
+
+using CircularList = ListNode*;
+
+void reverseList(CircularList &list);
+
+int main() {
+    int count;
+    CircularList start, end, current;
+    start = end = new ListNode();
+    cin >> count;
+    for (int i = 0; i < count; i++) {
+        current = new ListNode();
+        cin >> current->value;
+        end->next = current;
+        current->prev = end;
+        end = current;
+    }
+    start->prev = end;
+    end->next = start;
+    reverseList(start);
+    current = start->next;
+    while (current != start->prev) {
+        cout << current->value << " ";
+        current = current->next;
+    }
+    cout << current->value;
+    return 0;
+}
+
+void reverseList(CircularList &list) {
+    ListNode *temp = nullptr;
+    ListNode *prev = list->prev;
+    ListNode *next = nullptr;
+    while (list != prev) {
+        next = list->next;
+        list->next = list->prev;
+        list->prev = next;
+        temp = list;
+        list = next;
+    }
+    list->next = temp;
+}

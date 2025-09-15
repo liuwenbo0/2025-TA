@@ -1,0 +1,77 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+long long mergeAndCount(vector<int>& arr, int left, int mid, int right) {
+    long long inv_count = 0;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    vector<int> L(n1), R(n2);
+
+    // 拷贝数据到临时数组
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = arr[mid + 1 + i];
+
+    int i = 0, j = 0, k = left;
+
+    // 合并两个子数组并统计逆序对
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+            // L[i] > R[j] 说明左子数组 L[i] 及其后的元素都比 R[j] 大，形成逆序对
+            inv_count += (n1 - i);
+        }
+        k++;
+    }
+
+    // 复制剩余元素
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+
+    return inv_count;
+}
+
+long long mergeSortAndCount(vector<int>& arr, int left, int right) {
+    long long inv_count = 0;
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        inv_count += mergeSortAndCount(arr, left, mid);
+        inv_count += mergeSortAndCount(arr, mid + 1, right);
+        inv_count += mergeAndCount(arr, left, mid, right);
+    }
+    return inv_count;
+}
+
+int main() {
+    int n;
+    cin >> n;  // 读取序列中的元素个数
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];  // 读取每个元素
+    }
+
+    // 计算逆序对数
+    long long result = mergeSortAndCount(arr, 0, n - 1);
+    
+    // 输出逆序对的数量
+    cout << result << endl;
+
+    return 0;
+}

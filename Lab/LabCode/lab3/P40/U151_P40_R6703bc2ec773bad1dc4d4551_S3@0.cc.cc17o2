@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <unordered_map>
+#include <limits>
+
+using namespace std;
+
+int minTrims(int n, int q, vector<int>& heights) {
+    if (q == 0) return 0;
+    if (q >= n) return 0;
+
+    unordered_map<int, int> heightCount;
+    int result = numeric_limits<int>::max();
+
+    for (int h : heights) {
+        int trims = 0;
+        int currentHeight = h;
+        while (currentHeight > 1) {
+            ++trims;
+            currentHeight /= 2;
+        }
+        heightCount[h] = trims;
+    }
+
+    for (int h : heights) {
+        int trims = 0;
+        int currentHeight = h;
+        int currentTrims = heightCount[h];
+        while (heightCount[currentHeight] > 0) {
+            int count = 0;
+            for (int height : heights) {
+                int trimsNeeded = 0;
+                int tempHeight = height;
+                while (tempHeight > currentHeight) {
+                    trimsNeeded++;
+                    tempHeight /= 2;
+                }
+                if (tempHeight == currentHeight) {
+                    count++;
+                }
+            }
+            if (count >= q) {
+                result = min(result, trims + currentTrims);
+            }
+            if (currentHeight == 1) break;
+            currentHeight /= 2;
+            currentTrims = max(currentTrims - 1, 0);
+            trims++;
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    int result = minTrims(n, q, heights);
+    cout << result << endl;
+
+    return 0;
+}

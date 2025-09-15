@@ -1,0 +1,22 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+        if (n == 1)
+        {
+            ans.push_back(1);
+            return ans;
+        }
+        int left_size = (n + 1)/2;
+        int right_size = n/2;
+        vector<int> left_half = perfect_permutation(left_size);
+        vector<int> right_half = perfect_permutation(right_size);
+        for (int i = 0; i < left_half.size(); ++i)
+        {
+            ans.push_back(left_half[i] * 2 - 1);
+        }
+        for (int i = 0; i < right_half.size(); ++i)
+        {
+            ans.push_back(right_half[i] * 2);
+        }
+    return ans;
+}

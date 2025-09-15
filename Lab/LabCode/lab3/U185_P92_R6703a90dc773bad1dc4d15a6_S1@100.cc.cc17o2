@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> numbers(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> numbers[i];
+    }
+
+    // 确保 k 不大于 n
+    if (k > n) {
+        cout << "Invalid input: k is greater than n" << endl;
+        return 0;
+    }
+
+    // 查找第一个长度为 k 的数组中的最大值
+    int max_val = numbers[0];
+    for (int i = 1; i < k; ++i) {
+        if (numbers[i] > max_val) {
+            max_val = numbers[i];
+        }
+    }
+    cout << max_val << " "; // 输出第一个最大值
+
+    // 使用滑动窗口查找后续数组中的最大值
+    for (int j = k; j < n; ++j) {
+        // 如果移出窗口的元素是当前最大值，需要重新找最大值
+        if (numbers[j - k] == max_val) {
+            int new_max = numbers[j];
+            for (int i = j - k + 1; i < j; ++i) {
+                if (numbers[i] > new_max) {
+                    new_max = numbers[i];
+                }
+            }
+            max_val = new_max;
+        } else {
+            // 如果最大值没有移出窗口，只需要比较新元素与当前最大值
+            if (numbers[j] > max_val) {
+                max_val = numbers[j];
+            }
+        }
+        cout << max_val << " "; // 输出当前最大值
+    }
+    cout << endl;
+    return 0;
+}

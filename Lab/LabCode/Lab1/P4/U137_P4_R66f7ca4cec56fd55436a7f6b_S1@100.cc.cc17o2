@@ -1,0 +1,15 @@
+#include "InsertionSort.h"  
+  
+void InsertionSort::mysort(std::vector<int>& nums) {  
+    int size = nums.size();  
+    for (int currentIndex = 1; currentIndex < size; ++currentIndex) {  
+        int currentValue = nums[currentIndex];  
+        int previousIndex = currentIndex - 1;  
+  
+        while (previousIndex >= 0 && nums[previousIndex] > currentValue) {  
+            nums[previousIndex + 1] = nums[previousIndex];  
+            --previousIndex;  
+        }  
+        nums[previousIndex + 1] = currentValue;  
+    }  
+}

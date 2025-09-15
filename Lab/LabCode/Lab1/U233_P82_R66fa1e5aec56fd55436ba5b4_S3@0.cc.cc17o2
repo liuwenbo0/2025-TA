@@ -1,0 +1,33 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list){
+   if (!list || !list->next || list->next == list) return;
+   //判断要改变的链表是否为空
+   Linklist odd = list->next, even = list->next->next;
+   //初始化两个节点分别用于奇数位和偶数位
+   Linklist evenHead = even;
+   Linklist oddTail = odd;
+
+   while (even && even->next && even->next != list){
+      odd->next = even->next;
+      odd->next->prior = odd;
+      //建立奇数位之间的联系
+      odd = odd->next;
+      //奇数节点移位
+      even->next = odd->next;
+      if (even->next) even->next->prior = even;
+      //建立偶数位之间的联系
+      even = even->next;
+      //偶数节点移位
+   }
+   odd->next = evenHead;
+   if(evenHead) evenHead->prior = odd;
+   Linklist tail = evenHead;
+   while(tail && tail->next && tail->next != list){
+      tail = tail->next;
+   }
+   if (tail){
+      tail->next = list;
+      list->prior = tail;
+   }
+}

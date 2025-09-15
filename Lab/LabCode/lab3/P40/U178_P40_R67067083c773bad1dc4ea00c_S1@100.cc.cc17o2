@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+long long int maxn = 4e5;
+
+long long int ifover(long long int *nums, long long int root, long long int max){
+    long long int a=0,b=0;
+    if(root*2<max+1)
+    {
+        a = ifover(nums,root*2,max);
+    }
+    if(root*2+1<max+1)
+    {
+        b = ifover(nums,root*2+1,max);
+    }
+    return a+b+nums[root];
+}
+
+long long int pass(long long int *nums, long long int root, long long int times, long long int max){
+    long long int count = 0;
+    for(long long int i = root*pow(2,times);i<root*pow(2,times)+pow(2,times);i++)
+    {
+        if(i<max+1)
+        {
+            count+=nums[i];
+        }
+    }
+    return count;
+}
+
+int main()
+{
+    long long int length, same;
+    long long int max=0;
+    scanf("%lld%lld",&length,&same);
+    long long int *plus = (long long int*)malloc(maxn*sizeof(long long int));
+    for(long long int i = 0;i < length;i++)
+    {
+        long long int p;
+        scanf("%lld",&p);
+        max = max>p?max:p;
+        plus[p]++;
+    }
+    long long int realcount = 1e16;
+    for(long long int k = 1;k<max+1;k++)
+    {
+        if(ifover(plus,k,max)>=same)
+        {
+            long long int root = plus[k];
+            long long int yes = 0;
+            long long int count = 0;
+            long long int times = 1;
+            while(yes==0)
+            {
+                if(plus[k]>=same)
+                {
+                    break;
+                }
+                else
+                {
+                    root+=pass(plus,k,times,max);
+                }
+                if(root>=same)
+                {
+                    count += (same-root+pass(plus,k,times,max))*times;
+                    yes = 1;
+                }else
+                {
+                    count += pass(plus,k,times,max)*times;
+                }
+                times++;
+            }
+            realcount = realcount<count?realcount:count;
+        }
+    }
+    printf("%lld",realcount);
+    return 0;
+}

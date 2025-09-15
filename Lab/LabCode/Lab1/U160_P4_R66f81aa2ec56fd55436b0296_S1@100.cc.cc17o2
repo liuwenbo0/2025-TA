@@ -1,0 +1,18 @@
+#include "InsertionSort.h"
+
+void InsertionSort::mysort(std::vector<int>& nums) {
+    // 从第二个元素开始遍历，因为第一个元素默认是已排序的
+    for (size_t i = 1; i < nums.size(); ++i) {
+        int key = nums[i]; // 待插入元素
+        int j = i - 1;
+        
+        // 将比待插入元素大的元素向右移动
+        while (j >= 0 && nums[j] > key) {
+            nums[j + 1] = nums[j];
+            j--;
+        }
+        
+        // 插入待排序元素
+        nums[j + 1] = key;
+    }
+}

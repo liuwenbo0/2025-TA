@@ -1,0 +1,11 @@
+#include"SqList.h"
+using SqList = std::vector<int>;
+
+void insert(SqList& list, int num) {
+    int n = list.size();
+    int i = 0;
+    while (i < n && list[i] < num) {
+        ++i;
+    }
+    list.insert(list.begin() + i, num);
+}

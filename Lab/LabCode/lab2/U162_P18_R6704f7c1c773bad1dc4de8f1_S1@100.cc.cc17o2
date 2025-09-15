@@ -1,0 +1,27 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+  vector<int> ans;
+    // 请在这里完成你的代码
+    ans.push_back(1);
+    int flag=1;
+    while(flag<n){
+      int p=0;       
+      vector<int> tem(2*n);
+    
+      for(int i:ans){
+        if(i*2<=n){
+          tem[p++]=i*2;
+        } 
+      }
+      for( int i:ans){
+        if(i*2-1<=n){
+          tem[p++]=i*2-1;
+        } 
+      }
+      if(p>n)p=n;
+      ans.assign(tem.begin(),tem.begin()+p);
+      flag=p;   
+    }
+    return ans;
+
+}

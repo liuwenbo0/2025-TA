@@ -1,0 +1,17 @@
+#include "InsertionSort.h"
+
+void InsertionSort::mysort(std::vector<int>& nums) {
+    int n = nums.size();
+    for (int i = 1; i < n; i++) {
+        int key = nums[i];
+        int j = i - 1;
+        
+        // 将比key大的元素向后移动一个位置
+        while (j >= 0 && nums[j] > key) {
+            nums[j + 1] = nums[j];
+            j = j - 1;
+        }
+        // 将key插入到正确的位置
+        nums[j + 1] = key;
+    }
+}

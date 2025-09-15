@@ -1,0 +1,23 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    Linklist p = list->next, m = nullptr;
+    if(p->next == p->prior)return;
+    while(p && p->next->next != list && p->next != list) {
+        p->next = p->next->next;
+        p = p->next;
+    }
+    if(p->next->next == list){
+        p = p->next;
+    }
+    else {
+        p->next = p->prior;
+        p = p->next;
+    }
+    do{
+        p->next = p->prior->prior;
+        m = p;
+        p = p->next;
+    }while(p != list);
+    list->prior = m;
+}

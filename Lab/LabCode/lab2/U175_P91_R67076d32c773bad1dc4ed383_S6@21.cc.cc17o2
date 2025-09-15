@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+using namespace std; 
+void splitCrystal(int x,vector<int>& crystals,int index){
+    if(x<=1){
+        crystals[index]=x;
+        return;
+    }
+    int half=x/2;
+    int remainder=x%2;
+    splitCrystal(half,crystals,index*3);
+    splitCrystal(remainder,crystals,index*3+1);
+    splitCrystal(half,crystals,index*3+2);
+}
+
+int main(){
+    int m,k,s;
+    cin>>m>>k>>s;
+    int size=1;
+    for(int i=m;i>1;i/=2){
+        size*=3;
+    }
+
+    vector<int> crystals(size,0);
+    splitCrystal(m,crystals,0);
+    int onesInRange=0;
+    for(int i=k-1;i<s&&i<size;++i) {
+        if(crystals[i]==1){
+            onesInRange++;
+        }
+    }
+	cout<<onesInRange<<endl;
+    return 0;
+}

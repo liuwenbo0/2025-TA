@@ -1,0 +1,42 @@
+#include "Solution.h"
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    if(n>=4){
+      vector<vector<int>> befans=Solution::round_robin_schedule(n/2);
+      vector<vector<int>> pbefans(n/2,vector<int>(n/2));
+      for(int i=0;i<n/2;i++){
+        for(int j=0;j<n/2;j++){
+          pbefans[i][j]=befans[i][j]+n/2;
+        }
+      }
+      for(int i=0;i<n;i++){
+        if(i<n/2){
+          for(int j=0;j<n;j++){
+            if(j<n/2){
+              ans[i][j]=befans[i][j];
+            }
+            else{
+              ans[i][j]=pbefans[i][j-n/2];
+            }
+          }
+        }
+        else{
+          for(int j=0;j<n;j++){
+            if(j<n/2){
+              ans[i][j]=pbefans[i-n/2][j];
+            }
+            else{
+              ans[i][j]=befans[i-n/2][j-n/2];
+            }
+          }
+        }
+      }
+      return ans;
+    }
+    else{
+      return {{1,2},{2,1}};
+    }
+  }

@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+void split(int m, vector<int>& crystals) {
+    if (m <= 1) {
+        crystals.push_back(m);
+        return;
+    }
+
+    int a = m / 2;      
+    int b = m % 2;     
+    split(a, crystals);
+    crystals.push_back(b); 
+    split(a, crystals); 
+}
+
+int countOnesInRange(const vector<int>& crystals, int k, int s) {
+    int count = 0;
+    for (int i = k - 1; i < s; ++i) {
+        if (crystals[i] == 1) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    long long m;
+    int k, s;
+    cin >> m >> k >> s;
+
+    vector<int> crystals;
+    split(m, crystals);
+    int result = countOnesInRange(crystals, k, s);
+    cout << result << endl;
+
+    return 0;
+}

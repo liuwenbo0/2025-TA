@@ -1,0 +1,41 @@
+#include<iostream>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+
+vector<int> crystal(long long n)
+{
+	vector<int> count;
+	if (n == 0)
+	{
+		count.push_back(0);
+		return count;
+	}
+	else {
+		while (n){
+			count.push_back(n & 1);
+			n >>= 1;
+		}
+		reverse(count.begin(), count.end());
+		return count;
+	}
+}
+
+int main()
+{
+	long long m, k, s, roam, total = 0;
+	int index;
+	cin >> m >> k >> s;
+	vector<int> count = crystal(m);
+	long long width = pow(2, count.size());
+	for (long long i = k; i <= s; i++) {
+		roam = (i > (width >> 1)) ? (width - i) : i;
+		for (index = 0; (roam & 1) == 0; index++, roam >>= 1);
+		if (count[index]) {
+			total++;
+		}
+	}
+	cout << total << endl;
+	return 0;
+}

@@ -1,0 +1,50 @@
+#include "Solution.h"
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) {
+    // 请在这里完成你的代码
+    long long leftsum = -1000000;
+    long long sum = 0;
+    for (int i = mid; i >= low; i--) {
+        sum += A[i];
+        if (sum > leftsum) {
+            leftsum = sum;
+            
+        }
+    }
+    long long rightsum = -1000000;
+    sum = 0;
+    for (int i = mid + 1; i <= high; i++) {
+        sum += A[i];
+        if (sum > rightsum) {
+            rightsum = sum;
+            
+        }
+    }
+    return leftsum + rightsum;
+  
+}
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) {
+    // 请在这里完成你的代码
+    if(low == high){
+        return low,high,A[low];
+    }
+    else{
+        int mid = (low + high) / 2;
+        int leftlow,lefthigh,leftsum;
+        int rightlow,righthigh,rightsum;
+        int crosslow,crosshigh,crosssum;
+        leftlow,lefthigh,leftsum = find_maximum_subarray(A,low,mid);
+        rightlow,righthigh,rightsum = find_maximum_subarray(A,mid+1,high);
+        crosslow,crosshigh,crosssum = find_maximum_crossing_subarray(A,low,mid,high);
+        if(leftsum >= rightsum && leftsum >= crosssum){
+            return leftsum;
+        }
+        else if(rightsum >= leftsum && rightsum >= crosssum){
+            return rightsum;
+        }
+        else{
+            return crosssum;
+        }
+    }
+    
+    
+}

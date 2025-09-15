@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cmath>
+#include <unordered_map>
+
+int min_num_of_trims(int n, int q, std::vector<int>& heights) {
+    std::unordered_map<int, int> count;
+    for (int height : heights) {
+        count[height]++;
+    }
+
+    std::priority_queue<std::pair<int, int>> max_heap;
+    for (const auto& entry : count) {
+        max_heap.push({entry.second, entry.first});
+    }
+
+    int trims = 0;
+    while (!max_heap.empty()) {
+        auto [freq, height] = max_heap.top();
+        max_heap.pop();
+
+        if (freq >= q) {
+            return trims;
+        }
+
+        // 修剪比当前高度大的所有高度
+        std::vector<std::pair<int, int>> temp;
+        while (!max_heap.empty() && max_heap.top().second > height) {
+            temp.push_back(max_heap.top());
+            max_heap.pop();
+        }
+
+        for (auto& [f, h] : temp) {
+            int new_height = h / 2;
+            if (new_height > 0) {
+                count[new_height] += f;
+                max_heap.push({count[new_height], new_height});
+            }
+        }
+
+        // 将当前高度修剪一次
+        int new_height = height / 2;
+        if (new_height > 0) {
+            count[new_height] += freq;
+            max_heap.push({count[new_height], new_height});
+        }
+
+        trims++;
+    }
+
+    return trims;
+}
+
+int main() {
+    int n, q;
+    std::cin >> n >> q;
+    std::vector<int> heights(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> heights[i];
+    }
+
+    int result = min_num_of_trims(n, q, heights);
+    std::cout << result << std::endl;
+
+    return 0;
+}

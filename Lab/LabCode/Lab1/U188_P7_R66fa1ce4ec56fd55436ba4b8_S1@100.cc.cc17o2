@@ -1,0 +1,50 @@
+#include "MergeSort.h"
+
+void abb(std::vector<int> &num,std::vector<int> &numa,std::vector<int> &numb,int m,int n,int t,int c){
+    if((m>=0)&&(n>=0)){
+        if(numa[m]>numb[n]){
+            num[t]=numa[m];
+            m--;
+        }
+        else{
+            num[t]=numb[n];
+            n--;
+        }
+        t--;
+        abb(num,numa,numb,m,n,t,c);
+    }
+    else if((m<0)&&(n>=0)){
+        for(int i=t;i>=c;i--){
+            num[i]=numb[i-c];
+            n--;
+        }
+    }
+    else if((n<0)&&(m>=0)){
+        for(int i=t;i>=c;i--){
+            num[i]=numa[i-c];
+            m--;
+        }
+    }
+}
+// 通过归并排序对int队列nums中的[left, right]区间进行升序排序
+// @param
+// nums: 完整的待排序队列，最终排序的结果应存放在nums中
+// left: 当前排序区间的左端点
+// right: 当前排序区间的右端点
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    if((right-left)>=1){
+        int p=left,q=(right+left)/2,r=right;
+        std::vector<int> num1,num2;
+        for(int i=0;i<q-p+1;i++){
+            num1.push_back(nums[p+i]);
+        }
+        merge_sort_aux(num1,0,q-p);
+        for(int i=0;i<r-q;i++){
+            num2.push_back(nums[q+1+i]);
+        }
+        merge_sort_aux(num2,0,r-q-1);
+        abb(nums,num1,num2,q-p,r-q-1,r,p);
+        }
+    
+}

@@ -1,0 +1,44 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    long long m;
+    int k, s;
+    cin >> m >> k >> s;
+
+    queue<long long> crystals;
+    crystals.push(m);
+
+    long long countOnes = 0; // 用于统计能量为1的数量
+    long long totalCount = 0; // 统计符合条件的数量
+
+    while (!crystals.empty()) {
+        long long current = crystals.front();
+        crystals.pop();
+
+        // 分裂逻辑
+        if (current > 1) {
+            long long part1 = current / 2;
+            long long part2 = current % 2;
+            long long part3 = current / 2;
+
+            crystals.push(part1);
+            crystals.push(part2);
+            crystals.push(part3);
+        } else if (current == 1) {
+            countOnes++; // 能量为1的晶体数量加1
+        }
+    }
+
+    // 计算符合条件的能量为1的晶体数量
+    if (countOnes >= k) {
+        totalCount = countOnes - k + 1; // 计算符合条件的数量
+        if (s < countOnes) {
+            totalCount = s - k + 1; // 如果s小于countOnes，进行相应调整
+        }
+    }
+
+    cout << totalCount << endl;
+    return 0;
+}

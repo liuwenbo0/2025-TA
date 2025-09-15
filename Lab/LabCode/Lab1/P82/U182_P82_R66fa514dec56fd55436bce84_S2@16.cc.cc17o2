@@ -1,0 +1,45 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    //在此处添加代码
+    if (list == nullptr || list->next == list) {
+        return; // 如果链表为空或只有一个节点，不需要转换
+    }
+
+    node *current = list->next;
+    node *evenHead = nullptr;
+    node *evenTail = nullptr;
+    node *oddHead = list;
+    node *oddTail = list->next;
+
+    // 遍历链表，分离奇数位置和偶数位置的节点
+    while (current != list) {
+        node *next = current->next;
+        if (evenTail) {
+            evenTail->next = current;
+            current->prior = evenTail;
+            evenTail = current;
+        } else {
+            evenHead = evenTail = current;
+        }
+        current->next = oddHead;
+        oddHead->prior = current;
+        if (oddTail) {
+            oddTail->next = next;
+            next->prior = oddTail;
+            oddTail = next;
+        } else {
+            oddHead = next;
+        }
+        current = next->next;
+    }
+
+    // 连接奇数和偶数链表，并形成循环链表
+    oddTail->next = evenHead;
+    evenHead->prior = oddTail;
+    evenTail->next = list;
+    list->prior = evenTail;
+
+    // 更新原链表头节点
+    list = oddHead;
+}

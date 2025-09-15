@@ -1,0 +1,30 @@
+#include "MyStack.h"  
+bool MyStack::Empty() {  
+    return top == -1;  
+}  
+bool MyStack::Full() {  
+    return top == MAXLENG - 1;  
+}  
+bool MyStack::Push(ElementType e) {  
+    if (Full()) {  
+        return false; // 栈满，无法插入  
+    }  
+    top++; // 栈顶指针上移  
+    elem[top] = e; // 新元素入栈  
+    return true;  
+}  
+bool MyStack::Gettop(ElementType &e) {  
+    if (Empty()) {  
+        return false; // 栈空，无法拷贝  
+    }  
+    e = elem[top]; // 拷贝栈顶元素  
+    return true;  
+}  
+bool MyStack::Pop(ElementType &e) {  
+    if (Empty()) {  
+        return false; // 栈空，无法删除  
+    }  
+    e = elem[top]; // 取出栈顶元素  
+    top--; // 栈顶指针下移  
+    return true;  
+}

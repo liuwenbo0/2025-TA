@@ -1,0 +1,33 @@
+#include "MergeSort.h"
+    
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    if(left>=right)
+    {
+        return;
+    }
+
+    int b=(left+right)>>1;
+    merge_sort_aux(nums,left,b);
+    merge_sort_aux(nums,b+1,right);
+    int i=left,j=b+1,k=0;
+    int a[right-left+1];
+    while(i<=b && j<=right)
+    {
+        if(nums[i]>nums[j])
+            a[k++]=nums[j++];
+        else
+            a[k++]=nums[i++];
+    }
+    while(i<=b)
+    {
+        a[k++]=nums[i++];
+    }
+    while(j<=right)
+    {
+        a[k++]=nums[j++];
+    }
+
+    for(int m=0;m<right-left+1;m++)
+        nums[left+m]=a[m];
+}

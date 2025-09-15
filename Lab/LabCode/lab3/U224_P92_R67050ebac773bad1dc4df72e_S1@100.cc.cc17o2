@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int find_max(vector<int> &a, long l, long r){
+    int max = 0, j;
+    for(int i = l; i <= r; i++){
+        if(max < a[i]) {
+            max = a[i];
+            j = i;
+        }
+    }
+    return j;
+}
+void solution(vector<int> &a, long n, long k){
+    if(k > n){
+        cout<<find_max(a, 0, n-1);
+    }
+    else{
+        long j = 0;
+        long x = find_max(a, 0, k - 1);
+        while(j + k  <= n ){
+            cout<<a[x]<<" ";
+            if(j + k < n){
+            	if(a[j+k] >= a[x]){
+            		x = j + k;
+            		j++;
+				}
+				else{
+					if(j == x){
+						j++;
+						x = find_max(a, j, j + k - 1);
+					}
+					else j++;
+				}
+			}
+			else{
+				j++;
+			}
+        }
+            
+    }
+}
+int main(){
+    long n, k;
+    cin>>n>>k;
+    vector<int> a(n);
+    for(long i = 0; i < n; i++){
+    cin>>a[i];
+    }
+    solution(a, n, k);
+}

@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int Treehight(int tree[],int root,int n){
+    int lhight,rhight;
+    if(tree[root]==-1||root>=n) return 0;
+    else{
+        lhight=Treehight(tree,root*2+1,n);
+        rhight=Treehight(tree,root*2+2,n);
+        if(lhight>=rhight) return lhight+1;
+        else return rhight+1;
+    }
+}
+
+int maxpath(int tree[],int root,int n){
+    int lnum=0,rnum=0;
+    if(tree[root]==-1||root>=n) return 0;
+    else{
+        lnum+=maxpath(tree,root*2+1,n);
+        rnum+=maxpath(tree,root*2+2,n);
+        if(rnum>=lnum) return rnum+=tree[root];
+        else return lnum+=tree[root];
+    }
+}
+
+int find(int tree[],int root,int n){
+    if(tree[root]==-1||root>=n) return 0;
+    else if(tree[root*2+1]==-1&&tree[root*2+2]==-1) return 0;
+    else if((root*2+1)>=n&&(root*2+2)>=n) return 0;
+    else if(tree[root]>tree[root*2+1]&&tree[root]>tree[root*2+2]) return tree[root]+find(tree,root*2+1,n)+find(tree,root*2+2,n);
+    else return find(tree,root*2+1,n)+find(tree,root*2+2,n);
+}
+
+int main(){
+    int num,i=0;
+    //vector<int> tree;
+    int tree[10000000];
+    /*while(cin>>num){
+        tree.push_back(num);
+        i++;
+    }*/
+    while(cin>>num){
+        tree[i++]=num;
+    }
+    cout << Treehight(tree,0,i) << endl;
+    cout << maxpath(tree,0,i) << endl;
+    cout << find(tree,0,i);
+    return 0;
+}

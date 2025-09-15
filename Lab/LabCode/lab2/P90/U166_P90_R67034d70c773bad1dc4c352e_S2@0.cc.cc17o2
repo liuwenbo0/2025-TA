@@ -1,0 +1,129 @@
+#include <iostream>
+#include <queue>
+#include <climits>
+#include <vector>
+#include <algorithm> // for std::max
+using namespace std;
+
+struct TreeNode {
+    int value;
+    TreeNode *left;
+    TreeNode *right;
+    
+    TreeNode(int val) : value(val), left(nullptr), right(nullptr) {}
+};
+
+// Function to build the binary tree from the given vector
+TreeNode* buildTree(const vector<int>& nodes) {
+    if (nodes.empty() || nodes[0] == -1) return nullptr;
+
+    TreeNode* root = new TreeNode(nodes[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+    
+    long unsigned int i = 1;
+    while (!q.empty() && i < nodes.size()) {
+        TreeNode* current = q.front();
+        q.pop();
+        
+        // Build left child
+        if (i < nodes.size() && nodes[i] != -1) {
+            current->left = new TreeNode(nodes[i]);
+            q.push(current->left);
+        }
+        i++;
+        
+        // Build right child
+        if (i < nodes.size() && nodes[i] != -1) {
+            current->right = new TreeNode(nodes[i]);
+            q.push(current->right);
+        }
+        i++;
+    }
+    return root;
+}
+
+// Function to calculate the height of the tree
+int calculateHeight(TreeNode* node) {
+    if (!node) return 0;
+    return 1 + max(calculateHeight(node->left), calculateHeight(node->right));
+}
+
+// Function to find the maximum path sum in the tree
+int maxPathSum(TreeNode* node, int& maxSum) {
+    if (!node) return 0;
+
+    // Calculate the maximum path sums for left and right children
+    int leftSum = max(maxPathSum(node->left, maxSum), 0); // Ignore negative sums
+    int rightSum = max(maxPathSum(node->right, maxSum), 0); // Ignore negative sums
+
+    // Calculate current maximum sum at this node
+    int currentMax = node->value + leftSum + rightSum; // Maximum including both children
+
+    // Update global maximum sum
+    maxSum = max(maxSum, currentMax);
+
+    // Return the maximum path sum from this node to its parent
+    return node->value + max(leftSum, rightSum);
+}
+
+// Function to find special nodes
+void findSpecialNodes(TreeNode* node, int& specialSum) {
+    if (!node || (!node->left && !node->right)) return;
+
+    bool isSpecial = true;
+
+    if (node->left && node->value <= node->left->value) {
+        isSpecial = false;
+    }
+
+    if (node->right && node->value <= node->right->value) {
+        isSpecial = false;
+    }
+
+    if (isSpecial) {
+        specialSum += node->value;
+    }
+
+    // Recursively check left and right children
+    findSpecialNodes(node->left, specialSum);
+    findSpecialNodes(node->right, specialSum);
+}
+
+// Function to deallocate tree nodes
+void freeTree(TreeNode* node) {
+    if (!node) return;
+    freeTree(node->left);
+    freeTree(node->right);
+    delete node;
+}
+
+int main() {
+    vector<int> nodes;
+    int value;
+
+    // Read input until EOF
+    while (cin >> value) {
+        nodes.push_back(value);
+    }
+
+    TreeNode* root = buildTree(nodes);
+    
+    int height = calculateHeight(root);
+    
+    int maxResourcePathSum = INT_MIN; // Initialize to a very small number
+    maxPathSum(root, maxResourcePathSum);
+    
+    int specialNodeSum = 0;
+    findSpecialNodes(root, specialNodeSum);
+    
+    // Output the results
+    cout << height << endl;
+    cout << maxResourcePathSum << endl;
+    cout << specialNodeSum << endl;
+
+    // Free the allocated memory for the tree
+    freeTree(root);
+
+    return 0;
+}

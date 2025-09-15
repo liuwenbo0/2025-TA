@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1e6+5;
+int a[maxn],b[maxn],c[maxn];
+int n;
+long long ans=0,ans2=0;
+void msort(int left,int right){
+        if(left==right) return;
+
+        int mid=(left+right)/2;
+        msort(left,mid);
+        msort(mid+1,right);//拆分
+
+        int i=left,j=mid+1,k=left;//合并
+        while(i<=mid && j<=right){
+            ans++;
+            if(a[i]<=a[j]){
+                b[k++]=a[i++];
+            }else {
+                b[k++]=a[j++];
+            }
+        }
+        while(i<=mid) b[k++]=a[i++];
+
+        while(j<=right) b[k++]=a[j++];
+
+        for(i=left;i<=right; i++)
+            a[i]=b[i];
+}
+void isort(){
+    for (int i = 0; i < n - 1; ++i)
+	{
+		int end = i;
+		int tem = c[end + 1];
+		while (end >= 0)
+		{
+            ans2++;
+			if (tem < c[end])
+			{
+				c[end + 1] = c[end];
+				end--;
+			}
+			else
+			{
+				break;
+			}
+		}
+		c[end  + 1] = tem;
+	}
+}
+void solve(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+        c[i]=a[i];
+    }
+    msort(0,n-1);
+    isort();
+    cout<<ans<<" "<<ans2;
+}
+int main()
+{
+    int T=1;
+    while(T--){
+        solve();
+    }
+    return 0;
+}

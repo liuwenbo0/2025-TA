@@ -1,0 +1,36 @@
+#include <vector>
+#include <iostream>
+
+typedef std::vector<int> SqList;
+
+void insert(SqList& list, int num) {
+    auto it = list.begin();
+    while (it != list.end() && *it < num) {
+        ++it;
+    }
+    list.insert(it, num);
+}
+
+int main() {
+    int n, m;
+    std::cin >> n;
+    SqList list(n);
+    for (int i = 0; i < n; ++i) 
+    {
+        std::cin >> list[i];
+    }
+
+    std::cin >> m;
+    for (int i = 0; i < m; ++i) 
+    {
+        int num;
+        std::cin >> num;
+        insert(list, num);
+    }
+
+    for (int num : list)
+    {
+        std::cout << num << " ";
+    }
+    return 0;
+}

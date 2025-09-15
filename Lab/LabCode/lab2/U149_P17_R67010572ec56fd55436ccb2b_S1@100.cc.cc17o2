@@ -1,0 +1,35 @@
+#include "Solution.h"
+void constructSchedule(vector<vector<int>>& schedule, int n, int start, int offset) {
+    if (n == 2) {
+        schedule[start][start] = start + 1;
+        schedule[start][start + 1] = start + 2;
+        schedule[start + 1][start] = start + 2;
+        schedule[start + 1][start + 1] = start + 1;
+        return;
+    }
+
+    int m = n / 2;
+    constructSchedule(schedule, m, start, offset);
+    constructSchedule(schedule, m, start + m, offset);
+
+    int i = 0;
+    while (i < m) {
+        int j = 0;
+        while (j < m) {
+            schedule[start + i][start + m + j] = schedule[start + i][start + j] + m;
+            schedule[start + m + i][start + j] = schedule[start + i][start + j] + m;
+            schedule[start + m + i][start + m + j] = schedule[start + i][start + j];
+            ++j;
+        }
+        ++i;
+    }
+}
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    vector<vector<int>> ans(n, vector<int>(n, 0));
+    for (int i = 0; i < n; i++) {
+        ans[i][0] = i + 1; // 第一列从上到下依次为 1 到 n
+    }
+    constructSchedule(ans, n, 0, 0);
+    return ans;
+}

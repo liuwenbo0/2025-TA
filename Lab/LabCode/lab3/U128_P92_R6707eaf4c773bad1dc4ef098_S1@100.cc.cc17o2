@@ -1,0 +1,46 @@
+#include <iostream>  
+#include <deque>  
+#include <vector>  
+using namespace std;
+
+
+int main() {  
+    int n, k;  
+    cin >> n >> k;  
+    vector<int> nums(n);  
+    for (int i = 0; i < n; ++i) 
+    {  
+        cin >> nums[i];  
+    }  
+
+    deque<int> dq; 
+    vector<int> max_values; 
+
+    for (int i = 0; i < n; ++i) 
+    {  
+        if (!dq.empty() && dq.front() < i - k + 1) {  
+            dq.pop_front();  
+        }  
+        
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {  
+            dq.pop_back();  
+        }  
+        
+        dq.push_back(i);  
+        
+        if (i >= k - 1) {  
+            max_values.push_back(nums[dq.front()]);  
+        }  
+    }  
+
+    for (size_t i = 0; i < max_values.size(); ++i) 
+    {  
+        cout << max_values[i];  
+        if (i < max_values.size() - 1) {  
+            cout << " ";  
+        }  
+    }  
+    cout << endl;  
+
+    return 0;  
+}

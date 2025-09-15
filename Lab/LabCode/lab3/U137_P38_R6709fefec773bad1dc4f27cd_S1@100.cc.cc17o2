@@ -1,0 +1,54 @@
+#include "QuickSort.h"  
+  
+int median_of_three(std::vector<int>& nums, int left, int right) {  
+    int center = (left + right) / 2;  
+    if (nums[left] > nums[center]) std::swap(nums[left], nums[center]);  
+    if (nums[left] > nums[right]) std::swap(nums[left], nums[right]);  
+    if (nums[center] > nums[right]) std::swap(nums[center], nums[right]);  
+    std::swap(nums[center], nums[right - 1]);   
+    return nums[right - 1];  
+}  
+  
+int QuickSort::partition(std::vector<int>& nums, int p, int r) {  
+    int pivot = median_of_three(nums, p, r);  
+    int i = p - 1;  
+    int j = p;  
+    while (j < r) {  
+        if (nums[j] < pivot) {  
+            i++;  
+            std::swap(nums[i], nums[j]);  
+        }  
+        j++;  
+    }  
+    std::swap(nums[i + 1], nums[r - 1]);  
+    return i + 1;  
+}  
+  
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {  
+    if (l < r) {  
+        if (r - l <= 10) {   
+            int i = l + 1;  
+            int key, j;  
+            while (i <= r) {  
+                key = nums[i];  
+                j = i - 1;  
+                while (j >= l && nums[j] > key) {  
+                    nums[j + 1] = nums[j];  
+                    j--;  
+                }  
+                nums[j + 1] = key;  
+                i++;  
+            }  
+        } else {  
+            int pi = partition(nums, l, r);  
+            quick_sort(nums, l, pi - 1);  
+            quick_sort(nums, pi + 1, r);  
+        }  
+    }  
+}  
+  
+void QuickSort::mysort(std::vector<int>& nums) {  
+    if (nums.size() == 0)   
+        return;  
+    quick_sort(nums, 0, nums.size() - 1);  
+}

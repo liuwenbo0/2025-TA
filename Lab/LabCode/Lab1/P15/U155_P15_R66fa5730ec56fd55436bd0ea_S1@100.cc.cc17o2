@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+
+
+using namespace std;
+
+int s = 0;
+void merge(vector<int>& nums, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    vector<int> L(n1);
+    vector<int> R(n2);
+    for (int i = 0; i < n1; i++)
+        L[i] = nums[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = nums[mid + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        s++;
+        if (L[i] <= R[j]) {
+            nums[k++] = L[i++];
+        } else {
+            nums[k++] = R[j++];
+        }
+    }
+    while (i < n1) {
+        nums[k++] = L[i++];
+    }
+    while (j < n2) {
+        nums[k++] = R[j++];
+    }
+}
+void mergeSort(vector<int>& nums, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        merge(nums, left, mid, right);
+    }
+}
+int t = 0;
+void insertionSort(vector<int>& nums) {
+    int n = nums.size();
+    for (int i = 1; i < n; i++) {
+        int key = nums[i];
+        int j = i - 1;
+        while (j >= 0) {
+            t++;
+            if (nums[j] > key) {
+                nums[j + 1] = nums[j];
+                j--;
+            } else {
+                break;
+            }
+        }
+        nums[j + 1] = key;
+    }
+}
+int main() {
+    int N;
+    cin >> N;
+    vector<int> nums(N);
+    for (int i = 0; i < N; i++) {
+        cin >> nums[i];
+    }
+    vector<int> list = nums; 
+    mergeSort(list, 0, N - 1);
+    vector<int> list1 = nums;
+    insertionSort(list1);
+
+    cout << s << " " << t << endl;
+    return 0;
+}

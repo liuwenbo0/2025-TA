@@ -1,0 +1,34 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    int i=0;
+    Linklist head0,flag0,head1,flag1;
+    flag1=head1=list->next;
+    flag0=head0=list;
+    while(flag1!=list && flag1!=list->prior){
+        flag1->next=flag1->next->next;
+        flag1=flag1->next;
+        i++;
+    }
+    if(flag1==list)
+{
+		list->prior->prior->next=list->prior;
+		flag1=list->prior;
+    	while(flag1!=list->next->next && flag1!=list->next && flag1!=list){
+    		flag1->next=flag1->prior->prior;
+            flag1=flag1->next;
+		}
+	}
+	else{
+		flag1->next=flag1->prior;
+		flag1=flag1->next;
+		while(flag1!=list->next->next && flag1!=list->next && flag1!=list){
+			head0=flag1;
+    		flag1->next=flag1->prior->prior;
+            flag1=flag1->next;
+	}
+}
+    flag0=list->prior;
+    list->prior=head0;
+    head0=flag0;
+}

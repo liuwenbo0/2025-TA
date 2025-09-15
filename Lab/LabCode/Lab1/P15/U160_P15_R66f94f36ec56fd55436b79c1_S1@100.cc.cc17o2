@@ -1,0 +1,104 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int insert(vector<int>&a,int n)
+{
+    int k=0;
+    for(int j=1;j<n;j++)
+    {
+        int i=j-1;
+        int key=a[j];
+        while(j>=1&&key<a[i])
+        {
+            a[i+1]=a[i];
+            k++;
+            i--;
+        }
+        a[i+1]=key;
+        if(i!=-1)
+        k++;
+    }
+    return k;
+}
+int Merge(vector<int>&a,int left,int mid,int right)
+{
+    int k3=0;
+    int i=left,j=mid+1,k=0;
+    vector<int>temp(right-left+1);
+    while(i<=mid&&j<=right)
+    {
+        k3++;
+        if(a[i]<a[j])
+        {
+            temp[k++]=a[i++];
+        }else{
+            temp[k++]=a[j++];
+        }
+    }
+    while(j<=right)
+        {
+            temp[k++]=a[j++];
+            k3++;
+        }
+    while(i<=mid)
+        {
+            temp[k++]=a[i++];
+            k3++;
+        }
+    for (i = left, k = 0; i <= right; i++, k++) {
+        a[i] = temp[k];
+    }
+    return k3;
+}
+int Merge_sort(vector<int>&a,int left,int right)
+{
+       if(left>=right)
+    {
+        return 0;
+    }
+        int mid=(left+right)/2;
+        int left_count= Merge_sort(a,left,mid);
+        int right_count= Merge_sort(a,mid+1,right);
+        int sum_count= Merge(a,left,mid,right);
+        return sum_count+left_count+right_count;
+}
+// int Merge_sort(vector<int>&a,int left,int right)
+// {
+//     if(left>=right)
+//     {
+//         return 0;
+//     }
+//     int mid=(right+left)/2;
+//     Merge_sort(a,left,mid);
+//     Merge_sort(a,mid+1,right);
+//     int i=left,j=mid+1,q=0;
+//     vector<int> temp(right-left+1);
+//     {
+//         while(i<=mid&&j<=right)
+//         {
+//             if(a[i]<a[j])
+//             {
+//                 temp[q++]=a[i++];
+//                 k3++;
+//             }else
+//             {
+//                 temp[q++]=a[j++];
+//                 k3++;
+//             }
+//         }
+//     }
+//     return k3;
+// }
+int main(){
+    int n;
+    cin>>n;
+    const int N=n;
+    vector<int>a(N);
+    for(int i=0;i<N;i++)
+    {
+        cin>>a[i];
+    }
+    int k2=insert(a,N);
+    int k3=Merge_sort(a,0,N-1);
+    cout<<k3<<" "<<k2<<endl;
+}

@@ -1,0 +1,59 @@
+#include "HeapSort.h"
+void swap(std::vector<int>& a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+void HeapSort::max_heapify(std::vector<int>& nums, int length) {
+        int i=0;
+        int left = 2 * i + 1;
+        int right = 2 * i+ 2;
+        while (left < length) {
+            int largest;
+            if (nums[left] < nums[right] && right < length) {
+                largest = right;
+            } else {
+                largest = left;
+            }
+            if (nums[i] > nums[largest]) {
+                largest = i;
+            }
+        
+            if (i == largest) {
+                break;
+            }
+            swap(nums, largest, i);
+            i = largest;
+            left = 2 * i + 1;
+            right = 2 * i + 2;
+        }
+
+}
+void HeapSort::build_max_heap(std::vector<int>& nums) { 
+    int length=nums.size();
+     for (int i = 0; i < length; i++) {
+            int currentIndex = i;
+
+            int fatherIndex = (currentIndex - 1) / 2;
+            while (nums[currentIndex] > nums[fatherIndex]) {
+                
+                swap(nums, currentIndex, fatherIndex);
+           
+                currentIndex = fatherIndex;
+               
+                fatherIndex = (currentIndex - 1) / 2;
+            }
+        }
+    
+}
+void HeapSort::mysort(std::vector<int>& nums) {
+     build_max_heap(nums);
+        int size =nums.size();
+        while (size > 1) {
+            swap(nums, 0, size - 1);
+            size--;
+          max_heapify(nums,size);
+ 
+        }
+}

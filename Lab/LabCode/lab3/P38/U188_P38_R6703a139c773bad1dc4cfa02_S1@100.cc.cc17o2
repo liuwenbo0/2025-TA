@@ -1,0 +1,50 @@
+#include "QuickSort.h"
+int Numberofthree(std::vector<int>& nums, int p, int q){
+    int mid=(p+q)/2;
+    if(nums[mid]>nums[p]){
+        int temp=nums[p];
+        nums[p]=nums[mid];
+        nums[mid]=temp;
+    }
+    if(nums[q]>nums[p]){
+        int temp=nums[p];
+        nums[p]=nums[q];
+        nums[q]=temp;
+    }
+    if(nums[mid]>nums[q]){
+        int temp=nums[q];
+        nums[q]=nums[mid];
+        nums[mid]=temp;
+    }
+    return nums[q];
+}
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    int x=Numberofthree(nums,p,q);
+    int i=p-1;
+    for(int j=p;j<q;j++){
+        if(nums[j]<=x){
+            i++;
+            int temp=nums[i];
+            nums[i]=nums[j];
+            nums[j]=temp;
+        }
+    }
+    nums[q]=nums[i+1];
+    nums[i+1]=x;
+    return i+1;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if(l<r){
+        int q=partition(nums,l,r);
+        quick_sort(nums,l,q-1);
+        quick_sort(nums,q+1,r);
+    }
+
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

@@ -1,0 +1,52 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+int count_energy_ones(int m, int k, int s) {
+    queue<int> q;
+    vector<int> ones_count;
+
+    q.push(m);
+
+
+    while (!q.empty()) {
+        int x = q.front();
+        q.pop();
+
+        if (x == 0) {
+            continue;
+        } else if (x == 1) {
+            ones_count.push_back(1);
+        } else {
+            int half_x = x / 2;
+            int mod_x = x % 2;
+
+      
+            q.push(half_x);
+            q.push(mod_x);
+            q.push(half_x);
+        }
+    }
+
+
+    size_t range_start = static_cast<size_t>(k - 1);
+    size_t range_end = static_cast<size_t>(s - 1);
+
+
+    int count_of_ones_in_range = 0;
+    for (size_t i = range_start; i <= range_end && i < ones_count.size(); ++i) {
+        count_of_ones_in_range += ones_count[i];
+    }
+
+    return count_of_ones_in_range;
+}
+
+int main() {
+    int m, k, s;
+    cin >> m >> k >> s;
+    int result = count_energy_ones(m, k, s);
+    cout << result << endl;
+    return 0;
+}

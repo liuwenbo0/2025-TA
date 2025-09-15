@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+class HeapSort {
+public:
+    void mysort(std::vector<int>& nums);
+private:
+    void max(std::vector<int>& nums, int t, int h);
+    void heap(std::vector<int>& nums);
+};
+
+void HeapSort::max(std::vector<int>& nums, int t, int h) {
+    int s = t;
+    int l = 2 * t + 1;   
+    int r = 2 * t + 2;  
+
+    if (l < h && nums[l] > nums[s]) {
+        s = l;
+    }
+
+    if (r < h && nums[r] > nums[s]) {
+        s = r;
+    }
+
+    if (s != t) {
+        std::swap(nums[t], nums[s]);
+        max(nums, s, h);
+    }
+}
+
+void HeapSort::heap(std::vector<int>& nums) {
+    int h = nums.size();
+    for (int t = h / 2 - 1; t >= 0; --t) {
+        max(nums, t, h);
+    }
+}
+
+void HeapSort::mysort(std::vector<int>& nums) {
+    heap(nums);
+    int h = nums.size();
+
+    for (int t = h - 1; t > 0; --t) {
+        std::swap(nums[0], nums[t]); 
+        max(nums, 0, t); 
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> nums(n); 
+
+    for (int t = 0; t < n; ++t) {
+        std::cin >> nums[t]; 
+    }
+
+    HeapSort sorter;
+    sorter.mysort(nums);
+
+    for (int t = 0; t < n; ++t) {
+        printf("%d ",nums[t]); 
+    }
+    std::cout << std::endl;
+
+    return 0;
+}

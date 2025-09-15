@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// 计算数字的二进制长度
+long long bitsLength(long long n) {
+    if (n == 0) return 1;
+    return 1LL << static_cast<int>(log2(n)) + 1;
+}
+
+// 获取指定位置的二进制位
+long long bitAtPos(long long n, long long l, long long r, long long p) {
+    long long half = (l + r) / 2;
+    if (p < half) return bitAtPos(n / 2, l, half - 1, p);
+    if (p > half) return bitAtPos(n / 2, half + 1, r, p);
+    return n % 2;
+}
+
+// 计算指定范围内1的个数
+long long countOnesInRange(long long val, long long from, long long to) {
+    long long count = 0;
+    long long maxPos = bitsLength(val);
+    for (long long i = from; i <= to; i++) {
+        count += bitAtPos(val, 1, maxPos, i);
+    }
+    return count;
+}
+
+int main() {
+    long long m, k, s;
+    // 读取输入值
+    cin >> m;
+    cin >> k;
+    cin >> s;
+    // 输出范围内1的总数
+    cout << countOnesInRange(m, k, s) << endl;
+    return 0;
+}

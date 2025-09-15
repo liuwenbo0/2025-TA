@@ -1,0 +1,28 @@
+#include "Solution.h"  
+  
+vector<int> Solution::perfect_permutation(int n) {  
+    vector<int> ans;  
+    vector<int> odds, evens;  
+
+    // 构造奇数序列和偶数序列  
+    for (int i = 1; i <= n; ++i) {  
+        if (i % 2 == 1) {  
+            odds.push_back(i);  
+        } 
+        else {  
+            evens.push_back(i);  
+        }  
+    }  
+      
+    // 交错地填充结果数组  
+    int odd_index = 0, even_index = 0;  
+    for (int i = 0; i < n; ++i) {  
+        if (i % 2 == 0) {  
+            ans.push_back(odds[odd_index++]);  
+        } else {  
+            ans.push_back(evens[even_index++]);  
+        }  
+    }  
+      
+    return ans;  
+}

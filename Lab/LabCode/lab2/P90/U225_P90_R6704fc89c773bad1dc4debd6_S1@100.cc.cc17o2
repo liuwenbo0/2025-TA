@@ -1,0 +1,110 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <algorithm>
+#include <sstream>
+#include <cmath>
+
+using namespace std;
+
+// 定义树节点
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+// 构建树，输入为层序遍历
+TreeNode* buildTree(const vector<int>& levelOrder) {
+    if (levelOrder.empty()) {
+        return nullptr;
+    }
+    
+    TreeNode* root = new TreeNode(levelOrder[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+    
+    int i = 1;
+    while (!q.empty() && i < levelOrder.size()) {
+        TreeNode* node = q.front();
+        q.pop();
+        
+        // 左子节点
+        if (i < levelOrder.size()) {
+            node->left = new TreeNode(levelOrder[i]);
+            q.push(node->left);
+        }
+        i++;
+        
+        // 右子节点
+        if (i < levelOrder.size()) {
+            node->right = new TreeNode(levelOrder[i]);
+            q.push(node->right);
+        }
+        i++;
+    }
+    
+    return root;
+}
+
+// 计算树的高度
+int getHeight(TreeNode* root) {
+    if (!root) return 0;
+    return 1 + max(getHeight(root->left), getHeight(root->right));
+}
+
+// 找到资源最丰富的路径
+int getMaxPathSum(TreeNode* root) {
+    if (!root) return 0;
+    int leftSum = getMaxPathSum(root->left);
+    int rightSum = getMaxPathSum(root->right);
+    return max(leftSum, rightSum) + root->val;
+}
+
+// 找到特殊区域的结点值之和
+void findSpecialNodes(TreeNode* root, int& sum) {
+    if (!root || (root->left == nullptr && root->right == nullptr) || (root->left->val == -1 && root->right->val == -1)) {
+        return;
+    }
+    
+    bool hasLeft = root->left && root->left->val != -1;
+    bool hasRight = root->right && root->right->val != -1;
+    
+    bool allChildrenLess = true;
+    if (hasLeft && root->left->val >= root->val) allChildrenLess = false;
+    if (hasRight && root->right->val >= root->val) allChildrenLess = false;
+    
+    if (allChildrenLess) {
+        sum += root->val;
+    }
+    
+    if (hasLeft) findSpecialNodes(root->left, sum);
+    if (hasRight) findSpecialNodes(root->right, sum);
+}
+
+int main() {
+    string inputLine;
+    getline(cin, inputLine); // 读取整行输入
+
+    istringstream iss(inputLine); // 使用istringstream来解析输入
+    int value;
+    vector<int> levelOrder;
+    while (iss >> value) {
+        levelOrder.push_back(value);
+    }
+    
+    TreeNode* root = buildTree(levelOrder);
+    
+    int height = getHeight(root);
+    int maxPathSum = getMaxPathSum(root);
+    int specialNodesSum = 0;
+    findSpecialNodes(root, specialNodesSum);
+    
+    cout << height << endl;
+    cout << maxPathSum << endl;
+    cout << specialNodesSum << endl;
+    
+    return 0;
+}

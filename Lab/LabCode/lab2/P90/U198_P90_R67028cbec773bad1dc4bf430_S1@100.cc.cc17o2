@@ -1,0 +1,65 @@
+# include<iostream>
+# include<vector>
+using namespace std;
+
+int build_tree(vector<int>& T)
+{
+    int x;
+    int length = 0;
+    int height = 0;
+    while (cin >> x)
+    {
+        T.push_back(x);
+        length++;
+    }
+    while (length!= 0)
+    {
+        length/=2;
+        height++;
+    }
+    return height;
+}
+
+int find_max_road(vector<int> &T, int head)
+{
+    int l = (int)T.size();
+    if (T[head] == -1 || head>=l) return 0;
+    if (T[head] != -1 && 2 * head + 1 > l) return T[head];
+    else
+    {
+        int left_max = T[head] + find_max_road(T, 2 * head + 1);
+        int right_max = T[head] + find_max_road(T, 2 * head + 2);
+        return max(left_max, right_max);
+    }
+
+}
+int special_node_sum(vector<int> T)
+{
+    int sum = 0;
+    int l = (int)(T.size());
+    for (int i = 0; i < l; i++)
+    {
+        if (T[i] != -1 && 2 * i - 1 < l)
+        {
+            if (2 * i + 2 < l)
+            {
+                if (T[i] > T[2 * i + 1] && T[i] > T[2 * i + 2] && (T[2 * i + 1] != -1 || T[2 * i + 2] != -1)) sum += T[i];
+            }
+            else if (2 * i + 1 < l)
+            {
+                if (T[2 * i + 1] < T[i]) sum += T[i];
+            }
+        }
+    }
+    return sum;
+}
+
+int main()
+{
+    vector<int> Tree;
+    int height;
+    height = build_tree(Tree);
+    int max = find_max_road(Tree, 0);
+    int sum = special_node_sum(Tree);
+    cout << height << "\n" << max<<"\n"<<sum;
+}

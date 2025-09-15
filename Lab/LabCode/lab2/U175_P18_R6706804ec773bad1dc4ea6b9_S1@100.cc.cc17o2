@@ -1,0 +1,17 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    if(n==1){
+		ans.push_back(1);
+		return ans;
+	}
+	else{
+        vector<int>ve=perfect_permutation((n+1)/2);
+        int sz=ve.size();
+        for(int it=0;it<sz;it++)ans.push_back(2*ve[it]-1);
+        vector<int>vv=perfect_permutation(n/2);
+        sz=vv.size();
+        for(int it=0;it<sz;it++)ans.push_back(2*vv[it]);
+    }
+    return ans;
+}

@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>  
+using namespace std;  
+  
+const int MAX_NUMBER_SIZE = 2000000;  
+int onesCounter = 0;
+int inputValue, rightLimit, leftLimit, rangeSpan;  
+  
+void processRecursively(int value) {  
+    if (rangeSpan == 0) return;   
+      
+    if (value == 0) {  
+        if (leftLimit > 1) {  
+            --leftLimit;  
+        } else if (rangeSpan) {  
+            onesCounter += 0;   
+            --rangeSpan;  
+        }  
+        return;  
+    }  
+      
+    if (value == 1) {  
+        if (leftLimit > 1) {  
+            --leftLimit;  
+        } else if (rangeSpan) {  
+            onesCounter += 1;   
+            --rangeSpan;  
+        }  
+        return;  
+    }  
+      
+    processRecursively(value / 2);  
+    if (rangeSpan > 0) {  
+        processRecursively(value % 2);  
+    }  
+    processRecursively(value / 2);  
+}  
+  
+int main() {  
+    cin >> inputValue >> leftLimit >> rightLimit;  
+    rangeSpan = rightLimit - leftLimit + 1;   
+    processRecursively(inputValue);   
+    cout << onesCounter;   
+    return 0;  
+}

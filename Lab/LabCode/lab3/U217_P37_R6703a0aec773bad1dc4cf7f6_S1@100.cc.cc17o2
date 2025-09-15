@@ -1,0 +1,44 @@
+#include "HeapSort.h"
+
+void HeapSort::max_heapify(std::vector<int>& nums, int i) {
+   int largest = i; // 初始化largest为根节点  
+    int left = 2 * i + 1; // 左子节点  
+    int right = 2 * i + 2; // 右子节点  
+  
+    // 如果左子节点存在且大于根节点  
+    if (left < heap_size && nums[left] > nums[largest]) {  
+        largest = left;  
+    }  
+  
+    // 如果右子节点存在且大于目前最大的节点  
+    if (right < heap_size && nums[right] > nums[largest]) {  
+        largest = right;  
+    }  
+  
+    // 如果最大值不是根节点  
+    if (largest != i) {  
+        std::swap(nums[i], nums[largest]); // 交换  
+        max_heapify(nums, largest); // 递归地对受影响的子树进行堆化 
+    }  
+}
+
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+     heap_size = nums.size(); // 初始化堆大小为数组长度  
+    // 从最后一个非叶子节点开始，向上进行堆化  
+    for (int i = heap_size / 2 - 1; i >= 0; i--) {  
+        max_heapify(nums, i); 
+    }  
+}
+
+void HeapSort::mysort(std::vector<int>& nums) {
+  length = nums.size();  
+    // 不需要在开头插入0元素，因为我们可以直接使用数组的第一个元素作为堆顶  
+    build_max_heap(nums); 
+    // 一个个从堆顶取出元素（最小值），放到数组末尾（实际上是覆盖原来的元素，因为我们已经不需要原来的顺序了）  
+    // 然后调整剩余的堆  
+    for (int i = length - 1; i > 0; i--) {  
+        std::swap(nums[0], nums[i]); // 将当前堆顶（最小值）放到数组末尾  
+        heap_size--; // 堆大小减1  
+        max_heapify(nums, 0); // 对新的堆顶进行堆化  
+    }  
+}

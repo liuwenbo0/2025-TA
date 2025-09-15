@@ -1,0 +1,16 @@
+#include "Solution.h"
+vector<int> Solution::perfect_permutation(int n) {
+    // 请在这里完成你的代码
+        if(n == 1) return {1};
+    int L = n / 2, R = n - L;
+    vector<int> l = perfect_permutation(L);
+    vector<int> r = perfect_permutation(R);
+    vector<int> ans(n);
+    for(int i = 0; i < L; i++) {
+      ans[i] = l[i] * 2;
+    }
+    for(int i = 0; i < R; i++) {
+      ans[i + L] = r[i] * 2 - 1;
+    }
+    return ans;
+}

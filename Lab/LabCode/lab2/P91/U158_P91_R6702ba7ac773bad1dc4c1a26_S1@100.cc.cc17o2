@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+int n,l,r,ans,len;
+int getlv(int x){
+    if(x==0||x==1)return 1;
+    else {
+        return getlv(x/2)*2+1;
+    }
+}
+int getans(int x,int l,int r,int ll,int rr){
+    if(l!=ll||r!=rr){
+        int mid=(l+r)/2;int q=x%2;
+        if(ll==rr&&ll==mid){
+            return q;
+        }
+        if(rr<mid)return getans(x/2,l,mid-1,ll,rr);
+        else if(ll>mid)return getans(x/2,mid+1,r,ll,rr);
+        else if(rr==mid){
+            return getans(x/2,l,mid-1,ll,rr-1)+q;
+        }
+        else if(ll==mid){
+            return getans(x/2,mid+1,r,ll+1,rr)+q;
+        }
+        else {
+            return getans(x/2,l,mid-1,ll,mid-1)+getans(x/2,mid+1,r,mid+1,rr)+q;
+        }
+    }
+    else return x;
+}
+signed main(){
+    cin>>n>>l>>r;
+    len=getlv(n);
+    ans=getans(n,1,len,l,r);
+    cout<<ans;
+    return 0;
+}

@@ -1,0 +1,32 @@
+#include <vector>
+#include "Solution.h"
+using namespace std;
+
+void deverge(std::vector<std::vector<int>>& ans,int n,int circle){
+    if(n==1) {
+        ans[0][0]=1;
+        return;
+    }
+       
+    deverge(ans,circle/2,circle/2);
+
+    for(int i=0;i<circle/2;i++){
+        for(int j=0;j<circle/2;j++){
+            ans[i+circle/2][j+circle/2]=ans[i][j];
+            ans[i+circle/2][j]=ans[i][j]+circle/2;
+            ans[i][j+circle/2]=ans[i][j]+circle/2;
+        }
+    }
+    return ;
+}
+
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    // 请在这里完成你的代码
+    deverge(ans,n,n);
+    return ans;
+  }

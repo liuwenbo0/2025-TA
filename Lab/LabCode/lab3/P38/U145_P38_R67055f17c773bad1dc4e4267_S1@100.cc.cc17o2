@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class QuickSort {
+public:
+    void sort(std::vector<int>& arr);
+
+private:
+    void quickSort(std::vector<int>& arr, int low, int high);
+    int partition(std::vector<int>& arr, int low, int high);
+    int medianOfThree(std::vector<int>& arr, int low, int high);
+    void insertionSort(std::vector<int>& arr, int low, int high);
+};
+
+void QuickSort::sort(std::vector<int>& arr) {
+    if (!arr.empty()) {
+        quickSort(arr, 0, arr.size() - 1);
+    }
+}
+
+void QuickSort::quickSort(std::vector<int>& arr, int low, int high) {
+    if (high - low < 10) {
+        insertionSort(arr, low, high);
+        return;
+    }
+
+    int pivotIndex = medianOfThree(arr, low, high);
+    std::swap(arr[pivotIndex], arr[high]);
+
+    int partIndex = partition(arr, low, high);
+    quickSort(arr, low, partIndex - 1);
+    quickSort(arr, partIndex + 1, high);
+}
+
+int QuickSort::partition(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; ++j) {
+        if (arr[j] <= pivot) {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+int QuickSort::medianOfThree(std::vector<int>& arr, int low, int high) {
+    int mid = low + (high - low) / 2;
+    if (arr[low] > arr[mid]) std::swap(arr[low], arr[mid]);
+    if (arr[low] > arr[high]) std::swap(arr[low], arr[high]);
+    if (arr[mid] > arr[high]) std::swap(arr[mid], arr[high]);
+    return mid;
+}
+
+void QuickSort::insertionSort(std::vector<int>& arr, int low, int high) {
+    for (int i = low + 1; i <= high; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= low && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int n;
+    std::cin >> n;
+    std::vector<int> arr(n);
+    for (int& num : arr) {
+        std::cin >> num;
+    }
+
+    QuickSort sorter;
+    sorter.sort(arr);
+
+    for (const int& num : arr) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}

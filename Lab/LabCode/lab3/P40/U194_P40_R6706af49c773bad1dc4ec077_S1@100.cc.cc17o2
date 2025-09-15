@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int minTrimsToMakeEqual(int n, int q, const vector<int>& heights) {
+    unordered_map<int, vector<int>> trimCount;
+
+    // 模拟每个高度的修剪过程
+    for (int height : heights) {
+        int currentHeight = height;
+        int cuts = 0;
+
+        while (currentHeight > 0) {
+            trimCount[currentHeight].push_back(cuts);
+            currentHeight /= 2; // 减半
+            cuts++;
+        }
+    }
+
+    int minCuts = INT_MAX;
+
+    // 计算需要的最小修剪次数
+    for (const auto& entry : trimCount) {
+        const vector<int>& counts = entry.second;
+        if (counts.size() >= q) { // 至少 q 段
+            vector<int> cuts = counts;
+            sort(cuts.begin(), cuts.end()); // 排序
+            int requiredCuts = 0;
+
+            // 取前 q 个最小修剪次数
+            for (int i = 0; i < q; ++i) {
+                requiredCuts += cuts[i];
+            }
+            minCuts = min(minCuts, requiredCuts); // 更新最小值
+        }
+    }
+
+    return minCuts == INT_MAX ? 0 : minCuts; // 如果没有满足条件的，返回 0
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    cout << minTrimsToMakeEqual(n, q, heights) << endl;
+
+    return 0;
+}

@@ -1,0 +1,31 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+long long leaf(long long m){
+    long long number = 1;
+    while(m > 1){
+        m = m / 2;
+        number = number *2 + 1;
+    }
+    return number;
+}
+long long calculate(long long m, long long l, long long r,long long cl, long long cr){
+    if(m==0||l > r||cl > r || cr < l){
+        return 0;
+    }
+    else if(m == 1){
+        return(l <= cl && cr <= r)? 1 : 0;
+    }
+    long long mid = (cl + cr)/2;
+    long long countleft = calculate(m/2, l, r, cl, mid-1);
+    long long countmid = (mid >= l && mid <= r && (m%2 ==1)) ? 1 : 0;
+    long long countright = calculate(m/2, l, r, mid+1, cr);
+    return countleft + countmid + countright;
+}
+int main(){
+    long long m,k,s;
+    cin>> m >> k >> s;
+    long long number = leaf(m);
+    long long count = calculate(m,k-1,s-1,0,number-1);
+    cout<<count<<endl; 
+}

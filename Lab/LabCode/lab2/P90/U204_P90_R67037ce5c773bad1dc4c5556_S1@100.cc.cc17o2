@@ -1,0 +1,71 @@
+#include<stdio.h>
+
+int findheight(int tree[],int root,int maxnum)
+{
+	int lh=0;
+	int rh=0;
+	if(root>=maxnum) 
+	return 0;
+	else if(tree[root]==-1)
+	return 0;
+    else
+	{
+        lh=findheight(tree,root*2+1,maxnum);
+        rh=findheight(tree,root*2+2,maxnum);
+        if(lh>=rh) 
+		return lh+1;
+        else 
+		return rh+1;
+    }
+}
+int findsource(int tree[],int root,int maxnum)
+{
+	int ls=0;
+	int rs=0;
+	if(root>=maxnum) 
+	return 0;
+	else if(tree[root]==-1)
+	return 0;
+    else
+    {
+    	ls=findsource(tree,root*2+1,maxnum)+ls;
+    	rs=findsource(tree,root*2+2,maxnum)+rs;
+        if(ls>rs)
+        {
+        	ls=ls+tree[root];
+        	return ls;
+		}
+		else 
+		{
+			rs=rs+tree[root];
+        	return rs;
+		}
+	}
+}
+bool findson(int tree[],int root,int maxnum)
+{
+	if(tree[root]==-1) return false;
+	if(root>=maxnum) return false;
+    else if(tree[root*2+1]==-1&&tree[root*2+2]==-1) return false;
+    else if((root*2+1)>=maxnum&&(root*2+2)>=maxnum) return false;
+    else return true;
+}
+int findspecial(int tree[],int root,int maxnum)
+{
+	if (findson(tree,root,maxnum)==false)
+    return 0;
+    else if(tree[root]>tree[root*2+1]&&tree[root]>tree[root*2+2]) 
+	return tree[root]+findspecial(tree,root*2+1,maxnum)+findspecial(tree,root*2+2,maxnum);
+    else return 0+findspecial(tree,root*2+1,maxnum)+findspecial(tree,root*2+2,maxnum);
+}
+int main()
+{
+    int maxnum=0;
+    int n=0;
+    int tree[20000000];
+    while(scanf("%d",&n)!=EOF)
+    {
+        tree[maxnum++]=n;
+    }
+    printf("%d\n%d\n%d",findheight(tree,0,maxnum),findsource(tree,0,maxnum),findspecial(tree,0,maxnum));
+}

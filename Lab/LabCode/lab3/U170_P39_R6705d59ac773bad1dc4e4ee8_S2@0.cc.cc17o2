@@ -1,0 +1,31 @@
+#include "ThreeWayQuickSort.h"
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    if (p >= q) return; // 如果区间缩小到没有元素或者只有一个元素，就不需要再排序了
+    if (p < q) {
+        int lt = p;      // 小于基准的分区的索引
+        int gt = q;      // 大于基准的分区的索引
+        int eq = p;      // 等于基准的分区的索引
+        int v = nums[p]; // 选取第一个元素作为基准
+        while (eq < gt) {
+            if (nums[eq] < v) {
+                swap(nums[lt++], nums[eq++]);
+            } else if (nums[eq] > v) {
+                swap(nums[eq], nums[gt--]);
+            } else {
+                eq++;
+            }
+        }
+        // 对小于基准值的部分进行递归排序
+        three_way_quick_sort(nums, p, lt - 1);
+        // 对等于基准值的部分进行递归排序（可选，因为等于部分已经是有序的）
+        // three_way_quick_sort(nums, lt, gt);
+        // 对大于基准值的部分进行递归排序
+        three_way_quick_sort(nums, gt + 1, q);
+    }
+}
+
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if (nums.size() == 0) return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

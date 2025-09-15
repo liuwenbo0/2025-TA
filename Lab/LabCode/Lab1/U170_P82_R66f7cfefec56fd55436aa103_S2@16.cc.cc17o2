@@ -1,0 +1,20 @@
+#include"Linklist.h"
+void changeList(Linklist&list){
+    if(list==nullptr||list->next==list||list->next->next==list){
+        return;
+    }
+    Linklist odd=list;
+    Linklist even=list->next;
+    Linklist curr=list;
+    Linklist tail=even;
+    while(curr!=list){
+       curr->next=curr->next->next;
+       if(curr->next!=list){
+        curr->next->prior=curr;
+       }
+       curr=curr->next;
+    }
+    tail->next=odd;
+    odd->prior=tail;
+    list=odd;
+}

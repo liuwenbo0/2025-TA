@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+
+using IntArray = std::vector<int>;
+
+inline void swap(int& a, int& b)
+{
+	auto tmp = a;
+	a = b;
+	b = tmp;
+}
+
+auto insertSort(IntArray& arr)
+{
+	auto ret = 0;
+	for (auto i = 0; i < arr.size(); i++)
+	{
+		for (auto j = i - 1; j >= 0; j--)
+		{
+			ret++;
+			if (arr.at(j) > arr.at(j + 1))
+				swap(arr.at(j), arr.at(j + 1));
+			else
+				break;
+		}
+	}
+	return ret;
+}
+
+auto mergeSort(IntArray& arr, int left, int right)
+{
+	auto ret = 0;
+	if (right - left <= 1)
+		return ret;
+	auto mid = (left + right) / 2;
+	ret += mergeSort(arr, left, mid);
+	ret += mergeSort(arr, mid, right);
+	IntArray arrL, arrR;
+	for (auto i = left; i < mid; i++)
+		arrL.push_back(arr.at(i));
+	for (auto i = mid; i < right; i++)
+		arrR.push_back(arr.at(i));
+	auto i = 0, j = 0;
+	for (auto k = left; k < right; k++)
+	{
+		ret++;
+		if (i >= arrL.size())
+		{
+			arr.at(k) = arrR.at(j);
+			j++;
+		}
+		else if (j >= arrR.size())
+		{
+			arr.at(k) = arrL.at(i);
+			i++;
+		}
+		else if (arrL.at(i) < arrR.at(j))
+		{
+			arr.at(k) = arrL.at(i);
+			i++;
+		}
+		else
+		{
+			arr.at(k) = arrR.at(j);
+			j++;
+		}
+	}
+	return ret;
+}
+
+int main()
+{
+	IntArray arr;
+	int n;
+	std::cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		int tmp;
+		std::cin >> tmp;
+		arr.push_back(tmp);
+	}
+	auto arr1 = arr;
+	auto arr2 = arr;
+	std::cout << mergeSort(arr2, 0, n) << ' ' << insertSort(arr);
+}

@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int maxSize = 2000000;
+int countOnes = 0, num, rightBound, leftBound, length;
+void recursiveProcess(int element) {
+    if (length == 0) return; 
+    if (element == 0) {
+        if (leftBound > 1) {
+            --leftBound;
+        } else if (length) {
+            countOnes += 0; 
+            --length;
+        }
+        return;
+    }
+    if (element == 1) {
+        if (leftBound > 1) {
+            --leftBound;
+        } else if (length) {
+            countOnes += 1; 
+            --length;
+        }
+        return;
+    }
+    recursiveProcess(element / 2);
+    if (length > 0) {
+        recursiveProcess(element % 2);
+    }
+    recursiveProcess(element / 2);
+}
+
+int main() {
+    cin >> num >> leftBound >> rightBound;
+    length = rightBound - leftBound + 1; 
+    recursiveProcess(num); 
+    cout << countOnes; 
+    return 0;
+}

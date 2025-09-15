@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int mergesort_count=0,insertion_count=0;
+
+//归并排序
+void mergesort(vector<int> &nums, int left, int right)
+{
+    //完成代码
+    if(left>=right) return;
+    int mid = left+(right - left) / 2 ;  //要么左右相等，要么右边多一位；
+    mergesort(nums,left,mid);
+    mergesort(nums,mid+1,right);
+    int n1 = mid-left+1, n2 = right-mid ;
+    vector<int> L(n1);
+    vector<int> R(n2);
+    for(int i=0 ; i<n1 ; i++){
+        L[i] = nums[left+i];
+    }
+    for(int j=0;j<n2;j++){
+        R[j] = nums[mid+j+1];
+        
+    }
+    int i=0,j=0,k=left;
+    while(i<n1 && j<n2){          
+        mergesort_count++;//记录次数
+        if(L[i]<=R[j]){
+ 
+            nums[k]=L[i];
+            i++;
+        }
+        else{
+            nums[k]=R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i<n1){
+        nums[k]=L[i];
+        k++;
+        i++;
+    }
+    while(j<n2){
+        nums[k]=R[j];
+        k++;
+        j++;
+    }
+}
+//插入排序
+void insertion(vector<int>& nums) {
+    // 请在这里完成你的代码
+    int size=nums.size();
+    for(int j=1;j<size;j++){
+        int i = j-1;
+        int key = nums[j];
+        while(i>=0) {
+            insertion_count++;
+            if(nums[i]>key){
+            nums[i+1] = nums[i];
+            i = i-1;
+            }
+            else break;
+        } 
+        nums[i+1] = key;
+    }
+}
+
+
+int main(){
+    int N;
+    cin>>N;
+    vector<int> nums(N);
+    for(int i=0;i<N;i++){
+        cin>>nums[i];
+    }
+    vector<int> copy=nums;
+    mergesort(nums,0,N-1);
+    insertion(copy);
+    cout<<mergesort_count<<" "<<insertion_count<<endl;
+    return 0;
+}

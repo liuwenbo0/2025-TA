@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+
+inline std::size_t left(std::size_t n) { return n * 2 + 1; }
+inline std::size_t right(std::size_t n) { return n * 2 + 2; }
+inline std::size_t parent(std::size_t n) { return (n - 1) / 2; }
+inline long long max(long long  a, long long b) { return (a > b) ? a : b; }
+
+int treeHeight(std::size_t treeSize)
+{
+	int ans = 0;
+	std::size_t tmp = 1;
+	while (tmp - 1 < treeSize)
+	{
+		tmp *= 2;
+		ans++;
+	}
+	return ans;
+}
+
+long long findMaxResource(std::vector<int>& theTree, std::size_t rootIndex, std::size_t treeSize)
+{
+	if (rootIndex >= treeSize || theTree[rootIndex] == -1)
+		return 0;
+	auto lVal = findMaxResource(theTree, left(rootIndex), treeSize);
+	auto rVal = findMaxResource(theTree, right(rootIndex), treeSize);
+	return max(lVal, rVal) + theTree[rootIndex];
+}
+
+long long sumSpecialArea(std::vector<int>& theTree)
+{
+	long long sum = 0;
+	std::size_t treeSize = theTree.size();
+	for (std::size_t i = 0; i < treeSize; i++)
+	{
+		if (left(i) >= treeSize)
+			continue;
+		if (right(i) >= treeSize && left(i) < treeSize)
+		{
+			if (theTree[left(i)] == -1)
+				continue;
+			if (theTree[i] > theTree[left(i)])
+				sum += theTree[i];
+		}
+		if (right(i) < treeSize)
+		{
+			if (theTree[left(i)] == -1 && theTree[right(i)] == -1)
+				continue;
+			if (theTree[i] > theTree[left(i)] && theTree[i] > theTree[right(i)])
+				sum += theTree[i];
+		}
+	}
+	return sum;
+}
+
+int main()
+{
+	std::vector<int> theTree;
+	while (true)
+	{
+		int tmp;
+		std::cin >> tmp;
+		if (std::cin.eof())
+			break;
+		theTree.push_back(tmp);
+	}
+	std::cout << treeHeight(theTree.size()) << '\n';
+	std::cout << findMaxResource(theTree, 0, theTree.size()) << '\n';
+	std::cout << sumSpecialArea(theTree) << '\n';
+}

@@ -1,0 +1,47 @@
+#include<iostream>
+#include<cmath>
+#define int long long
+using namespace std;
+int countk(int n,int k,int m,int left,int right){
+    if(n == 0){
+    	return 0;
+	}
+	else{
+	
+	if(n==1){
+		if(k>=left&&m<=right)
+			return 1;
+		else
+			return 0;
+	}
+	if(left==right){
+		return 1;
+	} 
+	int mid = (left + right)/2;
+	int result = 0;
+	if(k<mid){
+		result += countk(n/2,k,min(m,mid-1),left,mid-1);
+	}	
+    if(m>mid){
+    	result += countk(n/2,max(mid+1,k),m,mid+1,right);
+	}
+	if(k<=mid&&m>=mid){
+		result += n%2;
+	}
+	return result;}
+}
+signed main(){
+    int n,k,m;
+    cin>>n>>k>>m;
+    int p = n;
+    int count = 0;
+    while(p!=1&&p!=0){
+    	p = p/2;
+    	count++;
+	}
+	
+    int length = 2*pow(2,count)-1; 
+    int h = countk(n,k,m,1,length);
+    cout<<h;
+
+}

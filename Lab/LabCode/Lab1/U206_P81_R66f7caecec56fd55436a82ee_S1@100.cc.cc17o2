@@ -1,0 +1,19 @@
+#include"SqList.h"
+#include<iostream>
+using namespace std;
+
+void insert(SqList& list, int num) 
+{
+    int a=list.size();
+    int b=a;
+    for(int i=0;i<a;i++)
+    {if (num <= list[i]) 
+        {
+            b = i;
+            break;
+        }
+    }
+        
+    list.insert(list.begin() + b, num);
+     
+}

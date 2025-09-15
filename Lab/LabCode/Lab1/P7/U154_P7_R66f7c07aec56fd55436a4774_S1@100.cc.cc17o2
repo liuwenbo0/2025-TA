@@ -1,0 +1,49 @@
+#include "MergeSort.h"  // 包含类声明头文件
+#include <vector>       // 引入标准库vector
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    // 如果区间内至少有两个元素
+    if (left < right) {
+        // 找到区间中点，进行分治
+        int mid = left + (right - left) / 2;
+        
+        // 递归排序左半部分
+        merge_sort_aux(nums, left, mid);
+        
+        // 递归排序右半部分
+        merge_sort_aux(nums, mid + 1, right);
+        
+
+
+
+        
+        // 归并两个排序好的子区间
+        int i = left, j = mid + 1;
+        std::vector<int> temp;  // 注意：std::vector使用了标准命名空间
+        
+        // 合并两个子区间
+        while (i <= mid && j <= right) {
+            if (nums[i] <= nums[j]) {
+                temp.push_back(nums[i++]);
+            } else {
+                temp.push_back(nums[j++]);
+            }
+        }
+        
+        // 将剩余的左半部分元素加入
+        while (i <= mid) {
+            temp.push_back(nums[i++]);
+        }
+        
+        // 将剩余的右半部分元素加入
+        while (j <= right) {
+            temp.push_back(nums[j++]);
+        }
+        
+        // 将合并后的结果拷贝回原数组
+        for (int k = 0; k < temp.size(); ++k) {
+            nums[left + k] = temp[k];
+        }
+    }
+}

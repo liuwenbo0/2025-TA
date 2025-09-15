@@ -1,0 +1,26 @@
+#include "Solution.h"
+#include <vector>
+
+using namespace std;
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans(n);  // 初始化一个长度为 n 的向量
+    
+    // 处理偶数情况
+    if (n % 2 == 0) {
+        for (int i = 0; i < n; i += 2) {
+            ans[i] = i + 1;
+            ans[i + 1] = i + 2;
+        }
+    }
+    // 处理奇数情况
+    else {
+        for (int i = 0; i < n - 1; i += 2) {
+            ans[i] = i + 1;
+            ans[i + 1] = i + 2;
+        }
+        ans[n - 1] = n;  // 最后一个元素直接放置 n
+    }
+    
+    return ans;
+}

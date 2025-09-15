@@ -1,0 +1,25 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+     int x,y;
+    y=list.size();
+    list.resize(y+1);
+     for(int i=1;;i++)
+     {
+        if(num>=list[y-1])
+        {
+            list[y]=num;
+            goto S;
+        }
+        if(num<=list[i])
+        {
+        x=i;
+        break;}
+     }
+
+     for(int i=y;i>=x;i--)
+     {
+        list[i+1]=list[i];
+     }
+     list[x]=num;
+     S:;
+}

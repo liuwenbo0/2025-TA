@@ -1,0 +1,7 @@
+#include"SqList.h"
+void insert(SqList& list, int num) {
+    // 使用 std::lower_bound 找到插入位置
+    auto it = std::lower_bound(list.begin(), list.end(), num);
+    // 在找到的位置插入元素
+    list.insert(it, num);
+}

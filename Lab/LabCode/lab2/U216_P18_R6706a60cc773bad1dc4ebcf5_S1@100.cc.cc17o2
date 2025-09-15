@@ -1,0 +1,33 @@
+#include "Solution.h"
+#include <vector>
+#include <algorithm> 
+using namespace std;
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans; 
+    vector<int> sequence = {1};
+
+    // 执行至少一次循环体
+    do {
+        size_t size_at_present = sequence.size();
+        vector<int> new_sequence;
+
+
+        for (auto it = size_at_present; it-- > 0;) {
+            int updated_value = sequence[it] * 2;
+            new_sequence.push_back(updated_value);
+            sequence[it] = updated_value - 1;
+        }
+
+        // 将新的序列元素添加到原来的序列末尾
+        sequence.insert(sequence.end(), new_sequence.begin(), new_sequence.end());
+    } while (sequence.size() < static_cast<size_t>(n));
+
+    std::copy_if(sequence.begin(), sequence.end(), std::back_inserter(ans),
+                 [n](int num) { return num <= n; });
+
+    // 请在这里完成你的代码
+
+    
+    return ans; 
+}

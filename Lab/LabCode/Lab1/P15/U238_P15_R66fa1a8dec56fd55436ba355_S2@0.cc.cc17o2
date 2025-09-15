@@ -1,0 +1,83 @@
+#include <iostream>  
+#include <vector>  
+using namespace std;
+  
+// 全局变量来记录比较次数  
+int insertionCount = 0;  
+int mergeCount = 0;  
+  
+// 插入排序函数  
+void insertionSort(std::vector<int>& arr, int left, int right) {  
+    for (int i = left + 1; i <= right; ++i) {  
+        int key = arr[i];  
+        int j = i - 1;  
+        while (j >= left && arr[j] > key) {  
+            ++insertionCount; // 记录比较次数  
+            arr[j + 1] = arr[j];  
+            --j;  
+        }  
+        arr[j + 1] = key;  
+    }  
+}  
+  
+// 归并排序的合并函数  
+void merge(std::vector<int>& arr, int left, int mid, int right, std::vector<int>& temp) {  
+    int i = left;  
+    int j = mid + 1;  
+    int k = left;  
+    while (i <= mid && j <= right) {  
+        ++mergeCount; // 记录比较次数  
+        if (arr[i] <= arr[j]) {  
+            temp[k++] = arr[i++];  
+        } else {  
+            temp[k++] = arr[j++];  
+        }  
+    }  
+    while (i <= mid) {  
+        temp[k++] = arr[i++];  
+    }  
+    while (j <= right) {  
+        temp[k++] = arr[j++];  
+    }  
+    for (i = left; i <= right; ++i) {  
+        arr[i] = temp[i];  
+    }  
+}  
+  
+// 归并排序函数  
+void mergeSort(std::vector<int>& arr, int left, int right, std::vector<int>& temp) {  
+    if (left < right) {  
+        int mid = left + (right - left) / 2;  
+        mergeSort(arr, left, mid, temp);  
+        mergeSort(arr, mid + 1, right, temp);  
+        merge(arr, left, mid, right, temp);  
+    }  
+}  
+  
+int main() {  
+    int N;  
+    cin >> N;  
+    vector<int> arr(N);  
+    for (int i = 0; i < N; i++) {  
+        cin >> arr[i];  
+    }  
+  
+    // 插入排序  
+    insertionCount = 0;  
+    insertionSort(arr, 0, N - 1);
+    int insertionSortComparisons = insertionCount;  
+  
+    // 为了重新测试归并排序，需要复制原始数组  
+    vector<int> originalArray = arr;  
+    vector<int> tempArray(N);  
+  
+    // 归并排序  
+    mergeCount = 0;  
+    mergeSort(originalArray, 0, N - 1, tempArray);  
+    int mergeSortComparisons = mergeCount;  
+  
+    // 输出比较次数  
+    cout << insertionSortComparisons << " " << mergeSortComparisons << std::endl;  
+  
+    return 0;  
+}

@@ -1,0 +1,42 @@
+#include "QuickSort.h"
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    int key = nums[p]; // 选择第一个元素作为基准
+    int l = p; // 左指针
+    int r = q; // 右指针
+
+    while (l < r) {
+        while (l < r && nums[r] >= key) {
+            r--; // 从右侧找到小于基准的元素
+        }
+        if (l < r) {
+            nums[l] = nums[r]; // 将小于基准的元素移到左侧
+            l++;
+        }
+        
+        while (l < r && nums[l] <= key) {
+            l++; // 从左侧找到大于基准的元素
+        }
+        if (l < r) {
+            nums[r] = nums[l]; // 将大于基准的元素移到右侧
+            r--;
+        }
+    }
+    
+    nums[l] = key; // 将基准放到最终位置
+    return l; // 返回基准的位置
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    if (l < r) {
+        int pivot_index = partition(nums, l, r); // 划分并获取基准索引
+        quick_sort(nums, l, pivot_index - 1); // 递归排序左侧子数组
+        quick_sort(nums, pivot_index + 1, r); // 递归排序右侧子数组
+    }
+}
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    if (nums.size() == 0) 
+        return;
+    quick_sort(nums, 0, nums.size() - 1); // 调用快速排序
+}

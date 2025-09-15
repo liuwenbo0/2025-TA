@@ -1,0 +1,102 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool isLeaf(const vector<long long> &treeArray, long long index) {
+    if (treeArray[index] != -1) {
+        if (2 * index >= treeArray.size() || 2 * index + 1 >= treeArray.size())
+            return true;
+        else if (treeArray[2 * index] == -1 && treeArray[2 * index + 1] == -1)
+            return true;
+        else 
+            return false;
+    }
+    return false;
+}
+
+void inputTree(vector<long long>& treeArray) {
+    long long value;
+    while (cin >> value && !cin.eof()) {
+        treeArray.push_back(value);
+    }
+}
+
+void completeFullTree(vector<long long>& treeArray, long long treeHeight) {
+    long long i = treeArray.size();
+    while (i < pow(2, treeHeight)) {
+        treeArray.push_back(-1);
+        i++;
+    }
+}
+
+long long calculateTreeHeight(const vector<long long>& treeArray) {
+    return floor(log2(treeArray.size() - 1)) + 1;
+}
+
+long long calculateRichestResourcePath(const vector<long long> &treeArray) {
+    long long maxSum = 0;
+    long long i = 1;
+
+    while (i < treeArray.size()) {
+        if (isLeaf(treeArray, i)) {
+            long long currentSum = treeArray[i];
+            long long parentNodeIndex = i / 2;
+
+            while (parentNodeIndex >= 1) {
+                currentSum += treeArray[parentNodeIndex];
+                parentNodeIndex /= 2;
+            }
+
+            maxSum = max(currentSum, maxSum);
+        }
+        i++;
+    }
+
+    return maxSum;
+}
+
+long long calculateSumOfSpecialNodes(const vector<long long> &treeArray, long long treeHeight) {
+    long long specialSum = 0;
+    long long i = 1;
+
+    while (i < pow(2, treeHeight)) {
+        if (isLeaf(treeArray, i) || treeArray[i] == -1) {
+            i++;
+            continue;
+        }
+
+        if (treeArray[2 * i] == -1 && treeArray[2 * i + 1] == -1) {
+            i++;
+            continue;
+        }
+
+        if (treeArray[i] > treeArray[2 * i] && treeArray[i] > treeArray[2 * i + 1]) {
+            specialSum += treeArray[i];
+        }
+        i++;
+    }
+
+    return specialSum;
+}
+
+int main() {
+    vector<long long> treeArray = { 0 };
+    
+    inputTree(treeArray);
+    
+    long long height = calculateTreeHeight(treeArray);
+    
+    completeFullTree(treeArray, height);
+    
+    long long maxPathSum = calculateRichestResourcePath(treeArray);
+    
+    long long specialNodesSum = calculateSumOfSpecialNodes(treeArray, height);
+    
+    cout << height << '\n' << maxPathSum << '\n' << specialNodesSum << '\n';
+
+    return 0;
+}

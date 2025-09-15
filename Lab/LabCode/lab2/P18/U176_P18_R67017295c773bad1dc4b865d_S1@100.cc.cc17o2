@@ -1,0 +1,21 @@
+#include "Solution.h"
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans;
+    int t = 0;
+
+    if (n != 1) {
+        vector<int> left_odd = perfect_permutation((n + 1) / 2);
+        for (int x : left_odd) {
+            ans.push_back(2 * x - 1);
+        }
+        vector<int> right_even = perfect_permutation(n / 2);
+        for (int x : right_even) {
+            ans.push_back(2 * x);
+        }
+    } else {
+        ans.push_back(1);
+    }
+
+    return ans;
+}

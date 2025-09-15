@@ -1,0 +1,47 @@
+#include "HeapSort.h"
+void HeapSort::max_heapify(std::vector<int>& nums, int i) {
+    // 请在这里完成你的代码
+	int length=nums.size()-1;
+	int max;
+	if(i*2<=length&&nums[i*2]>nums[i]){
+		max=i*2;
+	}
+	else max=i;
+	if(i*2+1<=length&&nums[i*2+1]>nums[max]){
+		max=i*2+1;
+	}
+	if(max!=i){
+		int t=nums[max];
+		nums[max]=nums[i];
+		nums[i]=t;
+		HeapSort::max_heapify(nums,max);
+	}
+	return;
+}
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+    // 请在这里完成你的代码
+	int length=nums.size()-1;
+	for(int i=length/2;i>0;i--){
+		HeapSort::max_heapify(nums,i);
+	}
+	return;
+}
+void HeapSort::mysort(std::vector<int>& nums) {
+    length = nums.size();
+    nums.insert(nums.begin(), 0); // 在开头插入一个元素，使得待排序元素下标从 1 开始
+    // 请在这里完成你的代码
+    HeapSort::build_max_heap(nums);
+	vector<int> temp(length);
+	for(int i=length;i>0;i--){
+        HeapSort::max_heapify(nums,1);
+		int t=nums[1];
+		nums[1]=nums[i];
+		nums[i]=t;
+		temp[i-1]=nums[i];
+		nums.pop_back();
+	}
+	for(int i=1;i<=length;i++){
+		nums.push_back(temp[i-1]);
+	}
+    nums.erase(nums.begin()); // 删除开头元素
+}

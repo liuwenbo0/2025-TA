@@ -1,0 +1,80 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int insertcount = 0;
+int mergecount = 0;
+int InsertionSort(vector<int>& nums) {
+    
+    int n = nums.size();
+    for (int i = 1; i < n; i++) {        
+        int temp = nums[i]; 
+        int j = i - 1;         
+        while (j >=0 ) { 
+            insertcount++;
+            if(nums[j]<=temp) break;
+            nums[j + 1] = nums[j]; 
+            j--;
+            
+        }
+        
+        nums[j+1] = temp; 
+    }
+    return insertcount;
+}
+int MergeSort(vector<int> &nums, int left, int right)
+{   
+    
+    if (left >= right) { 
+        return 0;
+    }
+    int mid = (left+right)/2; 
+    MergeSort(nums, left, mid);
+    MergeSort(nums, mid + 1, right);
+    int n1 = mid-left+1; 
+    int n2 = right-mid; 
+    vector<int> L(n1), R(n2); 
+    for (int i = 0; i<n1; i++) L[i] = nums[left+i];
+    for (int j = 0; j<n2; j++) R[j] = nums[mid+1+j];   
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        mergecount++;
+        if (L[i] <= R[j]) {
+            nums[k] = L[i];
+            i++;
+            
+        } else {
+            nums[k] = R[j];
+            j++;
+            
+        }
+        k++;
+    }
+    
+    while (i < n1) {
+        nums[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        nums[k] = R[j];
+        j++;
+        k++;
+    }
+    return mergecount;
+}
+int main() {
+    int N;
+    cin >> N;
+    vector<int> insertnums(N),mergenums(N);
+    for (int i = 0; i < N; i++) {
+        cin >> insertnums[i];
+        mergenums[i] = insertnums[i];
+    }
+    
+     MergeSort(mergenums, 0, N-1);    
+    
+    InsertionSort(insertnums);
+    
+    cout  << mergecount<<" "<<insertcount<< endl;
+    return 0;
+}

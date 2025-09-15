@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n,k;
+int a[2000001],q[2000001],s[2000001];
+void solve(){
+    cin>>n>>k;
+	for(int i=1;i<=n;i++){
+		cin>>a[i];
+	}
+	
+	int head=1,tail=0;
+	for(int i=1;i<=n;i++){
+		while(head<=tail&&q[tail]>=a[i]){
+			tail--;
+		}
+		q[++tail]=a[i];
+		s[tail]=i;
+		while(s[head]<=i-k){
+			head++;
+		}
+		if(i>=k){
+			//cout<<q[head]<<" ";
+		}
+	}
+	cout<<"\n";
+	head=1,tail=0;
+	for(int i=1;i<=n;i++){
+		while(head<=tail&&q[tail]<=a[i]){
+			tail--;
+		}
+		q[++tail]=a[i];
+		s[tail]=i;
+		while(s[head]<=i-k){
+			head++;
+		}
+		if(i>=k){
+			cout<<q[head]<<" ";
+		}
+	}
+}
+int main()
+{
+    int T=1;
+    while(T--){
+        solve();
+    }
+    return 0;
+}

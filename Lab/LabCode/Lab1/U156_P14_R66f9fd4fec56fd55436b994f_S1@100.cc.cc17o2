@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n), t(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    long num = 0;
+    int step = 1;
+
+    while (step < n) {
+        for (int l = 0; l < n; l += 2 * step) {
+            int m = min(l + step - 1, n - 1);
+            int r = min(l + 2 * step - 1, n - 1);
+            int i = l, j = m + 1, k = l;
+
+            while (i <= m && j <= r) {
+                if (a[i] <= a[j]) {
+                    t[k++] = a[i++];
+                } else {
+                    t[k++] = a[j++];
+                    num += m - i + 1;
+                }
+            }
+
+            while (i <= m) {
+                t[k++] = a[i++];
+            }
+
+            while (j <= r) {
+                t[k++] = a[j++];
+            }
+        }
+        swap(a, t);
+        step *= 2;
+    }
+
+    cout << num << endl;
+    return 0;
+}

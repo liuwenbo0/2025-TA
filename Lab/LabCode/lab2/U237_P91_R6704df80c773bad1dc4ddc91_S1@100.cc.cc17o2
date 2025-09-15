@@ -1,0 +1,61 @@
+#include<bits/stdc++.h>
+#define int long long
+using namespace std;
+const int maxn=1e7+5;
+int a[maxn];
+int c=0;
+int m,k,s;
+int ts=0,tmp=1;
+void solve(){
+    cin>>m>>k>>s;
+    while(m){
+        c++;
+        a[c]=m%2;
+        m/=2;
+    }
+    // a[0]=1;
+    int tc=c,res=1,ret=0,tmp=0;
+    while(k){
+        ret=res;
+        res*=2;
+        if((k+ret)%res==0){
+            tmp=1;
+        }
+
+        if((k+ret)/res==0){
+            break;
+        }
+        ts-=((k+ret)/res-tmp)*a[tc];
+        tmp=0;
+        tc--;
+        if(tc==0){
+            break;
+        }
+        //cout<<ts<<" ";
+    }
+    tc=c,res=1,ret=0;
+    while(s){
+        ret=res;
+        res*=2;
+        //cout<<s+ret<<" ";
+        if((s+ret)/res==0){
+            break;
+        }
+        ts+=((s+ret)/res)*a[tc];
+        tmp=0;
+        tc--;
+        if(tc==0){
+            break;
+        }
+    }
+    cout<<ts;
+}
+signed main()
+{
+    int T=1;
+    while(T--){
+        solve();
+    }
+
+    return 0;
+}

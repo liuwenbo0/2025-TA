@@ -1,0 +1,46 @@
+#include "Solution.h"
+#include "limits.h"
+
+int Solution::find_maximum_crossing_subarray(vector<int> &A, int low, int mid, int high) {
+    int leftmax=INT_MIN;
+    int rightmax=INT_MIN;
+    int leftsum=0;
+    int rightsum=0;
+    for(int i=mid;i>=low;i--){
+        leftsum+=A[i];
+        if(leftsum>leftmax){
+            leftmax=leftsum;
+        }
+    }
+    for(int i=mid+1;i<=high;i++){
+        rightsum+=A[i];
+        if(rightsum>rightmax){
+            rightmax=rightsum;
+        }
+    }
+    int midmax=0;
+    midmax=rightmax+leftmax;
+    if(midmax>=rightmax && midmax>=leftmax)
+    return midmax;
+    else if(leftmax>=rightmax)
+    return leftmax;
+    else
+    return rightmax;
+}
+int Solution::find_maximum_subarray(vector<int> &A, int low, int high) { 
+    if(low==high)
+    return A[low];
+    else{
+        int a,b,c;
+        int mid=(low+high)/2;
+        a=find_maximum_subarray(A,low,mid);
+        b=find_maximum_subarray(A,mid+1,high);
+        c=find_maximum_crossing_subarray(A,low,mid,high);
+        if(c>=a && c>=b)
+        return c;
+        else if(a>=b)
+        return a;
+        else
+        return b;
+    }
+}

@@ -1,0 +1,4 @@
+#include"Linklist.h"
+void changeList(Linklist &list){
+    //在此处添加代码
+    }

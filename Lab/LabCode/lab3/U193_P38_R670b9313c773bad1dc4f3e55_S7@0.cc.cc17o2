@@ -1,0 +1,32 @@
+#include <vector>
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+class QuickSort {
+public:
+    int partition(std::vector<int>& nums, int p, int q) {
+        int pivot = nums[q]; 
+        int i = p - 1; 
+
+        for (int j = p; j < q; ++j) {
+            if (nums[j] <= pivot) {
+                ++i;
+                std::swap(nums[i], nums[j]);
+            }
+        }
+        std::swap(nums[i + 1], nums[q]);
+        return i + 1;
+    }
+
+    void quick_sort(std::vector<int>& nums, int l, int r) {
+        if (l < r) {
+            int pi = partition(nums, l, r); 
+            quick_sort(nums, l, pi - 1);
+            quick_sort(nums, pi + 1, r); 
+        }
+    }
+
+    void mysort(std::vector<int>& nums) {
+        if (nums.size() == 0) return;
+        quick_sort(nums, 0, nums.size() - 1);
+    }
+};}

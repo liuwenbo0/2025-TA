@@ -1,0 +1,9 @@
+#include <vector>  
+#include <iostream> 
+#include"SqList.h"
+using namespace std;
+
+void insert(SqList& list, int num){
+    auto it = lower_bound(list.begin(), list.end(), num);   
+    list.insert(it, num); 
+}

@@ -1,0 +1,58 @@
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+int minOperations(int n, int q, const vector<int>& nums) {
+    sort(nums.begin(), nums.end());
+
+    int minOps = INT_MAX;
+    int currentHeight = 1;
+
+    // Calculate prefix sums to make operation counting easier.
+    vector<int> prefixSums(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        prefixSums[i + 1] = prefixSums[i] + nums[i];
+    }
+
+    // For each possible height, calculate the operations needed.
+    for (int height = 1; height <= *max_element(nums.begin(), nums.end()); ++height) {
+        int count = 0;
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] == height) {
+                count++;
+            } else if (nums[i] > height) {
+                break;
+            }
+            if (count >= q) {
+                int totalSum = prefixSums[n];
+                int sumBelowHeight = prefixSums[count];
+                int sumAboveHeight = totalSum - sumBelowHeight;
+                int aboveCount = n - count;
+
+                // Operations needed to make all heights equal to 'height'.
+                int ops = sumAboveHeight - aboveCount * height;
+                minOps = min(minOps, ops);
+                break;
+            }
+        }
+    }
+
+    return minOps == INT_MAX ? -1 : minOps;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> nums[i];
+    }
+
+    int result = minOperations(n, q, nums);
+    cout << result << endl;
+
+    return 0;
+}

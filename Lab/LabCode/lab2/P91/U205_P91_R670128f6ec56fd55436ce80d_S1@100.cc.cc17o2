@@ -1,0 +1,25 @@
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+using namespace std;
+long long m,k,s,ans;
+long long solve(long long now,long long l,long long r)
+{
+	if(k<=l && r<=s) return now;
+	if(r<k || s<l) return 0;
+	long long mid=(l+r)/2;
+	long long ret=solve(now/2,l,mid-1)+solve(now/2,mid+1,r);
+	if(k<=mid && mid<=s) ret+=now%2;
+	return ret;
+}
+int main()
+{
+	cin>>m>>k>>s;
+	if(!m) {cout<<"0";return 0;}
+	long long mm=m,limit=1;
+	while(m!=1) m/=2,limit*=2;
+	limit=limit*2-1;
+//	printf("%lld\n",limit);
+	cout<< solve(mm,1,limit);
+	return 0;
+}

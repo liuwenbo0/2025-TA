@@ -1,0 +1,42 @@
+#include "ThreeWayQuickSort.h"
+#include <cstdlib>
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    if (p >= q) return; // 若子数组大小为0或1，则返回
+
+    // 随机选取一个基准元素
+    int random_index = p + rand() % (q - p + 1);
+    std::swap(nums[p], nums[random_index]); // 将随机选取的元素与第一个元素交换
+    int pivot = nums[p]; // 选择第一个元素作为基准
+    int s = p; // 小于基准部分的末尾索引
+    int i = p + 1; // 当前元素的索引
+    int b = q; // 大于基准部分的开始索引
+
+    while (i <= b){
+      if (nums[i] < pivot){
+        std::swap(nums[i], nums[s]); // 小于基准的元素移到左边
+        ++s;
+        ++i;
+
+      }
+      else if(nums[i] > pivot){
+        std::swap(nums[i], nums[b]); // 大于基准的元素移到右边
+        --b;
+
+      }
+      else{
+        ++i;
+      }
+    }
+
+    //递归小于基准的部分
+    three_way_quick_sort(nums, p, s - 1);
+    //递归大于基准的部分
+    three_way_quick_sort(nums, b + 1, q);
+
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

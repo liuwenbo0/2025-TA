@@ -1,0 +1,98 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
+
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+
+TreeNode* buildTree(const vector<int>& levelOrder) {
+    if (levelOrder.empty()) return nullptr;
+
+    vector<TreeNode*> nodes;
+    for (int val : levelOrder) {
+        if (val == -1) {
+            nodes.push_back(nullptr);
+        } else {
+            nodes.push_back(new TreeNode(val));
+        }
+    }
+
+    int n = nodes.size();
+    for (int i = 0; i < n; ++i) {
+        if (nodes[i] != nullptr) {
+            int leftIndex = 2 * i + 1;
+            int rightIndex = 2 * i + 2;
+            if (leftIndex < n) {
+                nodes[i]->left = nodes[leftIndex];
+            }
+            if (rightIndex < n) {
+                nodes[i]->right = nodes[rightIndex];
+            }
+        }
+    }
+
+    return nodes[0];
+}
+
+
+int treeHeight(TreeNode* node) {
+    if (!node) return 0;
+    return max(treeHeight(node->left), treeHeight(node->right)) + 1;
+}
+
+int maxPathSum(TreeNode* node) {
+    if (!node) return 0;
+    if (!node->left && !node->right) return node->val; // 叶子节点
+    return node->val + max(maxPathSum(node->left), maxPathSum(node->right));
+}
+
+void findSpecialNodes(TreeNode* node, int& specialSum) {
+    if (!node || (!node->left && !node->right)) return; // 非叶子节点
+
+    bool isSpecial = true;
+    if (node->left && node->val <= node->left->val) isSpecial = false;
+    if (node->right && node->val <= node->right->val) isSpecial = false;
+
+    if (isSpecial) {
+        specialSum += node->val;
+    }
+
+    findSpecialNodes(node->left, specialSum);
+    findSpecialNodes(node->right, specialSum);
+}
+
+int main() {
+    string input;
+    getline(cin, input);
+    vector<int> levelOrder;
+    int value;
+
+  
+    istringstream iss(input);
+    while (iss >> value) {
+        levelOrder.push_back(value);
+    }
+
+    TreeNode* root = buildTree(levelOrder);
+    int height = treeHeight(root);
+    int maxPath = maxPathSum(root);
+    int specialSum = 0;
+    findSpecialNodes(root, specialSum);
+
+
+    cout << height << endl;              
+    cout << maxPath << endl;             
+    cout << specialSum << endl;          
+
+    return 0;
+}

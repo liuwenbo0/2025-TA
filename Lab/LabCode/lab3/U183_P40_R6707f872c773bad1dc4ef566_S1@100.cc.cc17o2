@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <climits>
+using namespace std;
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> high(n);
+    
+    for (int i = 0; i < n; ++i) {
+        cin >> high[i];
+    }
+
+    map<int, vector<int>> high_cut; 
+    for (int h : high) {
+        int Height = h;
+        int cutcount = 0;
+        while (Height > 0) {
+            high_cut[Height].push_back(cutcount);
+            Height=Height/2;
+            cutcount++;
+        }
+    }
+    int minnumber = INT_MAX;
+    for (const auto& x : high_cut) {
+        const auto& cutnumber = x.second;
+        int size = cutnumber.size();
+        if (size >= q) {
+            vector<int> temp(cutnumber);
+            sort(temp.begin(), temp.end());
+            int totalcutscount = 0;
+            for (int i = 0; i < q; ++i) {
+                totalcutscount=totalcutscount+temp[i];
+            }
+            minnumber = min(minnumber, totalcutscount);
+        }
+    }
+    cout << minnumber << endl;
+    return 0;
+}

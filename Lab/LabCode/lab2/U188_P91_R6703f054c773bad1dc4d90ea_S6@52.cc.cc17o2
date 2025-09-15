@@ -1,0 +1,46 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+typedef struct student{
+    long long data;
+    struct student *left,*mid,*right;
+}crystal;
+
+long long i=-1,p=0,a[100000];
+
+void create_crystal(crystal*head,int b,int c){
+    if(head->data>1){
+        head->left=(crystal*)malloc(sizeof(crystal));
+        head->mid=(crystal*)malloc(sizeof(crystal));
+        head->right=(crystal*)malloc(sizeof(crystal));
+        head->left->data=head->data/2;
+        head->right->data=head->data/2;
+        head->mid->data=head->data%2;
+        if(head->left->data>1) create_crystal(head->left,b,c);
+        else{
+            i++;
+            if(i>=b-1 && i<c) a[p++]=head->left->data;
+        }
+        i++;
+        if(i>=b-1 && i<c) a[p++]=head->mid->data;
+        if(head->right->data>1) create_crystal(head->right,b,c);
+        else{
+            i++;
+            if(i>=b-1 && i<c) a[p++]=head->right->data;
+        } 
+    }    
+}
+
+int main(){
+    long long m=0,k=0,s=0;
+    long long sum=0;
+    cin >> m >> k >> s;
+    crystal* C=(crystal*)malloc(sizeof(crystal));
+    C->data=m;
+    if(m==1) a[0]=1;
+    create_crystal(C,k,s);
+    for(long long j=0;j<=p;j++){
+        if(a[j]==1) sum++;
+    }
+    cout << sum;
+}

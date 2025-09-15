@@ -1,0 +1,35 @@
+#include"Linklist.h"
+#include <vector>
+
+
+void changeList(Linklist &list) {
+    
+    std::vector<node*> nodes;
+    node* now = list->next;
+
+    while (now != list) {
+        nodes.push_back(now);
+        now = now->next;
+    }
+
+    int n = nodes.size();
+    std::vector<node*> neworder(n);
+
+    for (int i = 0; i < n; ++i) {
+        if (i % 2 == 0) {
+            neworder[i / 2] = nodes[i];
+        } else {
+            neworder[n - 1 - i / 2] = nodes[i];
+        }
+    }
+
+    for (int i = 0; i < n; ++i) {
+        neworder[i]->next = neworder[(i + 1) % n];
+        neworder[(i + 1) % n]->prior = neworder[i];
+    }
+
+    list->next = neworder[0];
+    neworder[0]->prior = list;
+    neworder[n - 1]->next = list;
+    list->prior = neworder[n - 1];
+}

@@ -1,0 +1,27 @@
+#include<iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+#define int long long
+int solution(int m, int s, int k, int pl, int pr){
+    pr = pr * 2 + 1;
+    int  cr = pr * 2 + 1;
+    if(m == 0) return 0;
+    if(m == 1){
+        if(pr > k) return 0;
+        if(pr >= s && pr <= k) return 1;
+    }
+    else{
+        int l = m/2, mid = m%2;
+        return (solution(l, s, k, 1, pr) + solution(mid, s, k, pr+1, pr+1) + solution(l, s, k, pr+2, cr));
+    }
+    return 0;
+}
+signed main (){
+    int m;
+    long long s , k;
+    cin>> m >> s >> k;
+    int count = 0, pr = 0, pl = 0;
+    count = solution(m, s, k, pl, pr);
+    cout<<count;
+}

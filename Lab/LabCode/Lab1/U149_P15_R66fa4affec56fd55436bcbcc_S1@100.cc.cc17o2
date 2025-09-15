@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 实现插入排序，同时计算比较次数
+void insertionSort(vector<int>& arr, int& comparisons) {
+    comparisons = 0;
+    std::size_t pos = 1;
+    while (pos < arr.size()) {
+        int current = arr[pos];
+        int comparePos = pos - 1;
+        while (comparePos >= 0 && ++comparisons && arr[comparePos] > current) {
+            arr[comparePos + 1] = arr[comparePos];
+            comparePos--;
+        }
+        arr[comparePos + 1] = current;
+        ++pos;
+    }
+}
+
+// 归并操作，用于归并排序中
+void merge(vector<int>& arr, int leftIndex, int middleIndex, int rightIndex, int& comparisons) {
+    int leftSize = middleIndex - leftIndex + 1;
+    int rightSize = rightIndex - middleIndex;
+    vector<int> leftArray(leftSize), rightArray(rightSize);
+
+    int i = 0;
+    while (i < leftSize) {
+        leftArray[i] = arr[leftIndex + i];
+        ++i;
+    }
+    i = 0;
+    while (i < rightSize) {
+        rightArray[i] = arr[middleIndex + 1 + i];
+        ++i;
+    }
+
+    int leftCurrent = 0, rightCurrent = 0, mergeIndex = leftIndex;
+    while (leftCurrent < leftSize && rightCurrent < rightSize) {
+        ++comparisons;
+        if (leftArray[leftCurrent] <= rightArray[rightCurrent]) {
+            arr[mergeIndex++] = leftArray[leftCurrent++];
+        } else {
+            arr[mergeIndex++] = rightArray[rightCurrent++];
+        }
+    }
+
+    i = leftCurrent;
+    while (i < leftSize) {
+        arr[mergeIndex++] = leftArray[i++];
+    }
+
+    i = rightCurrent;
+    while (i < rightSize) {
+        arr[mergeIndex++] = rightArray[i++];
+    }
+}
+
+// 归并排序的递归函数
+void mergeSort(vector<int>& arr, int leftIndex, int rightIndex, int& comparisons) {
+    if (leftIndex < rightIndex) {
+        int midIndex = leftIndex + (rightIndex - leftIndex) / 2;
+        mergeSort(arr, leftIndex, midIndex, comparisons);
+        mergeSort(arr, midIndex + 1, rightIndex, comparisons);
+        merge(arr, leftIndex, midIndex, rightIndex, comparisons);
+    }
+}
+
+// 主函数
+int main() {
+    int numElements;
+    cin >> numElements;
+    vector<int> elements(numElements);
+    int i = 0;
+    while (i < numElements) {
+        cin >> elements[i];
+        ++i;
+    }
+
+    int insertComparisons = 0, mergeComparisons = 0;
+    vector<int> insertionElements = elements;
+    vector<int> mergeElements = elements;
+
+    insertionSort(insertionElements, insertComparisons);
+    mergeSort(mergeElements, 0, elements.size() - 1, mergeComparisons);
+
+    cout << mergeComparisons << ' ' << insertComparisons << endl;
+
+    return 0;
+}

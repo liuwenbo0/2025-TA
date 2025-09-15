@@ -1,0 +1,81 @@
+#include <iostream>
+#include <climits>
+#include <vector>
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+TreeNode* buildTree(const std::vector<int>& nodes, int index) {
+    if (index >= nodes.size() || nodes[index] == -1)
+        return nullptr;
+    TreeNode* root = new TreeNode(nodes[index]);
+    root->left = buildTree(nodes, 2 * index + 1);
+    root->right = buildTree(nodes, 2 * index + 2);
+    return root;
+}
+
+int treeHeight(TreeNode* root) {
+    if (root == nullptr)
+        return 0;
+    int leftHeight = treeHeight(root->left);
+    int rightHeight = treeHeight(root->right);
+    return std::max(leftHeight, rightHeight) + 1;
+}
+
+int maxPathSumHelper(TreeNode* root, int& maxSum) {
+    if (root == nullptr)
+        return 0;
+    int leftMax = maxPathSumHelper(root->left, maxSum);
+    int rightMax = maxPathSumHelper(root->right, maxSum);
+    int currentMax = root->val + std::max(0, std::max(leftMax, rightMax));
+    maxSum = std::max(maxSum, currentMax);
+    return currentMax;
+}
+
+int maxPathSum(TreeNode* root) {
+    int maxSum = INT_MIN;
+    maxPathSumHelper(root, maxSum);
+    return maxSum;
+}
+
+int specialNodesSum(TreeNode* root) {
+    if (root == nullptr)
+        return 0;
+    int sum = 0;
+    if (root->left || root->right) {
+        bool isSpecial = true;
+        if (root->left) {
+            if (root->val <= root->left->val)
+                isSpecial = false;
+        }
+        if (root->right) {
+            if (root->val <= root->right->val)
+                isSpecial = false;
+        }
+        if (isSpecial)
+            sum += root->val;
+    }
+    return sum + specialNodesSum(root->left) + specialNodesSum(root->right);
+}
+
+int main() {
+    std::vector<int> nodes;
+    int num;
+    while (std::cin >> num) {
+        nodes.push_back(num);
+        if (std::cin.get() == '\n')
+            break;
+    }
+    TreeNode* root = buildTree(nodes, 0);
+    int height = treeHeight(root);
+    int maxPath = maxPathSum(root);
+    int specialSum = specialNodesSum(root);
+    std::cout << height << std::endl;
+    std::cout << maxPath << std::endl;
+    std::cout << specialSum << std::endl;
+    return 0;
+}

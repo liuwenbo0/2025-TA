@@ -1,0 +1,88 @@
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int main(){
+    long long m=0,k=0,s=0;
+    cin>>m>>k>>s;
+    long long count=log(m)/log(2);
+    //long long n=static_cast<long long>(pow(2,count+1))-1;
+    long long sum=0;
+    for(long long i=(k/2)*2;i<s;i+=2){
+        sum++;
+    }
+    for(long long j=1;j<=count;j++){
+        long long num=((s-k)/static_cast<long long>(pow(2,j+1)));
+        if((k-1)%static_cast<long long>(pow(2,j+1))<=static_cast<long long>(pow(2,j))-1){
+            num++;
+        }
+        if((s-1)%static_cast<long long>(pow(2,j+1))<=static_cast<long long>(pow(2,j))-2){
+            num--;
+        }
+        sum+=((m/static_cast<long long>(pow(2,count-j)))%2)*num;
+        //cout<<num<<endl;
+    }
+    if(m==0)    sum=0;
+    cout<<sum<<endl;
+    return 0;
+}
+
+
+
+
+
+/*#include<iostream>
+#include<vector>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+int main(){
+    long long m=0,k=0,s=0;
+    cin>>m>>k>>s;
+    long long count=log(m)/log(2);
+    long long n=static_cast<long long>(pow(2,count+1))-1;
+    long long sum=0;
+    for(long long i=max(static_cast<long long>(0),(k/2)*2);i<min(n,s);i+=2){
+        sum++;
+    }
+    for(long long j=1;j<=count;j++){
+        for(long long i=static_cast<long long>(pow(2,j))-1;i<min(n,s);i+=static_cast<long long>(pow(2,j+1))){
+            if(i>=k-1){
+                sum+=(m/static_cast<long long>(pow(2,count-j)))%2;
+            }
+        }
+    }
+    if(m==0)    sum=0;
+    cout<<sum<<endl;
+    return 0;
+}*/
+
+
+
+
+
+
+/*#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+int main(){
+    long long m=0,k=0,s=0;
+    cin>>m>>k>>s;
+    long long count=log(m)/log(2);
+    long long n=static_cast<long long>(pow(2,count+1))-1;
+    long long sum=0;
+    for(long long i=0;i<n;i+=2){
+        if(i>=k-1&&i<s)    sum++;
+    }
+    for(long long j=1;j<=count;j++){
+        for(long long i=static_cast<long long>(pow(2,j))-1;i<n;i+=static_cast<long long>(pow(2,j+1))){
+            if(i>=k-1&&i<s){
+                sum+=(m/static_cast<long long>(pow(2,count-j)))%2;
+            }
+        }
+    }
+    if(m==0)    sum=0;
+    cout<<sum<<endl;
+    return 0;
+}*/

@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+int max_in_range(vector<int>& nums, int l, int m) {
+    if (nums.empty()) 
+        return 0;
+
+    int max_val = nums[l];
+    for (int i = l + 1; i <= m; i++) {
+        if (nums[i] > max_val) {
+            max_val = nums[i];
+        }
+    }
+    return max_val;
+}
+
+
+int max_in_range_index(vector<int>& nums, int l, int m) {
+    if (nums.empty()) 
+        return 0;
+
+    int max_val = nums[l];
+    int max_index = l;
+    for (int i = l + 1; i <= m; i++) {
+        if (nums[i] > max_val) {
+            max_val = nums[i];
+            max_index = i;
+        }
+    }
+    return max_index;
+}
+
+int main() {
+    int m, n;
+    cin >> m >> n;
+
+    vector<int> nums(m, 0);
+    for (int i = 0; i < m; i++) {
+        cin >> nums[i];
+    }
+
+    if (m >= n) {
+        int h = m - n + 1;
+        vector<int> hp(h, 0);
+        int max_index = max_in_range_index(nums, 0, n - 1);
+        hp[0] = nums[max_index];
+
+        for (int i = 1; i < h; i++) {
+            if (max_index >= i) {
+
+                if (nums[i + n - 1] >= nums[max_index]) {
+                    max_index = i + n - 1;
+                }
+            } else {
+                max_index = max_in_range_index(nums, i, i + n - 1);
+            }
+            hp[i] = nums[max_index];
+        }
+
+        for (int i = 0; i < h; i++) {
+            cout << hp[i] << " ";
+        }
+        cout << endl;
+    } else {
+        int max_val = max_in_range(nums, 0, m - 1);
+        cout << max_val << endl;
+    }
+
+    return 0;
+}

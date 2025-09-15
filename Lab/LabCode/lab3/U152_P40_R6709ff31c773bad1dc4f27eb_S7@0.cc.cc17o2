@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+using namespace std;
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    unordered_map<int, int> count;
+    unordered_map<int, int>修剪次数;
+    for (int height : heights) {
+        int修剪 = 0;
+        while (height > 1) {
+            if (修剪次数.find(height) == 修剪次数.end() || 修剪次数[height] > 修剪) {
+                修剪次数[height] = 修剪;
+                count[修剪] = count[修剪] + 1;
+            }
+            height = height / 2;
+            修剪++;
+        }
+        if (修剪次数.find(height) == 修剪次数.end() || 修剪次数[height] > 修剪) {
+            修剪次数[height] = 修剪;
+            count[修剪] = count[修剪] + 1;
+        }
+    }
+
+    int left = 0, right = 1e9;
+    while (left < right) {
+        int mid = (left + right + 1) / 2;
+        int covered = 0;
+        for (auto& c : count) {
+            if (c.first <= mid) {
+                covered += c.second;
+                if (covered >= q) {
+                    break;
+                }
+            }
+        }
+        if (covered >= q) {
+            right = mid - 1;
+        } else {
+            left = mid;
+        }
+    }
+
+    cout << left << endl;
+    return 0;
+}

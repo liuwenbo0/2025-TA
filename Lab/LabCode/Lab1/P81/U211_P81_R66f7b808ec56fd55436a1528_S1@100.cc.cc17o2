@@ -1,0 +1,10 @@
+#include"SqList.h"
+
+//将新增元素正确插入到线性表中，并不破坏其顺序性
+//@param
+//list:待处理线性表
+//num：待插入元素
+void insert(SqList& list, int num){
+	auto it = std::lower_bound(list.begin(), list.end(), num);
+    list.insert(it, num); // 在找到的位置插入元素
+}

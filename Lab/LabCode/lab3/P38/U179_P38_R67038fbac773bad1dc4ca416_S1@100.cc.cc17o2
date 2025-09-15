@@ -1,0 +1,38 @@
+#include "QuickSort.h"
+#include <random> 
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    std::random_device rd;  
+    std::uniform_int_distribution<int> dist(p, q); 
+    int randomIndex = dist(rd);
+
+   
+    std::swap(nums[p], nums[randomIndex]); 
+    int pivot = nums[p];
+    int i = p;
+    for(int j = p+1;j <= q ;j++){
+        if(nums[j] < pivot){
+            i++;
+            std::swap(nums[i],nums[j]);
+        }
+
+    }
+    std::swap(nums[i],nums[p]);
+    return i;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    // 请在这里完成你的代码
+    if(l<r){
+        int m = partition(nums,l,r);
+        quick_sort(nums,l,m-1);
+        quick_sort(nums,m+1,r);
+    }
+    
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

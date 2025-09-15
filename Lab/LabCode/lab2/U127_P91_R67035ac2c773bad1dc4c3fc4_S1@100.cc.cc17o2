@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+long long countnumber(int k,long long a,long long b){
+    long long step=pow(2,k);
+    long long first=pow(2,k-1);
+    //double k1=k;
+    //double a1=a;
+    //double b1=b;
+    long long min=ceil((a-first)/static_cast<double>(step));
+    long long max=floor((b-first)/static_cast<double>(step));
+    if(min>max){
+        return 0;
+    }
+    else{
+        return max-min+1;
+    }
+}
+int main() {
+    long long sum=0;
+    long long m,k,s;
+    cin >> m >> k >> s;
+    if(m==0){
+        cout << 0;
+        return 0;
+    }
+    if(k>s){
+        cout << 0;
+        return 0;
+    }
+    long long high;
+    high=log2(m);
+    //long length;
+    //length=2*pow(2,high);
+    //long long mid=(length+1)/2
+    long long k1,s1;
+    if(k%2) k1=k;
+    else k1=k+1;
+    if(s%2) s1=s;
+    else s1=s-1;
+    long long c=(s1-k1)/2+1;
+    sum+=c;
+    long long x=high-1;
+    for(int i=2;i<=high+1;i++){
+        long long num=countnumber(i,k,s);
+        long long y=pow(2,x);
+        long long z=(m/y)%2;
+        sum+=(z*num);
+        x--;
+        //cout <<num <<" "<<z <<" "<<endl;
+    }
+    cout << sum;    
+}

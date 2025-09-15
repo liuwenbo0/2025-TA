@@ -1,0 +1,72 @@
+#include "Linklist.h"
+
+void changeList(Linklist &list) {
+    // Step 1: Initialize pointers for even and odd linked lists
+    Linklist even_head = new node(); // Dummy head for even indices
+    Linklist odd_head = new node();  // Dummy head for odd indices
+    Linklist even_tail = even_head;  // Tail pointer for even list
+    Linklist odd_tail = odd_head;    // Tail pointer for odd list
+    
+    Linklist current = list->next; // Start from the first element
+    int index = 0; // To track the position
+    
+    // Step 2: Separate the original list into even and odd indexed lists
+    while (current != list) {
+        if (index % 2 == 0) {
+            // Even index, add to even list
+            even_tail->next = current;
+            current->prior = even_tail;
+            even_tail = current;
+        } else {
+            // Odd index, add to odd list
+            odd_tail->next = current;
+            current->prior = odd_tail;
+            odd_tail = current;
+        }
+        current = current->next;
+        index++;
+    }
+    
+    // Step 3: Cut off the ends of the even and odd lists
+    even_tail->next = nullptr;
+    odd_tail->next = nullptr;
+
+    // Step 4: Reverse the odd indexed list
+    Linklist prev = nullptr;
+    current = odd_head->next;
+    while (current != nullptr) {
+        Linklist next_node = current->next;
+        current->next = prev;
+        if (prev != nullptr) {
+            prev->prior = current;
+        }
+        prev = current;
+        current = next_node;
+    }
+    // Now 'prev' is the new head of the reversed odd list
+    odd_head->next = prev;
+    
+    // Step 5: Link the even list with the reversed odd list
+    even_tail->next = odd_head->next;
+    if (odd_head->next != nullptr) {
+        odd_head->next->prior = even_tail;
+    }
+    
+    // Step 6: Connect the new tail to the head to form a circular linked list
+    Linklist new_tail = even_tail;
+    while (new_tail->next != nullptr) {
+        new_tail = new_tail->next;
+    }
+    new_tail->next = list;
+    list->prior = new_tail;
+    
+    // Step 7: Update the original list's pointers
+    list->next = even_head->next;
+    if (even_head->next != nullptr) {
+        even_head->next->prior = list;
+    }
+    
+    // Free the dummy heads
+    delete even_head;
+    delete odd_head;
+}

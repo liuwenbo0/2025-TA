@@ -1,0 +1,38 @@
+#include "Solution.h"
+#include <vector>
+#include <unordered_map>
+#include <functional> // 添加这一行以使用 std::function
+
+using namespace std;
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans(n);
+    unordered_map<int, vector<int>> mp;
+    function<vector<int>(int)> f; // 声明f
+
+    // 定义f
+    f = [&](int N) -> vector<int> {
+        if (mp.find(N) != mp.end()) return mp[N];
+        vector<int> res(N);
+        if (N == 1) {
+            res[0] = 1;
+        } else {
+            int t = 0;
+            for (int x : f((N + 1) / 2)) {
+                res[t++] = 2 * x - 1;
+            }
+            for (int x : f(N / 2)) {
+                res[t++] = 2 * x;
+            }
+        }
+        mp[N] = res;
+        return res;
+    };
+
+    ans = f(n);
+ 
+
+
+
+    return ans;
+}

@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+// 计算晶体树的总长度
+long long compute_size(long long energy) {
+    if (energy <= 1) return 1; 
+    return 2 * compute_size(energy / 2) + 1;
+}
+
+long long count_ones_in_range(long long energy, long long left_bound, long long right_bound, long long range_start, long long range_end) {
+
+    if (energy == 0) return 0; 
+    if (energy == 1) {
+        return (left_bound >= range_start && right_bound <= range_end) ? 1 : 0;
+    }
+
+    // 计算中间位置
+    long long middle = left_bound + (right_bound - left_bound) / 2; 
+    long long total_ones = 0;
+
+    if (range_start <= middle - 1 && range_end >= left_bound) {
+        total_ones += count_ones_in_range(energy / 2, left_bound, middle - 1, range_start, range_end);
+    }
+
+    if (middle >= range_start && middle <= range_end && energy % 2 == 1) {
+        total_ones += 1;
+    }
+
+    if (range_start <= right_bound && range_end >= middle + 1) {
+        total_ones += count_ones_in_range(energy / 2, middle + 1, right_bound, range_start, range_end);
+    }
+
+    return total_ones;
+}
+
+int main() {
+    long long energy_level, query_start, query_end;
+    
+    cin >> energy_level >> query_start >> query_end;
+
+    long long full_size = compute_size(energy_level);
+
+    long long total_ones_in_query = count_ones_in_range(energy_level, 1, full_size, query_start, query_end);
+
+    cout << total_ones_in_query << endl;
+
+    return 0;
+}

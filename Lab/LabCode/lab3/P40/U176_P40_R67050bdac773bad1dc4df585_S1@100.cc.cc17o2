@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <climits>
+
+class MaxHeap {
+public:
+    std::vector<int> heap;
+
+    void push(int value) {
+        heap.push_back(value);
+        insert(heap.size() - 1);
+    }
+
+    void pop() {
+        if (heap.empty()) return;
+        std::swap(heap.front(), heap.back());
+        heap.pop_back();
+        max_build(0);
+    }
+
+    int top() {
+        return heap.front();
+    }
+
+    bool empty() {
+        return heap.empty();
+    }
+
+    int size() {
+        return heap.size();
+    }
+
+    void insert(int i) {
+        while (i > 0) {
+            int parent = (i - 1) / 2;
+            if (heap[i] <= heap[parent]) {
+                break;
+            }
+            std::swap(heap[i], heap[parent]);
+            i = parent;
+        }
+    }
+
+    void max_build(int i) {
+        while (i <  heap.size()) {
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+            int cur = i;
+
+            if (left <  heap.size() && heap[left] > heap[cur]) {
+                cur = left;
+            }
+            if (right <  heap.size() && heap[right] > heap[cur]) {
+                cur = right;
+            }
+            if (cur == i) {
+                break;
+            }
+            std::swap(heap[i], heap[cur]);
+            i = cur;
+        }
+    }
+};
+
+int minCut(std::vector<int>& bushes, int q) {
+    std::map<int, MaxHeap> map;
+    for (int i : bushes) {
+        int j = 0;
+        while (i > 0) {
+            if (!map.count(i)) {
+                map[i] = MaxHeap();
+            }
+            map[i].push(j);
+            i >>= 1;
+            j++;
+        }
+    }
+    int ans = 10000000;
+    for (auto& [key, heap] : map) {
+        while (heap.size() > q) {
+            heap.pop();
+        }
+        if (heap.size() == q) {
+            int s = 0;
+            MaxHeap temp = heap;
+            while (!temp.empty()) {
+                s += temp.top();
+                temp.pop();
+            }
+            ans = std::min(ans, s);
+        }
+    }
+    return ans;
+}
+
+int main() {
+    int n, q;
+    std::cin >> n >> q;
+    std::vector<int> bushes(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> bushes[i];
+    }
+    std::cout << minCut(bushes, q) ;
+    return 0;
+}

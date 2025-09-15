@@ -1,0 +1,66 @@
+#include "MergeSort.h"
+
+// 通过归并排序对int队列nums中的[left, right]区间进行升序排序
+// @param
+// nums: 完整的待排序队列，最终排序的结果应存放在nums中
+// left: 当前排序区间的左端点
+// right: 当前排序区间的右端点
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    // 基本情况：如果左端点大于或等于右端点，则返回
+    if (left >= right) {
+        return;
+    }
+
+    // 计算中间点
+    int mid = left + (right - left) / 2;
+
+    // 递归排序左半部分
+    merge_sort_aux(nums, left, mid);
+    // 递归排序右半部分
+    merge_sort_aux(nums, mid + 1, right);
+    
+    // 合并已排序的左右部分
+    int n1 = mid - left + 1; // 左半部分的大小
+    int n2 = right - mid;    // 右半部分的大小
+
+    // 创建临时数组
+    std::vector<int> leftArr(n1);
+    std::vector<int> rightArr(n2);
+
+    // 复制数据到临时数组
+    for (int i = 0; i < n1; ++i)
+        leftArr[i] = nums[left + i];
+    for (int j = 0; j < n2; ++j)
+        rightArr[j] = nums[mid + 1 + j];
+
+    // 合并临时数组回原数组
+    int i = 0; // 初始索引左半部分
+    int j = 0; // 初始索引右半部分
+    int k = left; // 初始索引合并后的部分
+
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            nums[k] = leftArr[i];
+            i++;
+        } else {
+            nums[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // 复制左半部分剩余元素（如果有）
+    while (i < n1) {
+        nums[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    // 复制右半部分剩余元素（如果有）
+    while (j < n2) {
+        nums[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}

@@ -1,0 +1,30 @@
+#include "HeapSort.h"
+void HeapSort::max_heapify(std::vector<int>& nums, int i) {
+    int MAX=i;
+    if(2*i<heap_size&&nums[i]<nums[2*i]){
+        MAX=2*i;
+    }
+    if(2*i+1<heap_size&&nums[MAX]<nums[2*i+1]){
+        MAX=2*i+1;
+    }
+    if(MAX!=i){
+        swap(nums[i],nums[MAX]);
+        HeapSort::max_heapify(nums,MAX);
+    }
+}
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+    for(int i=length/2;i>=1;i--){
+    	HeapSort::max_heapify(nums,i);
+    }
+}
+void HeapSort::mysort(std::vector<int>& nums) {
+    length = nums.size();
+    nums.insert(nums.begin(), 0);  //在开头插入一个元素，使得待排序元素下标从 1 开始
+    heap_size=length;
+    HeapSort::build_max_heap(nums);
+    for(;heap_size>0;heap_size--){
+            swap(nums[1],nums[heap_size]);
+            HeapSort::max_heapify(nums,1);
+        }
+    nums.erase(nums.begin()); // 删除开头元素
+}

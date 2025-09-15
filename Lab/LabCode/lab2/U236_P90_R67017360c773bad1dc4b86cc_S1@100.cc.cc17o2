@@ -1,0 +1,97 @@
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<cmath>
+using namespace std;
+
+struct TreeNode
+{
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) :val(x), left(nullptr), right(nullptr) {}
+}*root;
+
+TreeNode* createtree(const vector<int>& tree) {
+    if (tree.empty()) {
+        return nullptr;
+    }
+
+    TreeNode* root = new TreeNode(tree[0]);
+    queue<pair<TreeNode*, int>> nodes; // 存储节点和其在tree中的索引  
+    nodes.push({ root, 1 }); // 从索引1开始（根节点索引为0）  
+
+    while (!nodes.empty()) {
+        auto[ node, index ] = nodes.front();
+        nodes.pop();
+
+        // 处理左子节点  
+        if (index * 2 - 1 < tree.size()) {
+            if (tree[index * 2 - 1] != -1) {
+                node->left = new TreeNode(tree[index * 2 - 1]);
+                nodes.push({ node->left, index * 2 });
+            }
+            else {
+                node->left = nullptr;
+                // 不需要添加nullptr到队列中，因为我们知道这个位置是空的  
+            }
+        }
+
+        // 处理右子节点  
+        if (index * 2 < tree.size()) {
+            if (tree[index * 2] != -1) {
+                node->right = new TreeNode(tree[index * 2]);
+                nodes.push({ node->right, index * 2 + 1 });
+            }
+            else {
+                node->right = nullptr;
+                // 同样，不需要添加nullptr到队列中  
+            }
+        }
+    }
+    return root;
+}
+
+int maxsourcesum(TreeNode* root)
+{
+    if (root == nullptr)
+        return 0;
+    int left = maxsourcesum(root->left);
+    int right = maxsourcesum(root->right);
+    return max(left, right) + root->val;
+}
+
+int specialsourcesum(TreeNode* root) {
+    if (root == nullptr)
+        return 0;
+    int left = specialsourcesum(root->left);
+    int right = specialsourcesum(root->right);
+    if (root->left != nullptr && root->right != nullptr && root->val > root->left->val && root->val > root->right->val)
+        return left + right + root->val;
+    else if (root->left != nullptr && root->right == nullptr && root->val > root->left->val)
+        return left + root->val;
+    else if (root->left == nullptr && root->right != nullptr && root->val > root->right->val)
+        return right + root->val;
+    else
+        return left + right;
+}
+
+int main()
+{
+    long nums, height, mxsource, specsource;
+    vector<int> tree;
+    int x;
+    while (cin >> x) {
+        tree.push_back(x);
+        if (cin.get() == '\n') {
+            break;
+        }
+    }
+	nums = tree.size();
+    root = createtree(tree);
+    height = ceil(log(nums + 1) / log(2));
+    mxsource = maxsourcesum(root);
+    specsource = specialsourcesum(root);
+    cout << height << "\n" << mxsource << "\n" << specsource << endl;
+    return 0;
+}

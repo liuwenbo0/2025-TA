@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+#include <algorithm> // for std::lower_bound
+
+typedef std::vector<int> SqList;
+
+void insert(SqList& list, int num) {
+    // 使用 std::lower_bound 找到 num 应该插入的位置
+    auto it = std::lower_bound(list.begin(), list.end(), num);
+    list.insert(it, num); // 在指定位置插入 num
+}
+
+int main() {
+    int n;
+    std::cin >> n; // 输入初始线性表大小
+    SqList list(n); // 创建 SqList 并指定大小
+
+    for (int i = 0; i < n; ++i) {
+        std::cin >> list[i]; // 输入顺序递增的线性表元素
+    }
+
+    int m;
+    std::cin >> m; // 输入插入元素个数
+
+    for (int i = 0; i < m; ++i) {
+        int num;
+        std::cin >> num; // 输入待插入的元素
+        insert(list, num); // 调用 insert 函数
+    }
+
+    // 输出最终的顺序表
+    for (int i = 0; i < list.size(); ++i) {
+        std::cout << list[i] << " ";
+    }
+    std::cout << std::endl; // 最后输出换行
+    return 0;
+}

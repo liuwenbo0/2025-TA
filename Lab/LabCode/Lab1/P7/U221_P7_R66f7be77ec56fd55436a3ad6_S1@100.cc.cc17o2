@@ -1,0 +1,58 @@
+#include "MergeSort.h"
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    //请在这里完成你的代码
+    if (left >= right)
+      {
+        return;
+      }
+
+      int mid = left + (right - left) / 2;
+      merge_sort_aux(nums, left, mid);
+      merge_sort_aux(nums, mid + 1, right);
+
+      // 合并两个已排序的子区间
+      int x = mid - left + 1;
+      int y = right - mid;
+      std::vector<int> L(x), R(y);
+
+      for (int i = 0; i < x; ++i)
+      {
+        L[i] = nums[left + i];
+      }
+      for (int i = 0; i < y; ++i)
+      {
+        R[i] = nums[mid + 1 + i];
+      }
+
+      int i = 0, j = 0, k = left;
+      while (i < x && j < y)
+      {
+        if (L[i] <= R[j])
+        {
+          nums[k] = L[i];
+          ++i;
+        }
+        else
+        {
+          nums[k] = R[j];
+          ++j;
+        }
+        ++k;
+      }
+
+      while (i < x)
+      {
+        nums[k] = L[i];
+        ++i;
+        ++k;
+      }
+
+      while (j < y)
+      {
+        nums[k] = R[j];
+        ++j;
+        ++k;
+      }
+}

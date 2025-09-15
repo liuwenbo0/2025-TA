@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> split_crystals(long long m) {
+    vector<int> crystals;
+    while (m > 1) {
+        crystals.push_back(m % 2);
+        m /= 2;
+        if (m > 0) {
+            crystals.push_back(m);
+            m /= 2;
+        }
+    }
+    if (m == 1) {
+        crystals.push_back(1);
+    }
+    return crystals;
+}
+
+int main() {
+    long long m;
+    int k, s;
+    cin >> m >> k >> s;
+
+
+    vector<int> crystals = split_crystals(m);
+
+  
+    int count = 0;
+    for (int i = k - 1; i < static_cast<int>(k - 1 + (s - k + 1)) && static_cast<size_t>(i) < crystals.size(); ++i) {
+        if (crystals[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << count << endl;
+    return 0;
+}

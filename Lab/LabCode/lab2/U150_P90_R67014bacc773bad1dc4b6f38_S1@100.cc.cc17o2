@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <cmath>
+
+using namespace std;
+
+int merge_max(vector<int> &A, int index) {
+    int size = A.size();
+    if (index >= size || A[index] == -1) {
+        return 0;
+    }
+    int left = 2 * index + 1;
+    int right = 2 * index + 2;
+    int left_max = merge_max(A, left);
+    int right_max = merge_max(A, right);
+    return A[index] + max(left_max, right_max);
+}
+
+int specialSum(const vector<int>& tree, int i) {
+    if (i >= tree.size() || tree[i] == -1) {
+        return 0;
+    }
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    int leftChild = (left < tree.size() && tree[left] != -1) ? tree[left] : -1;
+    int rightChild = (right < tree.size() && tree[right] != -1) ? tree[right] : -1;
+    int sum = 0;
+
+    if ((leftChild != -1 || rightChild != -1) && tree[i] > max(leftChild, rightChild)) {
+        sum += tree[i];
+    }
+    
+    sum += specialSum(tree, left);
+    sum += specialSum(tree, right);
+    return sum;
+}
+
+int main() {
+    vector<int> numbers;  
+    string line;
+    getline(cin, line);
+
+    stringstream ss(line);
+    int num;
+    while (ss >> num) {
+        numbers.push_back(num);
+    }
+
+    int num_count = numbers.size();
+    int height = num_count;
+    int count = 0;
+    while(height != 0){
+        count++;
+        height = height / 2;
+    }
+    cout << count << endl;
+    int max_value = merge_max(numbers, 0);
+    cout << max_value << endl;
+    int sum = 0;
+    
+    sum = specialSum(numbers, 0);
+    cout << sum << endl;
+    return 0;
+}

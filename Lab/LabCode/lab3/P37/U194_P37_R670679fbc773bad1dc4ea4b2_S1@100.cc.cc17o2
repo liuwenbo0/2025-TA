@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// 输入
+void input(vector<int>& arr) {
+    int n = 0;
+    cin >> n;
+    arr.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+}
+
+// 输出
+void output(const vector<int>& arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl; // 添加换行以美化输出
+}
+
+// 下滤
+void down_filter(vector<int>& arr, int i, int size) {
+    int largest = i;
+    int left = 2 * i + 1; // 左子节点
+    int right = 2 * i + 2; // 右子节点
+
+    // 检查左子节点
+    if (left < size && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    // 检查右子节点
+    if (right < size && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    // 如果最大的不是当前节点，则交换
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        down_filter(arr, largest, size); // 递归下滤
+    }
+}
+
+// 维护最大堆
+void max_heapify(vector<int>& arr, int size) {
+    for (int i = size / 2 - 1; i >= 0; i--) {
+        down_filter(arr, i, size);
+    }
+}
+
+// 堆排序
+void mysort(vector<int>& nums) {
+    input(nums); // 输入待排序元素
+    int length = nums.size(); // 获取长度
+
+    max_heapify(nums, length); // 构建最大堆
+
+    // 逐步将最大元素移到数组末尾
+    for (int i = length - 1; i > 0; i--) {
+        swap(nums[0], nums[i]); // 将当前最大值移到数组末尾
+        down_filter(nums, 0, i); // 重新调整堆
+    }
+
+    output(nums); // 输出排序后的数组
+}
+
+int main() {
+    vector<int> arr;
+    mysort(arr);
+    return 0;
+}

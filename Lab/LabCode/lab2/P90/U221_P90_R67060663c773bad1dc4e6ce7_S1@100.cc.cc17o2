@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
+
+// 定义一个树结点结构
+struct TreeNode {
+    int val;
+    vector<TreeNode*> children;
+
+    TreeNode(int value) : val(value) {}
+};
+
+// 构建树,注意对-1的处理
+TreeNode* createTree(const vector<int>& levelOrder) {
+    if (levelOrder.empty()) return NULL;
+
+    TreeNode* root = new TreeNode(levelOrder[0]);
+    queue<TreeNode*> q;
+    q.push(root);  // 根节点入队
+    int n = levelOrder.size();
+    int idex = 1;
+
+    while (!q.empty() && idex < n) {
+        TreeNode* current = q.front();
+        q.pop();
+
+        // 增加左结点
+        if (idex < n) {
+            TreeNode* leftChild = new TreeNode(levelOrder[idex]);
+            current->children.push_back(leftChild);
+            q.push(leftChild);
+        }
+        idex++; 
+
+        // 增加右结点
+        if (idex < n) {
+            TreeNode* rightChild = new TreeNode(levelOrder[idex]);
+            current->children.push_back(rightChild);
+            q.push(rightChild);
+        }
+        idex++; 
+    }
+    return root;
+}
+
+// 计算树的高度
+int calculateHeight(TreeNode* node) {
+    if (!node) return 0;
+    int maxHeight = 0;
+
+    for (TreeNode* child : node->children) {
+        if (child->val != -1)
+            maxHeight = max(maxHeight, calculateHeight(child));
+    }
+    return maxHeight + 1;
+}
+
+// 递归计算资源最丰富路径和
+int calculateMaxResourcePath(TreeNode* node) {
+    if (!node) return 0; // 检查非叶节点
+    if (node->children.empty() && node->val != -1){
+        return node->val; // 叶节点
+    }
+    // 计算子节点的最大路径和
+    int maxChildSum = 0;
+    
+    for (TreeNode* child : node->children) { 
+        if (child->val != -1) // 递归，更新最大值
+            maxChildSum = max(maxChildSum, calculateMaxResourcePath(child)); 
+    }
+    return node->val + maxChildSum;
+}
+
+// 计算特殊区域的节点值和
+int calculateSpecialRegionSum(TreeNode* node) {
+    if (!node || node->val == -1) return 0; // 检查非叶节点
+    int sumSpecialNodes = 0;
+    bool isSpecial = false;
+    
+    // 检查有无子节点
+    for (TreeNode* child : node->children) {
+        if (child->val != -1) { 
+            isSpecial = true;
+            break;
+        }
+    }
+    // 检查特殊条件
+    for (TreeNode* child : node->children) {
+        if (node->val <= child->val) { 
+            isSpecial = false;
+        }
+    }
+    if (isSpecial) {
+        sumSpecialNodes += node->val;
+    }
+    for (TreeNode* child : node->children) {  // 对子节点递归调用
+        sumSpecialNodes += calculateSpecialRegionSum(child);
+    }
+    
+    return sumSpecialNodes;
+}
+
+int main() {
+    vector<int> Order;
+    int value;
+
+    // 输入数据
+    while (cin >> value) {
+        Order.push_back(value);
+        if (cin.peek() == '\n') break; 
+    }
+
+    TreeNode* root = createTree(Order);
+    
+    int height = calculateHeight(root);
+    int maxPathSum = calculateMaxResourcePath(root);
+    int specialValueSum = calculateSpecialRegionSum(root);
+
+    // 输出
+    cout << height << endl;
+    cout << maxPathSum << endl;
+    cout << specialValueSum;
+    return 0;
+}

@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+
+void splitEnergy(int energy, std::vector<int>& crystals) {
+    if (energy <= 1) {
+        crystals.push_back(energy);
+    } else {
+        int half = energy / 2;
+        splitEnergy(half, crystals);
+        splitEnergy(energy % 2, crystals);
+        splitEnergy(half, crystals);
+    }
+}
+
+int countOnesInRange(int m, int k, int s) {
+    std::vector<int> allCrystals;
+    splitEnergy(m, allCrystals);
+    int count = 0;
+    for (int i = k - 1; i < s; i++) {
+        if (allCrystals[i] == 1) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    int m, k, s;
+    std::cin >> m >> k >> s;
+    std::cout << countOnesInRange(m, k, s) << std::endl;
+    return 0;
+}

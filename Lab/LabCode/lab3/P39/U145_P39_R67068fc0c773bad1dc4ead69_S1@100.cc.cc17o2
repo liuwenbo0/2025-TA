@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+class HeapSorter {
+public:
+    void sort(std::vector<int>& array);
+
+private:
+    void heapify(std::vector<int>& array, int index, int size);
+    void buildHeap(std::vector<int>& array);
+};
+
+void HeapSorter::heapify(std::vector<int>& array, int index, int size) {
+    int largest = index;
+    int leftChild = 2 * index + 1;   
+    int rightChild = 2 * index + 2;  
+
+    if (leftChild < size && array[leftChild] > array[largest]) {
+        largest = leftChild;
+    }
+
+    if (rightChild < size && array[rightChild] > array[largest]) {
+        largest = rightChild;
+    }
+
+    if (largest != index) {
+        std::swap(array[index], array[largest]);
+        heapify(array, largest, size);
+    }
+}
+
+void HeapSorter::buildHeap(std::vector<int>& array) {
+    int size = array.size();
+    for (int i = size / 2 - 1; i >= 0; --i) {
+        heapify(array, i, size);
+    }
+}
+
+void HeapSorter::sort(std::vector<int>& array) {
+    buildHeap(array);
+    int size = array.size();
+
+    for (int i = size - 1; i > 0; --i) {
+        std::swap(array[0], array[i]); 
+        heapify(array, 0, i); 
+    }
+}
+
+int main() 
+{
+    int n;
+    std::cin >> n;
+    std::vector<int> array(n); 
+
+    for (int& num : array) {
+        std::cin >> num; 
+    }
+
+    HeapSorter sorter;
+    sorter.sort(array);
+
+    for (const int& num : array) 
+    {
+        std::cout << num << " "; 
+    }
+    std::cout << std::endl;
+
+    return 0;
+}

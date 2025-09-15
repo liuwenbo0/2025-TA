@@ -1,0 +1,41 @@
+#include"Linklist.h"
+#include<vector>
+
+void changeList(Linklist& list) {
+    Linklist remain = list;
+    Linklist p = list->prior;
+    list = list->next;
+    vector<int> A;
+    Linklist q = list;
+    
+    while (list != p)
+    {
+        A.push_back(list->num);
+        list = list->next;
+    }
+    A.push_back(list->num);
+    list = q;
+    int cou = 0;
+    int coup = 1;
+    for (int i = 0; i<int(A.size()); i++)
+    {
+        if (cou >= int(A.size()))
+        {
+            break;
+        }
+        list->num = A[cou];
+        cou += 2;
+        list = list->next;
+    }
+    for (int i = 0; i<int(A.size()); i++)
+    {
+        if (coup >= int(A.size()))
+        {
+            break;
+        }
+        p->num = A[coup];
+        coup += 2;
+        p = p->prior;
+    }
+    list = remain;
+}

@@ -1,0 +1,44 @@
+#include "MergeSort.h"
+    void mergea(std::vector<int>& nums, int left, int mid, int right); 
+#include "MergeSort.h"
+
+void mergea(std::vector<int> &nums, int left, int mid, int right)
+{
+    
+    std::vector<int> temp(right - left + 1);
+
+    int i = left;       
+    int j = mid + 1;    
+    int k = 0;         
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+        }
+    }
+
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+    }
+
+    while (j <= right) {
+        temp[k++] = nums[j++];
+    }
+
+    for (int p = 0; p < temp.size(); p++) {
+        nums[left + p] = temp[p];
+    }
+}
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    if (left >= right) {
+        return;
+    }
+
+    int mid = left + (right - left) / 2;
+    merge_sort_aux(nums, left, mid);
+    merge_sort_aux(nums, mid + 1, right);
+    mergea(nums, left, mid, right);
+}

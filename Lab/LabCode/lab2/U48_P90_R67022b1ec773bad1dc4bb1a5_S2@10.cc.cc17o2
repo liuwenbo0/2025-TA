@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <limits>
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+TreeNode* constructTree(const vector<int>& nodes) {
+    if (nodes.empty() || nodes[0] == -1) return nullptr;
+    
+    queue<TreeNode*> q;
+    TreeNode* root = new TreeNode(nodes[0]);
+    q.push(root);
+    
+    size_t i = 1; // 使用size_t来避免比较警告
+    while (!q.empty() && i < nodes.size()) {
+        TreeNode* current = q.front();
+        q.pop();
+        
+        if (nodes[i] != -1) {
+            current->left = new TreeNode(nodes[i]);
+            q.push(current->left);
+        }
+        i++;
+        
+        if (i < nodes.size() && nodes[i] != -1) {
+            current->right = new TreeNode(nodes[i]);
+            q.push(current->right);
+        }
+        i++;
+    }
+    
+    return root;
+}
+
+int getTreeHeight(TreeNode* root) {
+    if (!root) return 0;
+    return 1 + max(getTreeHeight(root->left), getTreeHeight(root->right));
+}
+
+int maxPathSum(TreeNode* root) {
+    if (!root) return 0;
+    return root->val + max(maxPathSum(root->left), maxPathSum(root->right));
+}
+
+void findSpecialNodes(TreeNode* root, int& sum) {
+    if (!root) return;
+    
+    if (root->left && root->right) {
+        if (root->val > root->left->val && root->val > root->right->val) {
+            sum += root->val;
+        }
+    } else if (root->left && root->val > root->left->val) {
+        sum += root->val;
+    } else if (root->right && root->val > root->right->val) {
+        sum += root->val;
+    }
+    
+    findSpecialNodes(root->left, sum);
+    findSpecialNodes(root->right, sum);
+}
+
+int main() {
+    vector<int> nodes;
+    int val;
+    while (cin >> val) {
+        nodes.push_back(val);
+    }
+    
+    TreeNode* root = constructTree(nodes);
+    
+    cout << getTreeHeight(root) << endl;
+    cout << maxPathSum(root) << endl;
+    
+    int specialSum = 0;
+    findSpecialNodes(root, specialSum);
+    cout << specialSum << endl;
+    
+    return 0;
+}

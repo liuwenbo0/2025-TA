@@ -1,0 +1,51 @@
+#include<iostream>
+#include<cmath>
+#include<vector>
+using namespace std;
+vector<int> nodes;
+
+int getMaxSource(int index,int n)
+{
+	if(index >=n ) return 0;
+	if(nodes[index]==-1) return 0;
+	if(index*2+1>=n && index*2+2>=n) return nodes[index];
+	int leftSum = getMaxSource(index*2+1,n);
+	int rightSum = getMaxSource(index*2+2,n);
+	return nodes[index] + max(leftSum,rightSum);
+}
+
+int findSpecialRegions(int index,int n)
+{
+	if(index >=n ) return 0;
+	if(nodes[index]==-1) return 0;
+	int specialValue = 0;
+	if(2 * index + 1 < n || 2 * index + 2 < n){
+		bool isSpecial = true;
+		if(2 * index + 1 < n&&nodes[index]<=nodes[index*2+1]){
+			isSpecial=false;
+		}
+		if( 2 * index + 2 < n &&nodes[index]<=nodes[index*2+2]){
+			isSpecial=false;
+		}
+		if(2 * index + 1 < n && 2 * index + 2 < n &&nodes[index*2+2]==-1&&nodes[index*2+1]==-1) isSpecial=false;
+		if(isSpecial){
+			specialValue+=nodes[index];
+		}
+			
+	}
+	specialValue += findSpecialRegions(index*2+1,n);
+    specialValue += findSpecialRegions(index*2+2,n);
+    return specialValue;
+}
+
+int main()
+{
+	int n=0,num;
+	while(cin>>num){
+		nodes.push_back(num);
+		n++;
+	}
+	cout<<(int)log2(n)+1<<endl;
+	cout<<getMaxSource(0,n)<<endl;
+	cout<<findSpecialRegions(0,n)<<endl;
+}

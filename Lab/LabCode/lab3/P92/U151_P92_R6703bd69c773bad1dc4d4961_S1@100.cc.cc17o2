@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <algorithm>
+
+std::vector<int> findMaxValues(int n, int k, const std::vector<int>& nums) {
+    std::vector<int> maxValues(n - k + 1, 0);
+    std::deque<int> window; 
+
+    for (int i = 0; i < k; ++i) {
+        while (!window.empty() && nums[window.back()] < nums[i]) {
+            window.pop_back();
+        }
+        window.push_back(i);
+        maxValues[0] = nums[window.front()];
+    }
+
+    for (int i = 1; i < n - k + 1; ++i) {
+        if (window.front() == i - 1) {
+            window.pop_front();
+        }
+        while (!window.empty() && nums[window.back()] < nums[i + k - 1]) {
+            window.pop_back();
+        }
+        window.push_back(i + k - 1);
+        maxValues[i] = nums[window.front()];
+    }
+
+    return maxValues;
+}
+
+int main() {
+    int n, k;
+    std::cin >> n >> k;
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    std::vector<int> result = findMaxValues(n, k, nums);
+    for (int i = 0; i < result.size(); ++i) {
+        std::cout << result[i] << (i < result.size() - 1 ? ' ' : '\n');
+    }
+
+    return 0;
+}

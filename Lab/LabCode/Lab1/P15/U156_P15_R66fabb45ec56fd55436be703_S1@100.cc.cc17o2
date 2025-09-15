@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int insertionSort(vector<int>& arr) {
+    int n = arr.size();
+    int cn = 0;
+
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            cn++;
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        
+        if (j >= 0) cn++;
+        arr[j + 1] = key;
+    }
+    return cn;
+}
+
+int merge(vector<int>& arr, int left, int mid, int right) {
+    int cn = 0;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    vector<int> L(n1), R(n2);
+    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        cn++;
+        if (L[i] <= R[j]) {
+            arr[k++] = L[i++];
+        } else {
+            arr[k++] = R[j++];
+        }
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+    return cn;
+}
+
+int mergeSort(vector<int>& arr, int left, int right) {
+    int cn = 0;
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        cn += mergeSort(arr, left, mid);
+        cn += mergeSort(arr, mid + 1, right);
+        cn += merge(arr, left, mid, right);
+    }
+    return cn;
+}
+
+int main() {
+    int N;
+    cin >> N;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
+    }
+
+    vector<int> arrCopy1 = arr;
+    vector<int> arrCopy2 = arr;
+    int inc = insertionSort(arrCopy1);
+    int mec = mergeSort(arrCopy2, 0, N - 1);
+    cout << mec << " " << inc << endl;
+}

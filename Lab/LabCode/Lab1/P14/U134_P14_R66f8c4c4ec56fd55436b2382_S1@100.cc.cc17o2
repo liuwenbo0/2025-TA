@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+long long combine(vector<int>& data, vector<int>& auxiliary, int start, int mid, int end) {
+    int leftPtr = start;
+    int rightPtr = mid + 1;
+    int mergePtr = start;
+    long long inversionCount = 0;
+
+    while (leftPtr <= mid && rightPtr <= end) {
+        if (data[leftPtr] <= data[rightPtr]) {
+            auxiliary[mergePtr++] = data[leftPtr++];
+        } else {
+            auxiliary[mergePtr++] = data[rightPtr++];
+            inversionCount += (mid - leftPtr + 1);
+        }
+    }
+
+    while (leftPtr <= mid) {
+        auxiliary[mergePtr++] = data[leftPtr++];
+    }
+
+    while (rightPtr <= end) {
+        auxiliary[mergePtr++] = data[rightPtr++];
+    }
+
+    for (int i = start; i <= end; i++) {
+        data[i] = auxiliary[i];
+    }
+
+    return inversionCount;
+}
+
+long long sortAndCount(vector<int>& data, vector<int>& auxiliary, int start, int end) {
+    long long totalInversions = 0;
+    if (start < end) {
+        int mid = (start + end) / 2;
+        totalInversions += sortAndCount(data, auxiliary, start, mid);
+        totalInversions += sortAndCount(data, auxiliary, mid + 1, end);
+        totalInversions += combine(data, auxiliary, start, mid, end);
+    }
+    return totalInversions;
+}
+
+int main() {
+    int numElements;
+    cin >> numElements;
+    vector<int> data(numElements);
+    
+    for (int i = 0; i < numElements; i++) {
+        cin >> data[i];
+    }
+
+    vector<int> auxiliary(numElements);
+    long long inversionCount = sortAndCount(data, auxiliary, 0, numElements - 1);
+    cout << inversionCount << endl;
+
+    return 0;
+}

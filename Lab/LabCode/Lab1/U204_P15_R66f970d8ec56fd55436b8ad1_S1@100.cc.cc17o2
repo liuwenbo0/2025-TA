@@ -1,0 +1,87 @@
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+int count2=0;
+void merge_sort_aux(int nums[], int left, int right)
+{   
+    int mid=(left+right)/2;
+    if(left<right)
+    {
+        merge_sort_aux(nums, left, mid);
+        merge_sort_aux(nums, mid+1, right);
+
+        int n1=mid-left+1;
+        int n2=right-mid;
+        int L[1000010];
+        int R[1000010];
+        for(int i=0;i<n1;i++)
+            L[i]=nums[left+i];
+        for(int j=0;j<n2;j++)
+            R[j]=nums[mid+1+j];
+        L[n1]=100000000;
+        R[n2]=100000000;
+        int i=0,j=0;
+        for(int k=left;k<=right;k++)
+        {
+            if((L[i]<=R[j])&&(i<n1)&&(j<n2))
+            {   count2++;
+                nums[k]=L[i];
+                i=i+1;
+            }
+            else if((i<n1)&&(j<n2)) 
+            {   count2++;
+                nums[k]=R[j];
+                j=j+1;
+            }
+            else if(i==n1&&j<n2)
+            {
+                nums[k]=R[j];
+                j=j+1;
+            }
+            else if(j==n2&&i<n1)
+            {
+                nums[k]=L[i];
+                i=i+1;
+            }
+        }
+      
+    }       
+        
+}
+
+
+
+
+
+
+int main()
+{   int n=0;
+    int count1=0;
+    
+    cin>>n;
+    int nums[n],numscopy[n]; 
+    for(int i=0;i<n;i++)
+    {
+        cin>>nums[i];
+    }
+    for(int i=0;i<n;i++)
+    {
+        numscopy[i]=nums[i];
+    }
+
+    for (int i=1;i<n;++i) 
+    {  
+        int key=nums[i]; 
+        int j=i-1;  
+        while (j>=0&&(++count1)&&nums[j]>key) 
+        {   
+            nums[j+1]=nums[j];  
+            j=j-1;  
+        }  
+        nums[j+1]=key;  
+    }
+    merge_sort_aux(numscopy,0,n-1);
+    cout<<count2<<" "<<count1;
+
+
+}

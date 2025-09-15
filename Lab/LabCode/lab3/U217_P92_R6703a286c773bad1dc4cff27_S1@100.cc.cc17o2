@@ -1,0 +1,53 @@
+#include <iostream>  
+#include <vector>  
+#include <deque>  
+  
+std::vector<int> findMaxInWindows(int n, int k, const std::vector<int>& nums) {  
+    std::deque<int> dq; // 双端队列，存储元素下标  
+    std::vector<int> result; // 存储每次窗口的最大值  
+  
+    for (int i = 0; i < n; ++i) {  
+        // 移除队列尾部所有小于当前元素的元素  
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {  
+            dq.pop_back();  
+        }  
+  
+        // 将当前元素下标加入队列  
+        dq.push_back(i);  
+  
+        // 移除队列头部已经不在窗口范围内的元素  
+        if (!dq.empty() && dq.front() <= i - k) {  
+            dq.pop_front();  
+        }  
+  
+        // 当窗口形成后，记录最大值  
+        if (i >= k - 1) {  
+            result.push_back(nums[dq.front()]);  
+        }  
+    }  
+  
+    return result;  
+}  
+  
+int main() {  
+    int n, k;  
+    std::cin >> n >> k;  
+  
+    std::vector<int> nums(n);  
+    for (int i = 0; i < n; ++i) {  
+        std::cin >> nums[i];  
+    }  
+  
+    std::vector<int> result = findMaxInWindows(n, k, nums);  
+  
+    // 输出结果，元素之间用空格分隔  
+    for (size_t i = 0; i < result.size(); ++i) {  
+        if (i > 0) {  
+            std::cout << " ";  
+        }  
+        std::cout << result[i];  
+    }  
+    std::cout << std::endl;  
+  
+    return 0;  
+}

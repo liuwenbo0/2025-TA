@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <limits>
+#include <map>
+
+int minCuts(const std::vector<int>& heights, int q)
+{
+	std::unordered_map<int, std::vector<int>> heightMap;
+
+	for (auto h : heights) 
+	{
+		int cuts = 0;
+		while (h > 0) 
+		{
+			if (heightMap.find(h) == end(heightMap))
+				heightMap.insert(std::make_pair(h, std::vector<int>()));
+			heightMap[h].push_back(cuts);
+			h /= 2;
+			cuts++;
+		}
+	}
+
+	int minCuts = std::numeric_limits<int>::max();
+
+	for (const auto& entry : heightMap) {
+		const auto& cutsList = entry.second;
+		if (cutsList.size() >= q) 
+		{
+			auto temp = cutsList;
+			std::sort(temp.begin(), temp.end());
+			int total = 0;
+			for (int i = 0; i < q; i++)
+				total += temp[i];
+			minCuts = minCuts < total ? minCuts : total;
+		}
+	}
+
+	return minCuts == std::numeric_limits<int>::max() ? -1 : minCuts;
+}
+
+int main()
+{
+	int n, q;
+	std::cin >> n >> q;
+	auto heights = std::vector<int>(n);
+	for (auto i = 0; i < n; i++)
+		std::cin >> heights[i];
+	std::cout << minCuts(heights, q) << '\n';
+
+	return 0;
+}

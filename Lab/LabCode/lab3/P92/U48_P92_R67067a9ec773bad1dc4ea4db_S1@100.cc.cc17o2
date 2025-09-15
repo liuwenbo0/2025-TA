@@ -1,0 +1,49 @@
+#include <iostream>
+#include <deque>
+#include <vector>
+
+using namespace std;
+
+void sliding_window_max(int n, int k, const vector<int>& nums) {
+    deque<int> dq; // 双端队列，存储的是索引
+    vector<int> max_values;
+
+    for (int i = 0; i < n; ++i) {
+        // 移除不在窗口范围的元素
+        if (!dq.empty() && dq.front() < i - k + 1) {
+            dq.pop_front();
+        }
+
+        // 移除队列尾部所有比当前元素小的索引
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {
+            dq.pop_back();
+        }
+
+        // 添加当前元素的索引到队列
+        dq.push_back(i);
+
+        // 当窗口大小达到 k 时，将当前窗口的最大值添加到结果中
+        if (i >= k - 1) {
+            max_values.push_back(nums[dq.front()]);
+        }
+    }
+
+    // 打印出结果
+    for (int value : max_values) {
+        cout << value << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> nums[i];
+    }
+
+    sliding_window_max(n, k, nums);
+
+    return 0;
+}

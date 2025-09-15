@@ -1,0 +1,37 @@
+#include "Solution.h"
+void copy(vector<vector<int>>&A,int a,int b,int c,int d,int n)
+  { 
+    for(int k=0;k<n;k++)
+    {
+      for(int j=0;j<n;j++)
+      {
+        A[c+k][d+j]=A[a+k][b+j];
+      }
+    }
+  }
+void ford(vector<vector<int>>&A,int a,int b,int n)
+{
+  if(n==1)
+    return;
+    else{
+      //分治思想，把矩阵分为四个小的矩阵
+      ford(A,a,b,n/2);
+      ford(A,a+n/2,b,n/2);
+      copy(A,a,b,a+n/2,b+n/2,n/2);
+      copy(A,a+n/2,b,a,b+n/2,n/2);
+    }
+}
+vector<vector<int>> Solution::round_robin_schedule(int n) {
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int> > ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    for(int i=0;i<n;i++)
+    {
+      ans[i][0]=i+1;
+    }
+    ford(ans,0,0,n);
+    //请在这里完成你的代码
+    return ans;
+  }

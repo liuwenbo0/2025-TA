@@ -1,0 +1,18 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    //在此处添加代码
+     for(auto i=list.begin();i!=list.end()+1;++i)
+    {
+        if(*i>=num)
+        {
+            list.insert(i,num);
+            return;
+        }
+        else if(i==list.end())
+        {
+            list.push_back(num);
+            return;
+        }
+        
+    }
+}

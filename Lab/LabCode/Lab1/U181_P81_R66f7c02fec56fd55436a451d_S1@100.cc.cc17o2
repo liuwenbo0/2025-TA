@@ -1,0 +1,10 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    //在此处添加代码
+    unsigned long int i=0;
+    while(i<list.size() && list[i]<num){
+        i++;
+    }
+   list.insert(list.begin()+i,num); 
+
+}

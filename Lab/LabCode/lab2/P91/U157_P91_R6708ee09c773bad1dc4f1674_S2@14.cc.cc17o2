@@ -1,0 +1,25 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int main (){
+    long long int m, k, s;
+    int n, cnt=0;
+    cin >> m >> k >> s;
+    vector<int> nums;
+    while(m!=0){
+        nums.push_back(static_cast<int>(m%2));
+        m=m/2;
+    }
+    n=nums.size();
+    for(int i=0; i<n; i++){
+        //cout << nums[i] << " ";
+        if(nums[i]==1){
+                cnt+=(s/pow(2, n-i-1)-k/pow(2, n-i-1));
+        }
+    }
+    cout << cnt;
+    return 0;
+}

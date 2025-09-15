@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+long long merge(vector<int>& arr, vector<int>& temp_arr, int left, int mid, int right) {
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+    long long inv_count = 0;
+    while (i <= mid && j <= right)
+    {
+        if (arr[i] <= arr[j])
+        {
+            temp_arr[k++] = arr[i++];
+        } 
+        else
+        {
+            temp_arr[k++] = arr[j++];
+            inv_count += (mid - i + 1);
+        }
+    }
+
+    while (i <= mid)
+    {
+        temp_arr[k++] = arr[i++];
+    }
+    while (j <= right)
+    {
+        temp_arr[k++] = arr[j++];
+    }
+    for (i = left; i <= right; i++)
+    {
+        arr[i] = temp_arr[i];
+    }
+
+    return inv_count;
+}
+
+long long merge_sort(vector<int>& arr, vector<int>& temp_arr, int left, int right) {
+    long long inv_count = 0;
+    if (left < right)
+    {
+        int mid = (left + right) / 2;
+        inv_count += merge_sort(arr, temp_arr, left, mid);
+        inv_count += merge_sort(arr, temp_arr, mid + 1, right);
+        inv_count += merge(arr, temp_arr, left, mid, right);
+    }
+    return inv_count;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    vector<int> temp_arr(n);
+    long long inv_count = merge_sort(arr, temp_arr, 0, n - 1);
+    cout << inv_count << endl;
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include "Solution.h"
+int Solution::find_maximum_crossing_subarray(vector<int>& A, int left, int middle, int right) {
+	int sum = 0;
+	int left_sum = -10000;
+	for (int i = middle; i >= left; i--) {
+		sum += A[i];
+		if (sum > left_sum) {
+			left_sum = sum;
+		}
+	}
+
+	sum = 0;
+	int right_sum = -10000;
+	for (int j = middle + 1; j <= right; j++) {
+		sum += A[j];
+		if (sum > right_sum) {
+			right_sum = sum;
+		}
+	}
+
+	return left_sum + right_sum;
+}
+
+int Solution::find_maximum_subarray(vector<int>& A, int left, int right) {
+	if (left == right) {
+		return A[left];
+	}
+
+	int mid = (left+right) / 2;
+	int left_sum = find_maximum_subarray(A, left, mid);
+	int right_sum = find_maximum_subarray(A, mid + 1, right);
+	int cross_sum = find_maximum_crossing_subarray(A, left , mid, right);
+
+	return max(left_sum, max(right_sum, cross_sum));
+}

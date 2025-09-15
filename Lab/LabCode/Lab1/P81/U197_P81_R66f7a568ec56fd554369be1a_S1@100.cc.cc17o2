@@ -1,0 +1,13 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    list.push_back(num);
+    for (int i = list.size() - 2; i >= 0; i--)
+    {
+        if (list.at(i) > list.at(i + 1))
+        {
+            int tmp = list.at(i);
+            list.at(i) = list.at(i + 1);
+            list.at(i + 1) = tmp;
+        }
+    }
+}

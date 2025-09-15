@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+using namespace std;
+#define int long long
+int max_a(const vector<int>& a, int n) {
+    int max_value = 0; 
+    for (int i = 0; i < n; i++) {
+        if (a[i] > max_value) max_value = a[i]; 
+    }
+    return max_value;
+}
+
+int max_cutcount(const vector<int>& a, int n) {
+    int max_value = max_a(a, n);
+    int max_cut = 0;
+    while (max_value > 0) {
+        max_value /= 2;
+        max_cut++;
+    }
+    return max_cut;
+}
+
+
+int solution(vector<int>& a, int q, int n) {
+
+    unordered_map<int, vector<int>> b;
+
+    for (int h : a) {
+        int current = h;
+        int cuts = 0;
+        while (current > 0) {
+            b[current].push_back(cuts); 
+            current /= 2; 
+            cuts++;
+        }
+    }
+
+    int min_cuts = max_cutcount(a, n) * n; 
+    for (auto& entry : b) {
+        vector<int>& cuts_list = entry.second; 
+        if (cuts_list.size() < q) continue; 
+        sort(cuts_list.begin(), cuts_list.end());
+        int total_cuts = 0;
+        for (int i = 0; i < q; ++i) {
+            total_cuts += cuts_list[i]; 
+        }
+        min_cuts = min(min_cuts, total_cuts); 
+    }
+    return min_cuts; 
+}
+
+signed main() {
+    int n, q;
+    cin >> n >> q; 
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i]; 
+    }
+    cout << solution(a, q, n); 
+    return 0; 
+}

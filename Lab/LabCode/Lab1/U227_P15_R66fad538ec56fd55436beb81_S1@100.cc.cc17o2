@@ -1,0 +1,96 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+static int n=0;
+static int count=0;
+int mysort(vector<int>& nums) {
+    int k=nums.size();
+    for (int i = 1; i<k; i++)
+    {
+        int key = nums[i];
+        int j = i - 1;
+        if (nums[j] <= key)
+        {
+            n++;
+        }
+        while (j >= 0 && nums[j] > key)
+        {
+            nums[j + 1] = nums[j];
+            j=j-1;
+            n++;
+            if (j >= 0 && nums[j] <= key)
+            {
+                n++;
+            }
+        }
+        nums[j + 1] = key;
+    }
+    return n;
+}
+void merge(vector<int>&nums, int left, int q, int right) 
+{
+    int n1 = q - left + 1;
+    int n2 = right - q;
+    vector<int> L(n1);
+     vector<int>R(n2);
+    for (int i = 0; i < n1; i++)
+        L[i] = nums[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = nums[q + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) 
+    {
+        if (L[i] <=R[j]) 
+        {
+            nums[k] = L[i];
+            i++;
+            k++;
+            count++;
+        } else 
+        {
+            nums[k] = R[j];
+            j++;
+            k++;  
+            count++;
+        }
+        
+    }
+    while (i < n1)
+     {
+        nums[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2) 
+    {
+        nums[k] = R[j];
+        j++;
+        k++;
+    }
+}
+void mergeSort(vector<int> &nums, int left, int right)
+ {
+    if (left < right) {
+        int q = left + (right - left) / 2;
+         mergeSort(nums, left, q);
+         mergeSort(nums, q + 1, right);
+         merge(nums, left, q, right);
+    }
+}
+int main()
+{
+    int N;
+    cin>>N;
+    vector<int> a;
+    vector<int> b;
+    for(int i=0;i<N;i++)
+    {
+        int x1;
+        cin>> x1;
+        a.push_back(x1);
+        b.push_back(x1);
+    }
+    mergeSort(a,0,N-1);
+    cout<<count<<" ";
+    cout<<mysort(b);
+}

@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+
+
+void merge(std::vector<int>& arr, int l, int m, int r, int& comparisons);
+void mergeSort(std::vector<int>& arr, int l, int r, int& comparisons);
+void insertionSort(std::vector<int>& arr, int& comparisons);
+int main() {
+    int N;
+    std::cin >> N;
+    std::vector<int> arr(N);
+    for(int i = 0; i < N; i++) std::cin >> arr[i];
+
+    int comparisonsMerge = 0;
+    std::vector<int> arrMerge(arr);  
+    mergeSort(arrMerge, 0, N - 1, comparisonsMerge);
+    
+    int comparisonsInsertion = 0;
+    insertionSort(arr, comparisonsInsertion);
+
+    std::cout << comparisonsMerge << " " << comparisonsInsertion << std::endl;
+
+    return 0;
+}
+
+void merge(std::vector<int>& arr, int l, int mid, int r, int& comparisons) {
+    int n1 = mid - l + 1;
+    int n2 = r - mid;
+
+    std::vector<int> L(n1), R(n2);
+    for(int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for(int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while(i < n1 && j < n2) {
+        comparisons++;  
+        if(L[i] <= R[j]) {
+            arr[k++] = L[i++];
+        } else {
+            arr[k++] = R[j++];
+        }
+    }
+
+    while(i < n1) {
+        arr[k++] = L[i++];
+    }
+    while(j < n2) {
+        arr[k++] = R[j++];
+    }
+}
+
+void mergeSort(std::vector<int>& arr, int l, int r, int& comparisons) {
+    if(l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m, comparisons);
+        mergeSort(arr, m + 1, r, comparisons);
+        merge(arr, l, m, r, comparisons);
+    }
+}
+
+
+void insertionSort(std::vector<int>& arr, int& comparisons) {
+    for(int i = 1; i < arr.size(); i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while(j >= 0 && key < arr[j]) {
+            comparisons++;  
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+        if (j >= 0) comparisons++; 
+    }
+}

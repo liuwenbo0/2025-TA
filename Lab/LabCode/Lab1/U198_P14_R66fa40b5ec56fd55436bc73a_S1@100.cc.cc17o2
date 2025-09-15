@@ -1,0 +1,58 @@
+# include<iostream>
+# include<vector>
+using namespace std;
+
+static long long int cnt = 0;
+
+void Merge_FindInversePair(vector<int> &nums, int left, int right)
+{
+	if (left == right) return;
+	int mid = (left + right) / 2;
+	Merge_FindInversePair(nums, left, mid);
+	Merge_FindInversePair(nums, mid + 1, right);
+
+	int i = left, j = mid + 1;
+	vector<int> order;
+
+	while (i <= mid && j <= right) {
+		if (nums[i] <= nums[j]) {
+			order.push_back( nums[i++]);   
+		}
+		else {
+			cnt += (mid - i + 1);
+			order.push_back(nums[j++]);
+		}
+	}
+
+	while (j <= right)
+	{
+		order.push_back(nums[j++]);
+	}
+
+	while (i <= mid)
+	{
+		order.push_back(nums[i++]);
+	}
+
+	for (int i = left, p = 0; i <= right; i++, p++)
+    {
+         nums[i] = order[p];
+     }
+
+}
+
+int main()
+{
+	vector<int> nums;
+	int times;
+	cin >> times;
+	for (int i = 0; i < times; i++)
+	{
+		int x;
+		cin >> x;
+		nums.push_back(x);
+	}
+
+	Merge_FindInversePair(nums, 0, times-1);
+	cout << cnt;
+}

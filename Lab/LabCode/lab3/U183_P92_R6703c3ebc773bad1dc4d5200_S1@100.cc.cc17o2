@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <algorithm>
+using namespace std;
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> number(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> number[i];
+    }
+    deque<int> limit;
+    vector<int> result; 
+    for (int i = 0; i < n; ++i) {
+        while (!limit.empty() && number[limit.back()] < number[i]) {
+            limit.pop_back();
+        }
+        limit.push_back(i);
+        if (limit.front() == i - k) {
+            limit.pop_front();
+        }
+        if (i >= k - 1) {
+            result.push_back(number[limit.front()]);
+        }
+    }
+    for (size_t i = 0; i < result.size(); ++i) {
+        cout << result[i] <<" ";
+    }
+    return 0;
+}

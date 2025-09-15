@@ -1,0 +1,90 @@
+\documentclass[12pt,a4paper]{article}
+%-- coding: UTF-8 --
+\usepackage[UTF8]{ctex}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx} % 引入图片
+\usepackage{enumitem} % 取消列表默认间距
+\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+\usepackage{hyperref}
+\hypersetup{hidelinks,
+	colorlinks=true,
+	allcolors=black,
+	pdfstartview=Fit,
+	breaklinks=true}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage{booktabs} % 三线表
+
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{colortbl}
+\newcommand\y{\cellcolor{clight2}}
+\definecolor{clight2}{RGB}{212, 237, 244}%
+\newcommand\tikznode[3][]%
+   {\tikz[remember picture,baseline=(#2.base)]
+      \node[minimum size=0pt,inner sep=0pt,#1](#2){#3};%
+   }
+\tikzset{>=stealth}
+\renewcommand\vec[1]{\mathbf{#1}}
+
+% 嵌入代码风格
+\lstset{
+	language    = c++,
+	breaklines  = true,
+	captionpos  = b,
+	tabsize     = 4,
+	columns     = fullflexible,
+	commentstyle = \color[RGB]{0,128,0},
+	keywordstyle = \color[RGB]{0,0,255},
+	basicstyle   = \small\ttfamily,
+	stringstyle  = \color[RGB]{148,0,209}\ttfamily,
+	rulesepcolor = \color{red!20!green!20!blue!20},
+	showstringspaces = false,
+}
+
+
+
+\title{vector 的基本使用}
+
+\author{}
+\date{November, 2023}
+
+\begin{document}
+\maketitle
+
+vector 可以被简单的看做是一个动态数组，可以像普通的数组一样使用 $[]$ 运算符来访问其中的元素。与普通数组不同的是，它可以方便的进行创建、调整大小、添加或删除元素等等。
+\begin{lstlisting}
+    #include <vector> // 引入头文件
+    // 1. 定义方法：
+    vector<int> a; // 定义一个元素类型为 int 的动态数组 a
+    vector<int> b(10); // 定义一个包含 10 个 int（默认为 0） 的动态数组 b
+    vector<int> c(10, 100); // 定义一个包含 10 个 100 的动态数组 c
+    // 2. 访问元素
+    int x = c[0]; // 访问 c 中下标为 0 的元素
+    // 3. 获取数组大小
+    int n = c.size();
+    // 4. 判断数组是否为空
+    if(a.empty()) {
+        // 为空则 if 条件成立
+    }
+    // 5. 插入元素
+    a.push_back(x); // 把 x 插入到 a 的尾部
+    // 6. 删除元素
+    a.pop_back(); // 删除 a 的最后一个元素
+    // 7. 清空数组
+    c.clear();
+\end{lstlisting}
+
+有关更多内容，你可以参考:
+
+\begin{itemize}[noitemsep]
+    \item \href{https://www.runoob.com/w3cnote/cpp-vector-container-analysis.html}{https://www.runoob.com/w3cnote/cpp-vector-container-analysis.html}
+    \item \href{https://en.cppreference.com/w/cpp/container/vector}{https://en.cppreference.com/w/cpp/container/vector}
+    \item \href{https://www.w3cschool.cn/cpp/cpp-i6da2pq0.html}{https://www.w3cschool.cn/cpp/cpp-i6da2pq0.html}
+    \item \href{http://c.biancheng.net/view/6749.html}{http://c.biancheng.net/view/6749.html}
+\end{itemize}
+
+
+\end{document}

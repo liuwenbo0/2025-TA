@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+#define maxn 30
+using namespace std;
+
+vector<vector<int>> mp;
+map<int,int> countnums;//记录每个数出现的次数
+map<int ,int> countstep;//记录每个数的步数
+int main(){
+    int n,q;
+    cin>>n>>q;
+    mp.resize(n,vector<int>(maxn,-1));
+    for(int i=0;i<n;i++){
+        int tmp;
+       cin>>tmp;
+       mp[i][0]=tmp;
+       countnums[tmp]++;
+       countstep[tmp] = 0;
+       int j,val;
+       for( j=1, val = tmp/2;j<maxn&&val>0;j++,val/=2){
+           mp[i][j]=val;
+        }
+        mp[i][j] = 0;
+       
+
+    }
+    for(int j=1;j<maxn;j++){
+        for(int i=0;i<n;i++){
+            if((countnums[mp[i][j]]>=q) || (mp[i][j] == -1)){
+                continue;
+            }else{
+                countnums[mp[i][j]]++;
+                countstep[mp[i][j]]+=j;
+            }
+
+
+        }
+    }
+    for(auto&e:countnums){
+        int index = e.first;
+        int number = e.second;
+       if(number<q){
+           countstep[index]=INT_MAX;
+       }
+    }
+    int ans = INT_MAX;
+    for(auto&e:countstep){
+        ans = min(ans,e.second);
+    }
+    cout<<ans;
+
+
+    return 0;
+
+}

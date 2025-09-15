@@ -1,0 +1,21 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    int i,j,length;
+    length=list.size();
+    int k=length;
+    list.push_back(list[length-1]);
+    for(i=0;i<length;i++){
+        if(num<list[i]){
+            k=i;
+           // cout<<k<<endl;
+            break;
+        }
+    }
+    for(j=length-1;j>=k;j--){
+        list[j+1]=list[j];
+        //cout<<j<<endl;
+    }
+    j+=1;
+    list[j]=num;
+    
+}

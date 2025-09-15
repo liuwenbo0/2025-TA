@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int minPruningOperations(int n, int q, vector<int>& heights) {
+    unordered_map<int, vector<int>> heightOperations;
+
+    for (int height : heights) {
+        int currentHeight = height;
+        int operationsCount = 0;
+        
+        while (currentHeight > 0) {
+            heightOperations[currentHeight].push_back(operationsCount);
+            currentHeight /= 2;
+            operationsCount++;
+        }
+    }
+
+    int minOperations = INT_MAX;
+    
+    for (const auto& [height, operations] : heightOperations) {
+        if (operations.size() >= q) {
+            vector<int> sortedOps = operations;
+            sort(sortedOps.begin(), sortedOps.end());
+            int totalOperations = 0;
+            for (int i = 0; i < q; ++i) {
+                totalOperations += sortedOps[i];
+            }
+            minOperations = min(minOperations, totalOperations);
+        }
+    }
+
+    return minOperations == INT_MAX ? 0 : minOperations;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> heights[i];
+    }
+
+    int result = minPruningOperations(n, q, heights);
+    cout << result << endl;
+
+    return 0;
+}

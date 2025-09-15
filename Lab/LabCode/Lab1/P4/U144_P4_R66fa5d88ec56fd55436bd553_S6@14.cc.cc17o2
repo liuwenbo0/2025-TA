@@ -1,0 +1,20 @@
+#include "InsertionSort.h"
+// 通过插入排序对int队列nums进行升序排序
+// @param
+// nums: 完整的待排序队列，最终排序的结果应存放在nums中
+void InsertionSort::mysort(std::vector<int>& nums) {
+    int MAXLENG=nums.size();
+    int a,c=0,i=MAXLENG-1,d;
+    while(c<2*MAXLENG){
+        c++;
+       for( a=0;a<1000000&&nums[a]<nums[i];a++){
+       } 
+       d=nums[i];
+       for(int m=i;m<MAXLENG-1;m++){
+        nums[m]=nums[m+1];
+       }
+       nums.insert(nums.begin()+a,d);
+       if(a==i){ 
+        i--;}
+    }
+}

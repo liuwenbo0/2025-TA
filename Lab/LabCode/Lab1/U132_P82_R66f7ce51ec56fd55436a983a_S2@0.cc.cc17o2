@@ -1,0 +1,45 @@
+#include "Linklist.h"
+
+// 递归辅助函数，用于交换节点的next和prior指针
+void swapNextAndPrior(node* &head, node* curr) {
+    if (curr == nullptr || curr->next == head) {
+        return;
+    }
+    swapNextAndPrior(head, curr->next); // 先递归处理下一个节点
+
+    // 交换当前节点的next和prior指针
+    node* temp = curr->next;
+    curr->next = curr->prior;
+    curr->prior = temp;
+
+    // 如果当前节点是头节点，更新头节点
+    if (head == temp) {
+        head = curr;
+    }
+}
+
+void changeList(Linklist &list) {
+    if (list == nullptr || list->next == list) return; // 空链表或只有一个节点的链表不需要变换
+
+    node* tail = list;
+    // 找到尾节点
+    do {
+        tail = tail->next;
+    } while (tail != list);
+
+    // 从尾节点开始递归交换next和prior指针
+    swapNextAndPrior(list, tail);
+
+    // 重新连接头节点和尾节点
+    list->prior = tail;
+    tail->next = list;
+
+    // 找到新的头节点
+    node* newHead = list;
+    while (newHead->prior != tail) {
+        newHead = newHead->prior;
+    }
+
+    // 更新链表的头节点为新的头节点
+    list = newHead;
+}

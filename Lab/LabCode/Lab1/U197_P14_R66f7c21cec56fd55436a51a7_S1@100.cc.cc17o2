@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+
+using IntArray = std::vector<long long>;
+
+inline void swap(long long& a, long long& b)
+{
+	auto tmp = a;
+	a = b;
+	b = tmp;
+}
+
+auto mergeSort(IntArray& arr, int left, int right)
+{
+	long long ret = 0;
+	if (right - left <= 1)
+		return ret;
+	auto mid = (left + right) / 2;
+	ret += mergeSort(arr, left, mid);
+	ret += mergeSort(arr, mid, right);
+	IntArray arrL, arrR;
+	for (auto i = left; i < mid; i++)
+		arrL.push_back(arr.at(i));
+	for (auto i = mid; i < right; i++)
+		arrR.push_back(arr.at(i));
+	auto i = 0, j = 0;
+	for (auto k = left; k < right; k++)
+	{
+		if (i >= arrL.size())
+		{
+			arr.at(k) = arrR.at(j);
+			j++;
+		}
+		else if (j >= arrR.size())
+		{
+			arr.at(k) = arrL.at(i);
+			i++;
+		}
+		else if (arrL.at(i) <= arrR.at(j))
+		{
+			arr.at(k) = arrL.at(i);
+			i++;
+		}
+		else
+		{
+			arr.at(k) = arrR.at(j);
+			j++;
+			ret += (arrL.size() - i);
+		}
+	}
+	return ret;
+}
+
+int main()
+{
+	std::cin.sync_with_stdio(false);
+	std::cout.sync_with_stdio(false);
+	std::cin.tie(nullptr);
+	std::cout.tie(nullptr);
+
+	IntArray arr;
+	int n;
+	std::cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		long long tmp;
+		std::cin >> tmp;
+		arr.push_back(tmp);
+	}
+	std::cout << mergeSort(arr, 0, n);
+}

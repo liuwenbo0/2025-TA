@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int min(int n, int q, vector<int>& s) {
+    map<int, vector<int>> m;
+
+    for (int t : s) {
+        int x = t;
+        int c = 0;
+        while (x > 0) {
+            m[x].push_back(c);
+            x /= 2;
+            c++;
+        }
+    }
+
+    int f = INT_MAX;
+
+    for (const auto& e : m) {
+        const vector<int>& l = e.second;
+        if (l.size() >= static_cast<size_t>(q)) {
+            vector<int> y = l; 
+            sort(y.begin(), y.end());
+            int r = 0;
+            for (int i = 0; i < q; ++i) {
+                r += y[i];
+            }
+            f = min(f, r);
+        }
+    }
+
+    return (f == INT_MAX) ? 0 : f;
+}
+
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> s(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> s[i];
+    }
+
+    printf("%d",min(n, q, s));
+
+    return 0;
+}

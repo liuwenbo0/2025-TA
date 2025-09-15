@@ -1,0 +1,21 @@
+#include<iostream>
+#include<vector>
+#include <deque>
+using namespace std;
+int main(void) {
+    int n, k;
+    cin >> n >> k;
+    vector<int> test(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> test[i];
+    }
+    deque<int> win;
+    for (int i = 0; i < n; ++i) {
+        while(!win.empty() && test[win.back()] <= test[i])win.pop_back();
+        win.push_back(i);
+        if(i - win.front() + 1 > k)win.pop_front();
+        if(i >= k - 1)cout << test[win.front()] << ' ';
+    }
+
+    return 0;
+}

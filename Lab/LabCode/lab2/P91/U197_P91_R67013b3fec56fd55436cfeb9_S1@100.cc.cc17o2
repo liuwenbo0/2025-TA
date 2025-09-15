@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+long long countOf1(long long num, std::size_t left, std::size_t right)
+{
+	if (right < left)
+		return 0;
+	if (num == 1)
+		return 1;
+	std::size_t mid = static_cast<std::size_t>(1) << static_cast<std::size_t>(std::log2(num));
+	if (left == 1 && right == mid * 2 - 1)
+		return num;
+	if (right < mid)
+		return countOf1(num / 2, left, right);
+	if (left > mid)
+		return countOf1(num / 2, left - mid, right - mid);
+	return countOf1(num / 2, left, mid - 1) + countOf1(num / 2, 1, right - mid) + num % 2;
+}
+
+int main()
+{
+	long long m;
+	std::size_t k, s;
+	std::cin >> m >> k >> s;
+	std::cout << countOf1(m, k, s);
+}

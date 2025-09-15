@@ -1,0 +1,54 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+int nn=0,nnn=0;
+
+void InsertionSort(std::vector<int>& nums) {
+    int n=nums.size();
+    int a=0;
+    for(int i=0;i<n;i++){
+        int j=i-1;
+        for(;j>=0;j--){
+            if(nums[j]>nums[j+1]){
+                int m=nums[j];
+                nums[j]=nums[j+1];
+                nums[j+1]=m;
+                a++;
+            }
+        }
+        if(a!=i) nn=nn+a+1;
+        else nn=nn+a;
+        a=0;
+    }
+}
+void merge_sort_aux(std::vector<int>& nums,int left, int right)
+{
+    std::vector<int> a(right+1);
+    if(right>left){
+        int mid=(right+left)/2;
+        merge_sort_aux(nums,left,mid);
+        merge_sort_aux(nums,mid+1,right);
+        int i=mid,j=right,k=right;
+        while(i!=left-1 && j!=mid){
+            a[k--]=nums[i]>nums[j]?nums[i--]:nums[j--];
+            nnn++;
+        }    
+        while(i!=left-1) a[k--]=nums[i--];
+        while(j!=mid) a[k--]=nums[j--];
+        for(i=left;i<=right;i++) nums[i]=a[i];
+        
+    }
+    
+}
+int main(){
+    int N=0;
+    cin >> N;
+    vector<int> a(N),b(N);
+    for(int i=0;i<N;i++){
+        cin >> a[i];
+        b[i]=a[i];
+    }
+    InsertionSort(a);
+    merge_sort_aux(b,0,N-1);
+    cout << nnn << ' ' << nn << endl;
+}

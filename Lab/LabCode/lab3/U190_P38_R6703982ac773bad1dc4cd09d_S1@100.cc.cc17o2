@@ -1,0 +1,42 @@
+#include "QuickSort.h"
+
+using namespace std;
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+	int pivot = nums[p];
+
+	while (p < q)
+	{
+		while (p < q && nums[q] >= pivot)
+		{
+			q--;
+		}
+		nums[p] = nums[q];
+
+		while (p < q && nums[p] <= pivot)
+		{
+			p++;
+		}
+		nums[q] = nums[p];
+	}
+	nums[p] = pivot;
+
+	return p;
+
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    // 请在这里完成你的代码
+	if (l < r)
+	{
+		int pivot = partition(nums, l, r);
+		quick_sort(nums, l, pivot - 1);
+		quick_sort(nums, pivot + 1, r);
+	}
+	
+}
+void QuickSort::mysort(std::vector<int>& nums) {
+    if (nums.size() == 0)
+        return;
+    quick_sort(nums, 0, nums.size() - 1);
+}

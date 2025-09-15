@@ -1,0 +1,16 @@
+#include <iostream>
+#include <vector>
+#include"SqList.h"
+
+using namespace std;
+
+void insert(SqList& list, int num) {
+    // 使用与 list.size() 相同的类型
+    std::vector<int>::size_type i = 0;
+    while (i < list.size() && list[i] < num) {
+        i++;
+    }
+    
+    // 在位置i插入元素num，并将后面的元素向后移动
+    list.insert(list.begin() + i, num);
+}

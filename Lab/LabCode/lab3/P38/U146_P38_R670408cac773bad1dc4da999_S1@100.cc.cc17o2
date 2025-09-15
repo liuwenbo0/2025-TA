@@ -1,0 +1,37 @@
+#include "QuickSort.h"
+#include <vector>
+#include <algorithm>
+#include <random>
+
+int QuickSort::partition(std::vector<int>& nums, int p, int q) {
+    int randomIndex = p + rand() % (q - p + 1);
+    std::swap(nums[randomIndex], nums[q]);
+    int pivot = nums[q];
+    int i = p - 1;
+
+    for (int j = p; j < q; j++) {
+        if (nums[j] <= pivot) {
+            i++;
+            std::swap(nums[i], nums[j]);
+        }
+    }
+    std::swap(nums[i + 1], nums[q]);
+    return i + 1;
+}
+
+void QuickSort::quick_sort(std::vector<int>& nums, int l, int r) {
+    while (l < r) {
+        int pivotIndex = partition(nums, l, r);
+        if (pivotIndex - l < r - pivotIndex) {
+            quick_sort(nums, l, pivotIndex - 1);
+            l = pivotIndex + 1;
+        } else {
+            quick_sort(nums, pivotIndex + 1, r);
+            r = pivotIndex - 1;
+        }
+    }
+}
+
+void QuickSort::mysort(std::vector<int>& nums) {
+    quick_sort(nums, 0, nums.size() - 1);
+}

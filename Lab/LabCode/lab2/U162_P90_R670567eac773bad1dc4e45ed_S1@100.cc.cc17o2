@@ -1,0 +1,131 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct node {
+    int data;
+    struct node *lchild, *rchild;
+    node(int a) : data(a), lchild(nullptr), rchild(nullptr) {}
+};
+typedef struct node* bitree;
+
+
+bitree create_bitree(vector<int>& nums){
+    if(nums.empty()) return nullptr;
+    
+    bitree p;
+    bitree root=new node(nums.front());
+    vector<bitree> q={root};
+    size_t front =0; 
+    size_t i=1;
+
+    while(i<nums.size()){
+        
+        
+        p=q[front++];
+        if(p==nullptr){
+            i+=2;
+            q.push_back(nullptr);
+            q.push_back(nullptr);
+            continue;
+
+        }
+        
+        if(nums[i]!=-1){
+            p->lchild=new node(nums[i]);
+            q.push_back(p->lchild);
+            
+        }
+        else{
+            p->lchild=nullptr;
+            q.push_back(nullptr);
+
+        }
+        i++;
+
+        if(nums[i]!=-1&&i < nums.size()){
+            p->rchild=new node(nums[i]);
+            q.push_back(p->rchild);
+            
+        }
+        else{
+            p->rchild=nullptr;
+            q.push_back(nullptr);
+
+        }
+        i++;
+    }
+    
+    return root;
+
+}
+
+int deep(bitree root){
+    if(root==nullptr)return 0;
+    int ld = deep(root->lchild);
+    int rd = deep(root->rchild);
+    return max(rd,ld)+1;
+}
+
+
+int find_max(bitree root){
+    if(root==nullptr)return 0;
+    int sum_left=find_max(root->lchild);
+    int sum_right=find_max(root->rchild);
+    if(sum_left>=sum_right) return sum_left+root->data;
+    else return sum_right+root->data;
+}
+
+
+int find_special(bitree root){
+    
+    if(root==nullptr)return 0;
+    
+    if(root->rchild==nullptr&&root->lchild==nullptr)return 0;
+    
+    if(root->rchild==nullptr&&root->lchild!=nullptr){
+        if(root->data > root->lchild->data){
+            return root->data+find_special(root->lchild);
+        }else{
+            return find_special(root->lchild);
+        }
+    }
+    
+    
+    if(root->rchild!=nullptr&&root->lchild==nullptr){
+        if(root->data > root->rchild->data){
+            return root->data+find_special(root->rchild);
+        }else{
+            return find_special(root->rchild);
+        }
+    }
+    
+    
+    if(root->data > max(root->lchild->data,root->rchild->data)){
+        return find_special(root->lchild)+find_special(root->rchild)+root->data;
+
+    }
+    else{
+        return find_special(root->lchild)+find_special(root->rchild);
+    }
+}
+
+
+
+int main() {
+    vector<int> arr;
+    int n;
+    while (cin >> n) {
+        arr.push_back(n);
+    }
+
+    bitree root = create_bitree(arr);
+    int depth = deep(root);
+    cout << depth << endl;
+    int max_resources = find_max(root);
+    cout << max_resources << endl;
+    int special_sum = find_special(root);
+    cout << special_sum << endl;
+
+    return 0;
+}

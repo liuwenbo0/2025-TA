@@ -1,0 +1,66 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+void mergesortcount(vector<int> a,int left,int right,int *p){
+    int r;
+    if(left<right){
+        r=(left+right)/2;
+        mergesortcount(a,left,r,p);
+        mergesortcount(a,r+1,right,p);
+        vector<int>c(r-left+2),d(right-r+1);
+        int i,j,k;
+        for(i=0;i<r-left+1;i++){
+        c[i]=a[left+i]; 
+        }
+        c[i]=2147483647;
+        for(j=0;j<right-r;j++){
+            d[j]=a[r+1+j];
+        }
+        d[j]=2147483647;
+        i=0;
+        j=0;
+        for(k=left;k<=right;k++){
+            if(c[i]<d[j]){
+                a[k]=c[i];
+                i++;
+                *p=*p+1;
+            }
+            else{
+                a[k]=d[j];
+                j++;
+                *p=*p+1;
+            }
+        }
+    }
+}
+int main(){
+    int N;
+    cin>>N;
+    vector<int> a(N);
+    for(int k=0;k<N;k++){
+        cin>>a[k];
+    }
+    int e=0;
+    int *p;
+    p=&e;
+    mergesortcount(a,0,N-1,p);
+    int i,j,key,q=0;
+    for(j=1;j<N;j++){
+        key=a[j];
+        i=j-1;
+        while(a[i]>key&&i>=0){
+            if(i==0){
+                q-=1;
+            }
+            i--;
+            q++;
+        }
+        q+=1;
+        for(int k=j;k>i+1;k--){
+            a[k]=a[k-1];
+        }
+        a[i+1]=key;
+    }
+    cout<<*p<<" "<<q<<endl;
+    return 0;
+}

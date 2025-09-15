@@ -1,0 +1,73 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+//返回y除以几次2（每次均向下取整）后能得到x，如果无法得到，返回-1
+int cutcount(int x, int y)
+{
+	int count = 0;
+	if (y < x) {
+		swap(x, y);
+	}
+	while (1) {
+		if (y == x) {
+			return count;
+		}
+		else if (y < x) {
+			return -1;
+		}
+		y >>= 1;
+		count++;
+	}
+}
+
+//计算使tree中至少有q个数相同时，元素被裁剪（除以2，向下取整）的次数
+int main()
+{
+	int n, q, samecount;
+	cin >> n >> q;
+	vector<int> tree(n);
+	vector<int> index;
+	index.assign(300000, 0);
+	for (int i = 0; i < n; i++) {
+		cin >> tree[i];
+	}
+	for (int i = 0; i < n; i++) {
+		index[tree[i]]++;
+	}
+	samecount = *max_element(index.begin(), index.end());
+	if (samecount >= q) {
+		cout << 0 << endl;
+	}
+	else {
+		int onecut, mincut = 1919810, cutt, thissamec, becut;
+		for (int i = 0; i < 150000; i++) {
+			if (index[i] == 0) {
+				continue;
+			}
+			//计算出使得有q个高度为a（index[a] != 0）的数时的最小裁剪次数
+			onecut = 0;
+			thissamec = index[i];
+			for (int j = 2 * i + 1; j < 300000; j++) {
+				cutt = cutcount(i + 1, j + 1);
+				becut = 0;
+				if (cutt < 0) {
+					continue;
+				}
+				else {
+					onecut += cutt;
+					thissamec++, becut++;
+					if (thissamec >= q) {
+						break;
+					}
+					else if (becut == index[j]) {
+						continue;
+					}
+				}
+			}
+			mincut = min(mincut, onecut);
+		}
+		cout << mincut << endl;
+	}
+}

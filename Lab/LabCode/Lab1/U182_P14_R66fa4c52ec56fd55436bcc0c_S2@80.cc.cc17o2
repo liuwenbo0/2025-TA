@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int merge(vector<int>& nums, int left, int mid, int right, vector<int>& temp) {
+    int i = left, j = mid + 1, k = 0, inv_count = 0;
+    while (i <= mid && j <= right) {
+        if (nums[i] <= nums[j]) {
+            // 如果左边的元素小于等于右边的元素，则没有逆序对
+            temp[k++] = nums[i++];
+        } else {
+            // 如果左边的元素大于右边的元素，则左边元素及其后面的所有元素都与当前右边元素构成逆序对
+            temp[k++] = nums[j++];
+            inv_count += (mid - i + 1);
+        }
+    }
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+    }
+    while (j <= right) {
+        temp[k++] = nums[j++];
+    }
+    for (int m = 0; m < k; m++) {
+        nums[left + m] = temp[m]; // 将排序后的数组复制回原数组
+    }
+    return inv_count;
+}
+
+int mergeSort(vector<int>& nums, int left, int right, vector<int>& temp) {
+    if (left >= right) return 0;
+    int mid = left + (right - left) / 2;
+    int inv_count = 0;
+    inv_count += mergeSort(nums, left, mid, temp);
+    inv_count += mergeSort(nums, mid + 1, right, temp);
+    inv_count += merge(nums, left, mid, right, temp);
+    return inv_count;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> nums[i];
+    }
+    
+    vector<int> temp(n);
+    int total_inv_count = mergeSort(nums, 0, n - 1, temp);
+    cout << total_inv_count << endl;
+    
+    return 0;
+}

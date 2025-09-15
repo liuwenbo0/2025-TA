@@ -1,0 +1,40 @@
+#include "Solution.h"
+#include <cmath>
+
+vector<int> Solution::perfect_permutation(int n) {
+    vector<int> ans(n, 0);
+    // 请在这里完成你的代码
+    int zhishu = 0, n_size = n;
+    while(n_size != 0){
+        zhishu++;
+        n_size /= 2;
+    }
+    //找出首个大于n的2的整数幂的指数
+    long er_mi = 1;
+    while(er_mi < n){
+        er_mi *= 2;
+    }
+    //找到首个大于n的2的整数幂
+    vector<int> nums(er_mi , 0);
+    //存放首个大于n的2的整数幂的完美排列的数组
+    long er_mi_size = er_mi;
+    nums[0] = 1;
+    for(long temp = 1; temp <= er_mi /2; temp *= 2){
+        er_mi_size /= 2;
+        for(long i = temp; i <= 2*temp; i++){
+            if(i == 0)  nums[i] = 1;
+            else    nums[i] = nums[i-temp] + er_mi_size;
+        }        
+    }
+    //构建首个大于n的2的整数幂的完美排列
+    int j = 0;
+    for(long i = 0; i <= er_mi - 1; i++){
+        if(nums[i] <= n){
+            ans[j] = nums[i];
+            j++;
+        }
+        if(j >= n)  break;
+    }
+    //将nums中小于等于n的部分放入ans
+    return ans;
+}

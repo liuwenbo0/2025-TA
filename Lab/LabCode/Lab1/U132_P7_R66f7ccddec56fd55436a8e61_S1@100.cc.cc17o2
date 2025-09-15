@@ -1,0 +1,61 @@
+#include "MergeSort.h"
+
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right)
+{
+    if (left >= right) return; // 如果区间内只有一个元素或者没有元素，则不需要排序
+
+    int mid = left + (right - left) / 2; // 计算中间点
+
+    // 递归地对左右两个子区间进行排序
+    merge_sort_aux(nums, left, mid);
+    merge_sort_aux(nums, mid + 1, right);
+
+    // 合并两个已排序的子区间
+        int n1 = mid - left + 1; // 左区间的大小
+    int n2 = right - mid; // 右区间的大小
+
+    // 创建两个临时数组
+    vector<int> L(n1), R(n2);
+
+    // 复制数据到临时数组 L[] 和 R[]
+    for (int i = 0; i < n1; i++)
+        L[i] = nums[left + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = nums[mid + 1 + i];
+
+    // 合并临时数组回到原数组
+    int i = 0; // 初始索引第一个子数组
+    int j = 0; // 初始索引第二个子数组
+    int k = left; // 初始索引合并的子数组
+
+    while (i < n1 && j < n2)
+    {
+        if (L[i] <= R[j])
+        {
+            nums[k] = L[i];
+            i++;
+        }
+        else
+        {
+            nums[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // 复制L[]的剩余元素
+    while (i < n1)
+    {
+        nums[k] = L[i];
+        i++;
+        k++;
+    }
+
+    // 复制R[]的剩余元素
+    while (j < n2)
+    {
+        nums[k] = R[j];
+        j++;
+        k++;
+    }
+}

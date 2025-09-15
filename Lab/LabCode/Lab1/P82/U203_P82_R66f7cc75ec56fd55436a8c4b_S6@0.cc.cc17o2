@@ -1,0 +1,45 @@
+#include"Linklist.h"  
+  
+// 反转链表函数  
+void reverseList(Linklist &head) {  
+    Linklist prev = nullptr, curr = head, next = nullptr;  
+    while (curr != nullptr) {  
+        next = curr->next;  
+        curr->next = prev;  
+        curr->prior = next;  
+        prev = curr;  
+        curr = next;  
+    }  
+    head = prev; // 更新头指针  
+}  
+  
+// 找到链表的中点  
+Linklist findMiddle(Linklist head) {  
+    Linklist slow = head, fast = head;  
+    while (fast->next != head && fast->next->next != head) {  
+        slow = slow->next;  
+        fast = fast->next->next;  
+    }  
+    return slow;  
+}  
+  
+void changeList(Linklist &list) {  
+    if (list == nullptr || list->next == list) return; // 空链表或只有一个节点  
+  
+    Linklist mid = findMiddle(list);  
+    Linklist secondHalfStart = mid->next; // 后半部分的开始  
+  
+    // 断开链表为两部分  
+    mid->next = nullptr;  
+    secondHalfStart->prior = nullptr;  
+  
+    // 反转后半部分  
+    reverseList(secondHalfStart);  
+  
+    // 重新连接链表  
+    Linklist tail = list->prior; // 原始链表的尾节点  
+    tail->next = secondHalfStart; // 将后半部分接到前半部分的末尾  
+    secondHalfStart->prior = tail;  
+    list->prior = list->next->prior; // 修正原始头节点的prior  
+    list->next->prior->next = list; // 修正原始尾节点的next  
+}

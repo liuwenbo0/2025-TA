@@ -1,0 +1,30 @@
+#include "Linklist.h"
+#include <vector>
+
+
+
+void changeList(Linklist &list) { 
+    std::vector<node*> no;
+    node* current = list->next;
+    while (current != list) {
+        no.push_back(current);
+        current = current->next;
+    }
+    int n = no.size();
+    std::vector<node*> nw(n);
+    for (int i = 0; i < n; ++i) {
+        if (i % 2 != 0) {
+            nw[n - 1 - i / 2] = no[i];
+        } else {
+            nw[i / 2] = no[i];
+        }
+    }
+    for (int j = 0; j < n; ++j) {
+        nw[j]->next = nw[(j + 1) % n];
+        nw[(j + 1) % n]->prior = nw[j];
+    }
+    list->next = nw[0];
+    nw[0]->prior = list;
+    nw[n - 1]->next = list;
+    list->prior = nw[n - 1];
+}

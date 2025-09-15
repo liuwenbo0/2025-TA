@@ -1,0 +1,49 @@
+#include "Solution.h"
+// 辅助递归函数，用于生成子矩阵  
+vector<vector<int>> generateSubMatrix(int n, int offset) {  
+    // 基础情况：当n=2时，返回一个简单的2x2矩阵  
+    if (n == 2) {  
+        vector<vector<int>> subMatrix = {  
+            {1, 2}, 
+            {2, 1}  
+        };  
+        for (int i = 0; i < n; i++) {  
+            for (int j = 0; j < n; j++) { 
+                subMatrix[i][j] += offset; // 加上偏移量来得到正确的队伍编号  
+            }  
+        }  
+        return subMatrix;  
+    }  
+  
+    // 递归情况：对于n>2，生成四个子矩阵并组合它们  
+    int halfN = n / 2;  
+    vector<vector<int>> topLeft = generateSubMatrix(halfN, offset);  
+    vector<vector<int>> topRight = generateSubMatrix(halfN, offset + halfN);  
+    vector<vector<int>> bottomLeft = generateSubMatrix(halfN, offset + n - halfN);  
+    vector<vector<int>> bottomRight = generateSubMatrix(halfN, offset);  
+  
+    // 组合四个子矩阵成一个大的矩阵  
+    vector<vector<int>> largeMatrix(n, vector<int>(n, 0));  
+    for (int i = 0; i < halfN; i++) {  
+        for (int j = 0; j < halfN; j++) {  
+            largeMatrix[i][j] = topLeft[i][j];  
+            largeMatrix[i][j + halfN] = topRight[i][j];  
+            largeMatrix[i + halfN][j] = bottomLeft[i][j];  
+            largeMatrix[i + halfN][j + halfN] = bottomRight[i][j];  
+        }  
+    }  
+  
+    return largeMatrix;  
+}  
+
+ 
+vector<vector<int>> Solution::round_robin_schedule(int n) { 
+    // 如此构造一个二维数组（ nxn 矩阵）
+    vector<vector<int>> ans;
+    for(int i=0; i<n; i++) {
+      ans.push_back(vector<int>(n, 0));
+    }
+    ans = generateSubMatrix(n, 0);
+    // 请在这里完成你的代码
+    return ans;
+  }

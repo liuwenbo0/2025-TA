@@ -1,0 +1,15 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    int last=list.size()-1;
+    int now=last+1;
+    list.push_back(num);
+    for(int i=last;i>0;i--){
+        if(list[now]<list[i])
+        {
+            int temp=num;
+            list[now]=list[i];
+            list[i]=temp;
+            now--;
+        }
+    }
+}

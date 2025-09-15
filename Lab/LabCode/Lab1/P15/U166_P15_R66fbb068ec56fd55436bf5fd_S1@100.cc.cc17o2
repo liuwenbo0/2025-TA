@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int InsertionSort(std::vector<int>& nums) {
+    int incount = 0; 
+    for (int j = 1; j < nums.size(); j++) {
+        int key = nums[j];
+        int i = j - 1; 
+        
+        while (i >= 0 && nums[i] > key) {
+            incount++; 
+            nums[i + 1] = nums[i];
+            i--;
+        }
+        if (i >= 0) {
+            incount++; 
+        }
+        nums[i + 1] = key; 
+    }
+    return incount;
+}
+
+int merge_sort_aux(std::vector<int> &nums, int left, int right) {
+    int mecount = 0; 
+    if (left >= right) {
+        return mecount;
+    }
+
+    int mid = (left + right) / 2;
+    mecount += merge_sort_aux(nums, left, mid);
+    mecount += merge_sort_aux(nums, mid + 1, right);
+    
+    vector<int> temp(right - left + 1);
+    int i = left, j = mid + 1, k = 0;
+
+    while (i <= mid && j <= right) {
+        mecount++; 
+        if (nums[i] <= nums[j]) {
+            temp[k++] = nums[i++];
+        } else {
+            temp[k++] = nums[j++];
+        }
+    }
+    while (i <= mid) {
+        temp[k++] = nums[i++];
+        mecount++; 
+    }
+    while (j <= right) {
+        temp[k++] = nums[j++];
+        mecount++; 
+    }
+    for (int s = 0; s < right - left + 1; s++) {
+        nums[left + s] = temp[s];
+    }
+
+    return mecount;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    int x = InsertionSort(a);
+    int y = merge_sort_aux(a, 0, n - 1);
+    
+    cout << y << " " << x << endl; 
+}

@@ -1,0 +1,48 @@
+#include <iostream>  
+#include <deque>  
+#include <vector>  
+  
+using namespace std;  
+  
+int main() {  
+    int n, k;  
+    cin >> n >> k;  
+    vector<int> nums(n);  
+    for (int i = 0; i < n; ++i) {  
+        cin >> nums[i];  
+    }  
+  
+    deque<int> window; // 双端队列，用于维护递减的窗口  
+    vector<int> result; // 存储每次视窗内元素的最大值  
+  
+    for (int i = 0; i < n; ++i) {  
+        // 如果队列不为空且队列头部的元素已经不在当前视窗内，则移除它  
+        if (!window.empty() && window.front() == i - k) {  
+            window.pop_front();  
+        }  
+          
+        // 从队列尾部开始移除所有小于当前元素的元素，以保持队列递减  
+        while (!window.empty() && nums[window.back()] < nums[i]) {  
+            window.pop_back();  
+        }  
+          
+        // 将当前元素的索引添加到队列中  
+        window.push_back(i);  
+          
+        // 当视窗完全覆盖至少k个元素时，记录最大值  
+        if (i >= k - 1) {  
+            result.push_back(nums[window.front()]);  
+        }  
+    }  
+  
+    // 输出结果  
+    for (size_t i = 0; i < result.size(); ++i) {  
+        if (i > 0) {  
+            cout << " ";  
+        }  
+        cout << result[i];  
+    }  
+    cout << endl;  
+  
+    return 0;  
+}

@@ -1,0 +1,46 @@
+#include <cmath>
+#include <vector>
+#include <iostream>
+#include<algorithm>
+using namespace std;
+int main(){
+    long long m;
+    int k,s;
+    cin>>m>>k>>s;
+    //cout<<m<<endl;
+    long long n,si;
+    n=log(m)/log(2)+1;
+    //cout<<n<<endl;
+    si=pow(2,n)-1;//个数
+    //cout<<si<<endl;
+    //vector<int> jin(si,0);
+    int i=0;
+    long long sum=0;
+    while(i<n){
+        int mid=m%2;
+        long long wz=pow(2,n-i-1)-1;//第一个位置
+        long long jian=pow(2,n-i);
+        if(i==0){
+            if(mid==1&&wz<=s-1&&wz>=k-1) sum+=1;
+        } //jin[wz]=mid; 
+        else if(mid==1){
+            while(wz<si/2){
+                // jin[wz]=mid;
+                // //cout<<mid<<endl;
+                // jin[si-wz-1]=mid;
+                wz+=jian;
+                if(wz<=s-1&&wz>=k-1) sum+=1;
+                if((si-wz-1)<=s-1&&(si-wz-1)>=k-1) sum+=1;    
+            }
+        }
+        m=m/2;
+        i++;
+    }
+    //long long sum=0;
+    // for(int i=k-1;i<s;i++){
+    //     if(jin[i]==1) sum++;
+    // }
+    cout<<sum<<endl;
+    //cout<<jin[3]<<endl;
+    //cout<<m<<endl;
+}

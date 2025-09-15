@@ -1,0 +1,79 @@
+#include<iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+void division(int m,int& x,int i,int j,int& y,int a,int b){
+    if(m==0||m==1){
+        x++;
+        //cout<<m;
+        if(x>=i&&x<=j&&m==1) y++;
+    }
+    else{
+        int w=log(m)/log(2);
+        int mid=pow(2,w);
+        //cout<<mid;
+        if(a==1){
+            if(mid<=i){
+                //x+=mid-1;
+                division(m%2,x,i-mid+1,j-mid+1,y,0,b-mid+1);
+                division(m/2,x,i-mid+1,j-mid+1,y,1,b-mid+1);
+                //cout<<endl<<m<<endl;
+            }
+            else{
+                division(m/2,x,i,j,y,1,b);
+                division(m%2,x,i,j,y,0,b);
+                division(m/2,x,i,j,y,0,b);
+            }
+        }
+        else if(a==2){
+            if(mid<=b-j+1){
+                division(m/2,x,i,j,y,2,b-mid+1);
+                division(m%2,x,i,j,y,0,b-mid+1);
+                //cout<<endl<<m<<endl;
+            }
+            else{
+                division(m/2,x,i,j,y,0,b);
+                division(m%2,x,i,j,y,0,b);
+                division(m/2,x,i,j,y,2,b);
+            }
+        }
+        else if(a==3){
+            if(i>=mid){
+                //x+=mid-1;
+                division(m%2,x,i-mid+1,j-mid+1,y,0,b-mid+1);
+                division(m/2,x,i-mid+1,j-mid+1,y,2,b-mid+1);
+                //cout<<m;
+            }
+            else if(j<=mid){
+                division(m/2,x,i,j,y,1,b-mid+1);
+                division(m%2,x,i,j,y,0,b-mid+1);
+                //cout<<endl<<m<<endl;
+            }
+            else{
+                division(m/2,x,i,j,y,1,b);
+                division(m%2,x,i,j,y,0,b);
+                division(m/2,x,i,j,y,2,b);
+            }
+        }
+        else{
+            division(m/2,x,i,j,y,0,b);
+            division(m%2,x,i,j,y,0,b);
+            division(m/2,x,i,j,y,0,b);
+        }
+    }
+}
+
+int main(){
+    int i,j,m;
+    static int x=0,y=0;
+    cin>>m;
+    cin>>i;
+    cin>>j;
+    int c=log(m)/log(2);
+    int b=2*pow(2,c)-1;
+    division(m,x,i,j,y,3,b);
+    cout << y;
+    return 0;
+}

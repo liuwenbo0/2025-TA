@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int main() {
+    long long m, k, s;
+    cin >> m >> k >> s;
+
+    vector<int> energyArray;  // 用于存储所有能量值
+    queue<long long> q;
+    
+    // 初始晶体能量入队
+    q.push(m);
+    
+    while (!q.empty()) {
+        long long current = q.front();
+        q.pop();
+
+        if (current > 1) {
+            long long left = current / 2;
+            long long right = current % 2;
+
+            // 分裂后将新的能量值加入队列
+            q.push(left);
+            q.push(right);
+            q.push(left);
+        } else {
+            // 当能量为 1 时，记录能量
+            energyArray.push_back(current);
+        }
+    }
+
+    // 统计范围 [k, s] 内能量值为 1 的晶体数量
+    int countOfOnes = 0;
+    for (int i = k - 1; i <= s - 1 && i < energyArray.size(); i++) {
+        if (energyArray[i] == 1) {
+            countOfOnes++;
+        }
+    }
+
+    cout << countOfOnes << endl;
+    return 0;
+}

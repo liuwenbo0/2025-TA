@@ -1,0 +1,68 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <algorithm>
+#include <climits>
+#include <queue> 
+using namespace std;
+int sumOfSmallestN(const std::vector<int>& nums, int n) {  
+
+    std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;  
+      
+
+    for (int num : nums) {  
+        if (minHeap.size() < n) {  
+            minHeap.push(num);  
+        } else if (num < minHeap.top()) {  
+            minHeap.pop();  
+            minHeap.push(num);  
+        }  
+    }  }
+int main() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> heights(n);
+    for (int i=0; i<n; ++i)
+    {
+        cin>>heights[i];
+    }
+    unordered_map<int, vector<int>> height_states;
+    for (int i=0;i<n;i++) 
+    {
+        int h=heights[i];
+        vector<int> states;
+        for (int s=h;s>0;s/=2) 
+        {
+            states.push_back(s);
+        }
+        height_states[h]=states;
+    }
+    unordered_map<int, int> state_count;
+    for (const auto& [h, states] : height_states) {
+        for (int state : states) {
+            state_count[state]++;
+        }
+    }
+    int min_cuts = INT_MAX;
+    for (const auto& [state, count] : state_count) {
+        int b[1000],j=0;
+        int cuts[count],i=0;
+        if (count >= q) {
+            
+            int min_cuts2 = 0;
+            for (const auto& [h, states] : height_states) {
+                for (int s : states) {
+                    if (s==state) {
+                        int cuts[i++]=log2(h)-log2(s);
+                  }
+                }
+                b[j++]=sumOfSmallestN(cuts,q);
+
+            }
+            min_cuts=sumOfSmallestN(b,1);
+        }  
+    }
+    cout<<min_cuts<<endl;
+    return 0;
+}

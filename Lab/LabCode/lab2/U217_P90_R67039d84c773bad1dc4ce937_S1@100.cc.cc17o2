@@ -1,0 +1,78 @@
+#include <iostream>  
+#include <cmath>  
+#include <vector>  
+  
+using namespace std;  
+  
+// 计算树的高度  
+int calculateTreeHeight(const vector<int>& treeNodes) {  
+    int height = 0;  
+    while (pow(2, height) <= treeNodes.size()) {  
+        height++;  
+    }  
+    return height;  
+}  
+  
+// 查找树中的最大资源值  
+int findMaxResource(const vector<int>& treeNodes, int currentIndex) {  
+    if (currentIndex >= treeNodes.size() || treeNodes[currentIndex] == -1) {  
+        return 0;  
+    } else if (treeNodes.size() == 1) {  
+        return treeNodes[0];  
+    } else {  
+        int leftMax = findMaxResource(treeNodes, 2 * currentIndex + 1);  
+        int rightMax = findMaxResource(treeNodes, 2 * currentIndex + 2);  
+        return treeNodes[currentIndex] + max(leftMax, rightMax);  
+    }  
+}  
+  
+// 计算特殊区域节点值之和  
+int calculateSpecialAreaSum(const vector<int>& treeNodes, int currentIndex) {  
+    if (currentIndex >= treeNodes.size() || treeNodes[currentIndex] == -1) {  
+        return 0;  
+    } else {  
+        int sum = 0;  
+        int leftChildIndex = 2 * currentIndex + 1;  
+        int rightChildIndex = 2 * currentIndex + 2;  
+        int leftChildValue = (leftChildIndex < treeNodes.size()) ? treeNodes[leftChildIndex] : -1;  
+        int rightChildValue = (rightChildIndex < treeNodes.size()) ? treeNodes[rightChildIndex] : -1;  
+  
+        // 如果当前节点大于其子节点，并且不是叶子节点的空值  
+        if (treeNodes[currentIndex] > leftChildValue && treeNodes[currentIndex] > rightChildValue &&  
+            !(leftChildValue == -1 && rightChildValue == -1)) {  
+            sum += treeNodes[currentIndex];  
+        }  
+  
+        // 递归计算左右子树的特殊区域值之和  
+        sum += calculateSpecialAreaSum(treeNodes, leftChildIndex);  
+        sum += calculateSpecialAreaSum(treeNodes, rightChildIndex);  
+  
+        return sum;  
+    }  
+}  
+  
+int main() {  
+    vector<int> treeNodes;  
+    int input;  
+  
+    // 读取输入并构建树  
+    while (cin >> input) {  
+        treeNodes.push_back(input);  
+    }  
+  
+    // 计算树的高度  
+    int treeHeight = calculateTreeHeight(treeNodes);  
+  
+    // 查找最大资源值  
+    int maxResource = findMaxResource(treeNodes, 0);  
+  
+    // 计算特殊区域节点值之和  
+    int specialAreaSum = calculateSpecialAreaSum(treeNodes, 0);  
+  
+    // 输出结果  
+    cout << treeHeight << endl;  
+    cout << maxResource << endl;  
+    cout << specialAreaSum << endl;  
+  
+    return 0;  
+}

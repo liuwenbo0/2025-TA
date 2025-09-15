@@ -1,0 +1,78 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+using namespace std;
+class MySort {
+public:
+    virtual long long mysort(std::vector<long long>& nums) = 0;
+};
+
+class MergeSort : public MySort
+{
+public:
+    long long merge_sort_aux(std::vector<long long>& nums, long long left, long long right)
+    {
+        
+        long long l, r, mid, a = 0, b = 0, c = 0;
+        l = left, r = right, mid = (l + r) / 2;
+        if(r-l<=0)
+        {
+            return 0;
+        }
+        a = merge_sort_aux(nums, l, mid);
+        b = merge_sort_aux(nums, mid + 1, r);
+        vector<int> temp(r-l+1);
+        long long p1 = l, p2 = mid+1,k = 0;
+        while (p1 <= mid && p2 <= r)
+        {
+            if (nums[p1] > nums[p2])
+            {
+                temp[k++] = nums[p2++];
+                c = c + mid - p1 + 1;
+            }
+            else
+            {
+                temp[k++] = nums[p1++];
+            }
+        }
+        while(p1 <= mid)
+        {
+            temp[k++] = nums[p1++];
+        }
+        while (p2 <= r)
+        {
+            temp[k++] = nums[p2++];
+        }
+        for (int i = l; i <= r; i++)
+        {
+            nums[i] = temp[i - l];
+        }
+        return a + b + c;
+    }
+    
+    long long mysort(std::vector<long long>& nums)
+    {
+        long long n = nums.size();
+        return  merge_sort_aux(nums, 0, n - 1);
+    }
+};
+int main()
+{
+    int n;
+    cin >> n;
+    vector<long long> nums(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> nums[i];
+    }
+    MergeSort sorter;
+    long long c = 0;
+    c = sorter.mysort(nums);
+    //for (int num : nums) {
+    //    cout << num << " ";
+    //}  
+    cout <<c << endl;
+
+}

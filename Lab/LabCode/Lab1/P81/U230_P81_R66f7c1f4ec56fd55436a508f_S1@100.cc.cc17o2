@@ -1,0 +1,22 @@
+#include"SqList.h"
+void insert(SqList& list, int num){
+    //在此处添加代码
+    int i=0;
+    int n=list.size();
+    while(list[i]<num&&i<n){
+        i++;
+    }
+    if(i==n){
+        list.push_back(num);
+    }
+    else if(i<n&&list[i]==num){
+        return;
+    }
+    else{
+        list.push_back(0);
+        for (int j = n; j > i; j--) {
+            list[j] = list[j - 1];
+        }
+        list[i]=num;
+    }
+}

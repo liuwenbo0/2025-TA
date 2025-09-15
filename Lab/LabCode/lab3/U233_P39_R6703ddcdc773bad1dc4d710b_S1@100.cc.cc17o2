@@ -1,0 +1,30 @@
+#include "ThreeWayQuickSort.h"
+
+void ThreeWayQuickSort::three_way_quick_sort(std::vector<int>& nums, int p, int q) {
+    // 请在这里完成你的代码
+    if (p >= q) return;
+    int a = p + rand() % (q - p + 1), i = p + 1, j = q + 1;
+    swap(nums[p],nums[a]);
+    for(int k = p + 1; k < j; k++){
+        if(nums[k] < nums[p]){
+            swap(nums[k],nums[i]);
+            i++;
+        }
+        else if(nums[k] > nums[p]){
+            swap(nums[k],nums[--j]);
+            k--;
+        }
+        else continue;
+    }
+    //按照与结点的大小关系来为剩下的数据分类
+    swap(nums[p], nums[i - 1]);
+    //放入分区结点
+    three_way_quick_sort(nums, p, i - 2);
+    three_way_quick_sort(nums, j, q);
+    //逐渐缩小范围，递归排序
+}
+void ThreeWayQuickSort::mysort(std::vector<int>& nums) {
+    if(nums.size() == 0) 
+      return;
+    three_way_quick_sort(nums, 0, nums.size() - 1);
+}

@@ -1,0 +1,35 @@
+#include "MergeSort.h"  
+  
+void MergeSort::merge_sort_aux(std::vector<int> &nums, int left, int right) {  
+    if (left >= right) { 
+        return;  
+    }  
+  
+    int mid = left + (right - left) / 2; 
+    merge_sort_aux(nums, left, mid);  
+    merge_sort_aux(nums, mid + 1, right);  
+  
+    
+    std::vector<int> temp(right - left + 1); // 创建一个临时数组来存储合并后的结果  
+    int i = left, j = mid + 1, k = 0;  
+  
+    while (i <= mid && j <= right) {  
+        if (nums[i] <= nums[j]) {  
+            temp[k++] = nums[i++];  
+        } else {  
+            temp[k++] = nums[j++];  
+        }  
+    }  
+  
+    while (i <= mid) {  
+        temp[k++] = nums[i++];  
+    }  
+  
+    while (j <= right) {  
+        temp[k++] = nums[j++];  
+    }  
+
+    for (i = 0; i < temp.size(); i++) {  
+        nums[left + i] = temp[i];  
+    }  
+}

@@ -1,0 +1,39 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+long long Count(long long m, long long l, long long r,long long currentleft, long long currentright){
+    
+    if(m == 0 || l > r || currentleft > r || currentright < l)
+        return 0;
+    
+    else {
+        if(m == 1) return(l <= currentleft && currentright <= r)? 1 : 0;
+    
+        else{
+            long long middle = (currentleft + currentright)/2;
+            long long countleft = Count(m/2, l, r, currentleft, middle-1);
+            long long countmid = (middle >= l && middle <= r && (m%2 ==1)) ? 1 : 0;
+            long long countright = Count(m/2, l, r, middle+1, currentright);
+            return countleft + countmid + countright;
+        }
+    }
+    
+}
+int main(){
+    long long m,k,s;
+    cin>> m >> k >> s;
+    long long n = m;
+    long long length = 1;
+
+    while(n > 1){
+        n = n / 2;
+        length = length *2 + 1;
+    }
+
+    long long result = Count(m,k-1,s-1,0,length-1);
+
+    cout << result << endl; 
+    return 0;
+}

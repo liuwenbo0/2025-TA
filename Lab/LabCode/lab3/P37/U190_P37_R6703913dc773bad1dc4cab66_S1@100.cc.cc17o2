@@ -1,0 +1,59 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <functional>
+#include "HeapSort.h"
+using namespace std;
+void HeapAdjust(vector<int>& nums, int start, int end)
+{
+	int tmp = nums[start];
+	for (int i = 2 * start + 1; i <= end; i = i * 2 + 1)
+	{
+		if (i < end && nums[i] < nums[i + 1])
+		{
+			i++;
+		}
+		if (nums[i] > tmp)
+		{
+			nums[start] = nums[i];
+			start = i;
+		}
+		else
+		{
+			break;
+		}
+	}
+	nums[start] = tmp;
+}
+void HeapSort::build_max_heap(std::vector<int>& nums) {
+	// 请在这里完成你的代码
+	int len = int(nums.size());
+	for (int i = (len - 1 - 1) / 2; i >= 0; i--)
+	{
+		HeapAdjust(nums, i, len - 1);
+	}
+	}
+void HeapSort::max_heapify(std::vector<int>& nums, int i) {
+	// 请在这里完成你的代码
+	int tmp;
+	int len = int(nums.size());
+	tmp = nums[0];
+	nums[0] = nums[len - 1 - i];
+	nums[len - 1 - i] = tmp;
+	HeapAdjust(nums, 0, len - 1 - i - 1);
+
+}
+void HeapSort::mysort(std::vector<int>& nums) {
+	int length = nums.size();
+	nums.insert(nums.begin(), 0); // 在开头插入一个元素，使得待排序元素下标从 1 开始
+	// 请在这里完成你的代码
+    nums.erase(nums.begin());
+	build_max_heap(nums);
+	for (int i = 0; i < length-1 ; i++)
+	{
+		max_heapify(nums, i);
+	}
+    nums.insert(nums.begin(), 0);
+	nums.erase(nums.begin()); // 删除开头元素
+}

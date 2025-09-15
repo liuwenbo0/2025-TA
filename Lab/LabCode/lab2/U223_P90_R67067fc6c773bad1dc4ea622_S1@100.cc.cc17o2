@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+class TreeNode {
+public:
+    int value;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int val) : value(val), left(nullptr), right(nullptr) {}
+};
+
+// 构建树的方法
+TreeNode* buildTree(const vector<int>& levelOrder) {
+    if (levelOrder.empty() || levelOrder[0] == -1) return nullptr;
+
+    TreeNode* root = new TreeNode(levelOrder[0]);
+    queue<TreeNode*> q;
+    q.push(root);
+    size_t index = 1;
+
+    while (!q.empty() && index < levelOrder.size()) {
+        TreeNode* current = q.front();
+        q.pop();
+
+        // 处理左子节点
+        if (index < levelOrder.size() ) {
+            current->left = new TreeNode(levelOrder[index]);
+            q.push(current->left);
+        }
+        index++;
+
+        // 处理右子节点
+        if (index < levelOrder.size() ) {
+            current->right = new TreeNode(levelOrder[index]);
+            q.push(current->right);
+        }
+        index++;
+    }
+
+    return root;
+}
+
+// 遍历树并将值为-1的节点变成nullptr
+void removeNegativeOne(TreeNode*& node) {  // 修改为引用
+    if (!node) return;
+
+    if (node->value == -1) {
+        delete node; // 释放内存
+        node = nullptr; // 将当前节点设为nullptr
+    } else {
+        removeNegativeOne(node->left);
+        removeNegativeOne(node->right);
+    }
+}
+
+// 计算树的高度
+int treeHeight(TreeNode* node) {
+    if (!node) return 0;
+    int leftHeight = treeHeight(node->left);
+    int rightHeight = treeHeight(node->right);
+    return max(leftHeight, rightHeight) + 1; // 高度从1开始计数
+}
+
+// 寻找资源最丰富路径
+int maxResourcePath(TreeNode* node) {
+    if (!node) return 0;
+    if (!node->left && !node->right) { // 叶子节点
+        return node->value;
+    }
+    
+    int leftValue = maxResourcePath(node->left);
+    int rightValue = maxResourcePath(node->right);
+    
+    // 返回当前节点的值加上其子树中的最大路径和
+    return node->value + max(leftValue, rightValue);
+}
+
+int specialRegionsSum(TreeNode* node) {
+    if (!node) return 0;
+    int total = 0;
+
+    // 检查当前节点是否为非叶子节点
+    bool isNonLeaf = (node->left != nullptr || node->right != nullptr);
+
+    // 如果是非叶子节点，检查与子节点的值比较
+    if (isNonLeaf) {
+        if (node->left && node->value > node->left->value && node->right && node->value > node->right->value) {
+            total += node->value;
+        }
+        else if (node->right && !(node->left) && node->value > node->right->value) {
+            total += node->value;
+        }
+        else if (node->left && node->value > node->left->value && !(node->right)){
+            total += node->value;
+        }
+    }
+
+    // 递归计算左子树和右子树的特殊区域和
+    total += specialRegionsSum(node->left);
+    total += specialRegionsSum(node->right);
+    
+    return total;
+}
+
+int main() {
+    vector<int> levelOrder;
+    int val;
+    while (cin >> val) {
+        levelOrder.push_back(val);
+    }
+
+    TreeNode* root = buildTree(levelOrder);
+
+    // 先调用 removeNegativeOne 来把-1的节点变成nullptr
+    removeNegativeOne(root);
+    
+    int height = treeHeight(root);
+    int maxPathResource = maxResourcePath(root);
+    int specialRegionSum = specialRegionsSum(root);
+
+    cout << height << endl;               // 树的高度
+    cout << maxPathResource << endl;      // 最大路径和
+    cout << specialRegionSum << endl;     // 特殊区域和
+
+    return 0;
+}

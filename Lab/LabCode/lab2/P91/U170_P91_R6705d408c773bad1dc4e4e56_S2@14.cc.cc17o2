@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include<algorithm>
+using namespace std;
+
+long long countOnes(long long m, int k, int s) {
+    vector<long long> crystals;
+    long long current = m;
+    while (true) {
+        crystals.push_back(current % 2);
+        current /= 2;
+        if (current == 0) break;
+        crystals.push_back(current % 2);
+        current /= 2;
+    }
+    reverse(crystals.begin(), crystals.end());
+    long long ones = 0;
+    for (int i = k - 1; i < s && i < (int)crystals.size(); ++i) {
+        if (crystals[i] == 1) {
+            ones++;
+        }
+    }
+    return ones;
+}
+
+int main() {
+    long long m;
+    int k, s;
+    cin >> m >> k >> s;
+    cout << countOnes(m, k, s) << endl;
+
+    return 0;
+}

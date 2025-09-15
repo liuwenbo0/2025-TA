@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+// 计算晶体树的总长度
+long calculate_tree_size(long input_energy) {
+    if (input_energy <= 1) return 1; 
+    return 2 * calculate_tree_size(input_energy / 2) + 1;
+}
+
+// 计算中间位置
+long calculate_midpoint(long start_index, long end_index) {
+    return start_index + (end_index - start_index) / 2;
+}
+
+// 判断一个值是否在指定范围内
+bool is_within_range(long value, long range_start, long range_end) {
+    return (value >= range_start && value <= range_end);
+}
+
+// 递归计算指定范围内的1的数量
+long count_ones_in_interval(long input_energy, long start_index, long end_index, long query_start, long query_end) {
+    if (input_energy == 0) return 0; 
+    if (input_energy == 1) {
+        return is_within_range(start_index, query_start, query_end) && is_within_range(end_index, query_start, query_end) ? 1 : 0;
+    }
+
+    long midpoint = calculate_midpoint(start_index, end_index); 
+    long ones_count = 0;
+
+    if (query_start <= midpoint - 1 && query_end >= start_index) {
+        ones_count += count_ones_in_interval(input_energy / 2, start_index, midpoint - 1, query_start, query_end);
+    }
+
+    if (is_within_range(midpoint, query_start, query_end) && input_energy % 2 == 1) {
+        ones_count += 1;
+    }
+
+    if (query_start <= end_index && query_end >= midpoint + 1) {
+        ones_count += count_ones_in_interval(input_energy / 2, midpoint + 1, end_index, query_start, query_end);
+    }
+
+    return ones_count;
+}
+
+// 主函数，处理输入和输出
+void process_input() {
+    long energy_input, range_start, range_end;
+    
+    cin >> energy_input >> range_start >> range_end;
+
+    long full_tree_size = calculate_tree_size(energy_input);
+    long total_ones_in_range = count_ones_in_interval(energy_input, 1, full_tree_size, range_start, range_end);
+
+    cout << total_ones_in_range << endl;
+}
+
+int main() {
+    process_input();
+    return 0;
+}

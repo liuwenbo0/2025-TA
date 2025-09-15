@@ -1,0 +1,54 @@
+#include <iostream>
+#include <deque>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> nums(n);
+
+    // 读取输入的数据
+    for (int idx = 0; idx < n; ++idx) 
+    {
+        cin >> nums[idx];
+    }
+
+    deque<int> windowDeque;
+    vector<int> max_elements;
+
+    // 在各个窗口中找到最大值
+    for (int i = 0; i < n; ++i) 
+    {
+        // 将不在窗口的元素移除
+        while (!windowDeque.empty() && windowDeque.front() <= i - k)
+         {
+            windowDeque.pop_front();
+        }
+
+        // 若元素小于当前元素，则把该元素移除
+        while (!windowDeque.empty() && nums[windowDeque.back()] < nums[i]) 
+        {
+            windowDeque.pop_back();
+        }
+
+        // 将当前元素索引增添到队列当中
+        windowDeque.push_back(i);
+
+        // 当第一个窗口满后，记录最大值
+        if (i >= k - 1) 
+        {
+            max_elements.push_back(nums[windowDeque.front()]);
+        }
+    }
+
+    // 将各个窗口的最大值输出
+    for (int j = 0; j < max_elements.size(); ++j) {
+        cout << max_elements[j];
+        if (j < max_elements.size() - 1) {
+            cout << " ";
+        }
+    }
+
+    return 0;
+}
