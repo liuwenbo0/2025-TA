@@ -1,8 +1,0 @@
-先用 hydrooj db 打开数据库
-再用 var cursor = db.user.find({}); 建立 cursor
-最后用
-cursor.forEach(function(doc) {
-    print(doc._id + "," + doc.mail + "," + doc.mailLower + "," + doc.uname); // 输出 CSV 每行
-});
- 遍历，并截取当年的用户，但要注意不是这一级的学生，可能在前面的位置
-cursor.forEach(function(doc) { print(doc._id + "," + doc.uname + "," + doc.ip); // 输出 CSV 每行 });
