@@ -1,0 +1,61 @@
+60
+push 745
+push 517
+push 530
+pop
+front
+push 471
+front
+pop
+front
+push 424
+push 709
+push 172
+push 380
+front
+push 386
+pop
+pop
+pop
+push 212
+push 995
+push 986
+front
+front
+front
+front
+front
+pop
+pop
+front
+push 984
+front
+front
+pop
+front
+front
+pop
+pop
+front
+pop
+front
+push 46
+push 446
+front
+push 609
+pop
+push 807
+front
+push 279
+front
+pop
+push 175
+pop
+pop
+pop
+pop
+front
+pop
+front
+push 552
+pop

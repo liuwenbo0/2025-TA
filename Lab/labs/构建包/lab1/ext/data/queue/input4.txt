@@ -1,0 +1,91 @@
+90
+push 653
+push 167
+push 594
+pop
+push 596
+front
+pop
+pop
+push 595
+front
+push 692
+pop
+front
+push 839
+push 216
+push 940
+push 548
+push 681
+front
+push 702
+front
+front
+pop
+pop
+front
+push 386
+front
+pop
+push 871
+front
+front
+front
+push 767
+pop
+front
+pop
+pop
+pop
+pop
+pop
+pop
+push 1000
+push 820
+pop
+front
+pop
+push 584
+pop
+front
+front
+push 23
+front
+push 25
+front
+pop
+pop
+pop
+push 67
+push 224
+front
+pop
+pop
+push 265
+push 121
+push 907
+pop
+pop
+push 506
+push 769
+push 157
+pop
+push 671
+push 156
+push 353
+front
+push 824
+front
+front
+push 671
+push 278
+front
+front
+pop
+pop
+front
+push 529
+pop
+push 22
+pop
+pop
