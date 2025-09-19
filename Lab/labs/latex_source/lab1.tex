@@ -36,11 +36,11 @@
 \title{\textbf{实验一 \hspace{0.5cm} 栈、队列与基本排序}}
 \author{
 \begin{tabular}{c @{\hspace{5mm}} c}
-    黄韦杰 & 刘嘉杰 \\  % 作者名
-    \href{mailto:hwj@hust.edu.cn}{hwj@hust.edu.cn} & \href{mailto:m202474039@hust.edu.cn}{m202474039@hust.edu.cn} % 邮箱
+    王祖鹏 \\  % 作者名
+    \href{mailto:wangzupeng@hust.edu.cn}{wangzupeng@hust.edu.cn}  % 邮箱
 \end{tabular}
 }
-\date{September 2024}
+\date{September 2025}
 
 
 \begin{document}
@@ -213,19 +213,37 @@ merge\_sort\_aux 函数为归并排序辅助函数，你需要对 nums 数组闭
     \end{itemize}
     
     \item 比较插入排序与归并排序的性能差距。
-    \item 【拓展题】
+
+    % ===== 拓展题开始 =====
+    \item 【拓展题1】用两个栈实现队列（摊还 O(1)）
     \begin{itemize}
-        \item 尝试修改源代码，实现排序过程中「比较」操作的计数功能，并以该角度来对插入排序和归并排序进行对比。
-        \item 不基于比较操作，如何实现排序。
+        \item 要求：只使用两个栈支持 \texttt{push(x)}、\texttt{pop()}、\texttt{front()}，并说明摊还时间复杂度为何为 O(1)。
+        \item input \\
+        7 \\
+        push 1 \\
+        push 2 \\
+        front \\
+        pop \\
+        push 3 \\
+        front \\
+        pop
+        \item output \\
+        1 \\
+        2
     \end{itemize}
 
-    \item 【拓展题】基于归并排序，求解给定数组的逆序对问题。
-    在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。
-    输入一个数组，求出这个数组中的逆序对的总数。
+    \item 【拓展题2】单调栈：右侧第一个更大元素
     \begin{itemize}
-        \item input \\ 4 \\ 7 5 6 4
-        \item output \\ 5
+        \item 要求：给定数组，输出每个位置右侧第一个严格更大元素的下标（不存在则输出 -1）。时间复杂度 O(n)。
+        \item input \\
+        6 \\
+        2\ 1\ 2\ 4\ 3\ 5
+        \item output \\
+        3\ 3\ 4\ 6\ 6\ -1
     \end{itemize}
+
+    % ===== 拓展题结束 =====
+
     
 \end{enumerate}
 
