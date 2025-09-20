@@ -1,6 +1,8 @@
 import pandas as pd
-import os, math
-pd.set_option('display.notebook_repr_html',False)
+import os
+import math
+
+pd.set_option('display.notebook_repr_html', False)
 
 # 统计的实验名
 lab_names = ['lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab6']
@@ -12,7 +14,7 @@ lab_base_problem_num = {
     'lab3': 2,
     'lab4': 2,
     'lab5': 2,
-    'lab6': 2
+    'lab6': 2,
 }
 
 # 扣分系数
@@ -39,8 +41,7 @@ special_student_base = {
         'U202311618': 400,
         'U202315980': 300,
         'U202311557': 300,
-     },
-
+    },
     'lab2': {
         'U202311575': 200,
         'U202311611': 200,
@@ -48,9 +49,8 @@ special_student_base = {
         'U202312075': 300,
         'U202311604': 300,
         'U202311621': 300,
-        'U202311618': 200
+        'U202311618': 200,
     },
-
     'lab3': {
         'U202311611': 200,
         'U202311602': 100,
@@ -58,16 +58,14 @@ special_student_base = {
         'U202311604': 100,
         'U202311621': 200,
         'U202311618': 80,
-        'U202315980': 100
+        'U202315980': 100,
     },
-
     'lab4': {
         'U202312075': 200,
         'U202311611': 200,
         'U202311602': 100,
-        'U202311621': 200
+        'U202311621': 200,
     },
-
     'lab5': {
         'U202311575': 200,
         'U202311611': 200,
@@ -76,7 +74,6 @@ special_student_base = {
         'U202311621': 200,
         'U202311568': 200,
     },
-
     'lab6': {
         'U202311553': 200,
         'U202311554': 200,
@@ -87,31 +84,23 @@ special_student_base = {
         'U202311602': 100,
         'U202312075': 200,
         'U202311621': 200,
-    }
+    },
 }
 
 # 手动修改拓展题分数
 special_student_advanced = {
-    'lab1': {
-        'U202311619': 100
-     },
-
+    'lab1': {'U202311619': 100},
     'lab5': {
         'U202311568': 300,
     },
-
     'lab6': {
         'U202311553': 100,
         'U202311554': 100,
-    }
+    },
 }
 
 # 手动修改学生总分，优先级高于上面两个
-special_student_tot = {
-    'U202311582': tot_base_score,
-    'U202311577': 500
-}
-
+special_student_tot = {'U202311582': tot_base_score, 'U202311577': 500}
 
 
 # 手动修改代码查重次数
@@ -120,11 +109,11 @@ special_plagiarism_cnt = {
 }
 
 # 读取xls（绝对路径）
-first_class = pd.read_excel(io=f'./accounts.xlsx', sheet_name=0, usecols="A,F")
+first_class = pd.read_excel(io='./accounts.xlsx', sheet_name=0, usecols='A,F')
 
-second_class = pd.read_excel(io=f'./accounts.xlsx', sheet_name=1, usecols="A,F")
+second_class = pd.read_excel(io='./accounts.xlsx', sheet_name=1, usecols='A,F')
 
-others_class = pd.read_excel(io=f'./accounts.xlsx', sheet_name=2, usecols="A,F")
+others_class = pd.read_excel(io='./accounts.xlsx', sheet_name=2, usecols='A,F')
 
 
 id_name_dict = {}
@@ -148,7 +137,6 @@ for key in id_name_dict.keys():
 
 
 for lab_name in lab_names:
-
     lab_score_file = f'./{lab_name}.csv'
 
     if not os.path.exists(lab_score_file):
@@ -157,7 +145,9 @@ for lab_name in lab_names:
     lab_scores[lab_name] = {}
 
     # 统计总分
-    lab_score = pd.read_csv(lab_score_file, usecols=['排名', '用户', '分数'])  # 使用列索引来选择列
+    lab_score = pd.read_csv(
+        lab_score_file, usecols=['排名', '用户', '分数']
+    )  # 使用列索引来选择列
     print(f'lab_score: {lab_score}')
 
     for idx, data in lab_score.iterrows():
@@ -180,7 +170,6 @@ for lab_name in lab_names:
                 lab_detail_scores[lab_name][data[1]].append(float(0))
             else:
                 lab_detail_scores[lab_name][data[1]].append(float(data[i]))
-
 
     # 原始代码为统计 xlsx 格式，已改为 csv 格式
     # # 统计总分
@@ -207,7 +196,6 @@ for lab_name in lab_names:
     #             lab_detail_scores[lab_name][data[1]].append(float(data[i]))
 
 
-
 print_excel_dict = {}
 
 lab_scores_dict = {}
@@ -222,9 +210,9 @@ for lab_name in lab_names:
     for sid in id_name_dict.keys():
         scores = [0] * tot_base_cnt
         # if lab_detail_scores[lab_name].get(sid) is None:
-            # base_scores.append(0.0)
-            # advanced_scores.append(0.0)
-            # continue
+        # base_scores.append(0.0)
+        # advanced_scores.append(0.0)
+        # continue
 
         if lab_detail_scores[lab_name].get(sid) is not None:
             scores = lab_detail_scores[lab_name][sid]
@@ -233,12 +221,11 @@ for lab_name in lab_names:
             continue
         base_score = 0
         advanced_score = 0
-        
+
         for i in range(0, lab_base_problem_num[lab_name]):
             base_score += scores[i]
         for i in range(lab_base_problem_num[lab_name], len(scores)):
-            advanced_score  += scores[i]
-        
+            advanced_score += scores[i]
 
         # 特殊处理
         if lab_name in special_student_base:
@@ -254,7 +241,7 @@ for lab_name in lab_names:
         if lab_name in special_student_advanced:
             if sid in special_student_advanced[lab_name]:
                 special_advanced_score = special_student_advanced[lab_name][sid]
-                
+
                 tot_scores_dict[sid] -= advanced_score
                 tot_scores_dict[sid] += special_advanced_score
 
@@ -265,7 +252,6 @@ for lab_name in lab_names:
 
     lab_scores_dict[f'{lab_name}_基础'] = base_scores
     lab_scores_dict[f'{lab_name}_拓展'] = advanced_scores
-
 
 
 tot_scores = []
@@ -293,7 +279,7 @@ for lab_name in lab_names:
     print_excel_dict[f'{lab_name}_拓展'] = lab_scores_dict[f'{lab_name}_拓展']
 
 
-p_cnt = pd.read_excel(io=f'./p_cnt.xlsx', sheet_name='summary', usecols="B, C")
+p_cnt = pd.read_excel(io='./p_cnt.xlsx', sheet_name='summary', usecols='B, C')
 
 p_cnt_dict = {}
 
@@ -337,7 +323,6 @@ for sid in id_name_dict.keys():
     punish_scores.append(punish_scores_dict[sid])
 
 print_excel_dict['扣分'] = punish_scores
-
 
 
 # 分类
@@ -421,7 +406,7 @@ for sid in id_name_dict.keys():
     # 如果当前分数 >= type_std_score_dict 的分数，则说明处于对应的等级
     for i, score in type_std_score_dict.items():
         if tot_score >= score:
-            type_scores_dict[sid] = (100 - i * 5)
+            type_scores_dict[sid] = 100 - i * 5
             break
 
 type_scores = []
@@ -468,7 +453,7 @@ class_ordered_sid = []
 class_ordered_final_scores = []
 class_ordered_pcnt = []
 
-class_order = pd.read_excel(io=f'./class_order.xlsx', sheet_name=0, usecols="A")
+class_order = pd.read_excel(io='./class_order.xlsx', sheet_name=0, usecols='A')
 for idx, data in class_order.iterrows():
     # print(f'{data}')
     # class_ordered_sid.append(data[0])
