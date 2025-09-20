@@ -38,6 +38,7 @@ bool runSingleTest(int testCase) {
             expectedOutputLines.push_back(line);
         }
     }
+    expectedOutput.close();
     
     // 执行操作
     auto startTime = high_resolution_clock::now();
@@ -57,7 +58,6 @@ bool runSingleTest(int testCase) {
                 if (!myQueue.empty()) {
                     myQueue.pop();
                     stdQueue.pop();
-                    actualOutput.push_back("pop success");
                 }
             }
             else if (operation == "front") {
@@ -84,7 +84,8 @@ bool runSingleTest(int testCase) {
     
     // 比较输出
     if (actualOutput.size() != expectedOutputLines.size()) {
-        cout << "测试用例 " << testCase << ": 输出行数不匹配" << endl;
+        cout << "测试用例 " << testCase << ": 输出行数不匹配 (期望:" << expectedOutputLines.size() 
+             << ", 实际:" << actualOutput.size() << ")" << endl;
         return false;
     }
     
@@ -102,7 +103,7 @@ bool runSingleTest(int testCase) {
 }
 
 int main() {
-    cout << "=== 队列实现判题脚本 ===" << endl;
+    cout << "=== 队列实现判题脚本（新测试数据集）===" << endl;
     cout << "测试用两个栈实现的队列..." << endl << endl;
     
     int passedTests = 0;

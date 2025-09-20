@@ -1,0 +1,7 @@
+6
+push 42
+front
+pop
+push 10
+front
+pop

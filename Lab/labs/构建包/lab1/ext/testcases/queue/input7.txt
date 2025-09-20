@@ -1,0 +1,7 @@
+6
+push 1000000
+push 999999
+front
+pop
+push 1000001
+front

@@ -34,6 +34,9 @@ bool runSingleTest(int testCase) {
         expectedOutput >> expected[i];
     }
     
+    input.close();
+    expectedOutput.close();
+    
     // 执行算法
     auto startTime = high_resolution_clock::now();
     vector<int> result = ExtMonotonicStack::nextGreaterElements(nums);
@@ -109,7 +112,7 @@ void performanceTest() {
 }
 
 int main() {
-    cout << "=== 单调栈判题脚本 ===" << endl;
+    cout << "=== 单调栈判题脚本（新测试数据集）===" << endl;
     cout << "测试右侧第一个更大元素算法..." << endl << endl;
     
     int passedTests = 0;
